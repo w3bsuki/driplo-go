@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { createServerClient } from '$lib/server/supabase-admin';
 import { verifyTOTPCode, verifyBackupCode, useBackupCode, get2FAStatus } from '$lib/server/two-factor';
 import { z } from 'zod';
 
@@ -9,9 +8,9 @@ const verifySchema = z.object({
   type: z.enum(['totp', 'backup']).default('totp')
 });
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
   try {
-    const supabase = createServerClient(cookies);
+    const supabase = locals.supabase;
     
     // Check if user is authenticated
     const { data: { user }, error: authError } = await supabase.auth.getUser();

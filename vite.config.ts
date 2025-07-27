@@ -44,15 +44,6 @@ export default defineConfig({
 				propertyReadSideEffects: false,
 			},
 			output: {
-				// Enhanced manual chunk splitting for Tailwind v4
-				manualChunks: {
-					// Core vendor libraries
-					'vendor-svelte': ['svelte', 'svelte/internal', 'svelte/store'],
-					'vendor-supabase': ['@supabase/supabase-js', '@supabase/ssr'],
-					'vendor-ui': ['bits-ui', 'lucide-svelte', 'class-variance-authority', 'clsx', 'tailwind-merge'],
-					'vendor-forms': ['sveltekit-superforms', 'zod'],
-					'vendor-utils': ['date-fns', '@tanstack/svelte-query']
-				},
 				// Optimize chunk names for better caching
 				chunkFileNames: (chunkInfo) => {
 					return `chunks/[name]-[hash].js`;

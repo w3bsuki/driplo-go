@@ -6,7 +6,7 @@
 	
 	import type { CheckoutFlowProps } from '$lib/types/components';
 	
-	type Props = Pick<CheckoutFlowProps, 'listing' | 'isOpen'> & {
+	type Props = CheckoutFlowProps & {
 		// Additional lazy-specific props
 		preloadOnHover?: boolean;
 	};
@@ -14,7 +14,8 @@
 	let {
 		listing,
 		isOpen,
-		preloadOnHover = true
+		preloadOnHover = true,
+		...restProps
 	}: Props = $props();
 	
 	let CheckoutFlow: any = null;
@@ -37,9 +38,11 @@
 	}
 	
 	// Load when modal opens
-	$: if (isOpen && !CheckoutFlow) {
-		loadCheckoutFlow();
-	}
+	$effect(() => {
+		if (isOpen && !CheckoutFlow) {
+			loadCheckoutFlow();
+		}
+	});
 	
 	// Preload on hover/focus of buy button
 	export function preload() {
@@ -85,7 +88,7 @@
 			}}
 			resetKeys={[listing.id, isOpen]}
 		>
-			<svelte:component this={CheckoutFlow} {listing} {isOpen} {...$$restProps} />
+			<svelte:component this={CheckoutFlow} {listing} {isOpen} {...restProps} />
 		</ErrorBoundary>
 	{/if}
 {/if}
