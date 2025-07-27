@@ -194,7 +194,7 @@
 {#if isOpen}
 	<div 
 		class={cn(
-			"absolute top-full left-0 mt-1 w-[calc(100vw-2rem)] md:w-[600px]",
+			"absolute top-full left-0 mt-1",
 			"bg-white rounded-sm shadow-lg border border-gray-200 z-[100] overflow-hidden",
 			"md:mt-2",
 			className

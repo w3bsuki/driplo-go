@@ -106,7 +106,7 @@
 <div class="space-y-8">
 	<!-- Step Header -->
 	<div>
-		<h2 class="text-xl sm:text-2xl font-bold mb-2">📝 Product Details</h2>
+		<h2 class="text-xl sm:text-2xl font-bold mb-2">Product Details</h2>
 		<p class="text-sm sm:text-base text-gray-600">Tell buyers about what you're selling</p>
 	</div>
 	
@@ -297,15 +297,16 @@
 	</div>
 	
 	<!-- Tips Section -->
-	<div class="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
-		<h3 class="font-medium text-purple-900 mb-2 flex items-center gap-2">
-			💡 Pro Tips for Great Listings
+	<div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+		<h3 class="font-medium text-gray-900 mb-2 flex items-center gap-2">
+			<Info class="w-4 h-4" />
+			Pro Tips for Great Listings
 		</h3>
-		<ul class="text-sm text-purple-800 space-y-1.5">
-			<li>🔍 Use specific keywords buyers might search for</li>
-			<li>🏷️ Mention brand, size, color, and condition clearly</li>
-			<li>📏 Include measurements for clothing items</li>
-			<li>✨ Be honest about any flaws or imperfections</li>
+		<ul class="text-sm text-gray-600 space-y-1.5 list-disc list-inside">
+			<li>Use specific keywords buyers might search for</li>
+			<li>Mention brand, size, color, and condition clearly</li>
+			<li>Include measurements for clothing items</li>
+			<li>Be honest about any flaws or imperfections</li>
 		</ul>
 	</div>
 	

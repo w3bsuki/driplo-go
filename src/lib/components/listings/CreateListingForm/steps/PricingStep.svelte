@@ -14,32 +14,27 @@
 		{ 
 			value: 'new_with_tags', 
 			label: 'New with tags',
-			description: 'Brand new, never worn, with original tags',
-			icon: '🏷️'
+			description: 'Brand new, never worn, with original tags'
 		},
 		{ 
 			value: 'new_without_tags', 
 			label: 'New without tags',
-			description: 'Brand new, never worn, tags removed',
-			icon: '✨'
+			description: 'Brand new, never worn, tags removed'
 		},
 		{ 
 			value: 'very_good', 
 			label: 'Very good',
-			description: 'Worn once or twice, excellent condition',
-			icon: '👍'
+			description: 'Worn once or twice, excellent condition'
 		},
 		{ 
 			value: 'good', 
 			label: 'Good',
-			description: 'Worn several times, minor signs of wear',
-			icon: '👌'
+			description: 'Worn several times, minor signs of wear'
 		},
 		{ 
 			value: 'fair', 
 			label: 'Fair',
-			description: 'Visible wear, but still wearable',
-			icon: '🤏'
+			description: 'Visible wear, but still wearable'
 		}
 	]
 	
@@ -180,7 +175,7 @@
 <div class="space-y-8">
 	<!-- Step Header -->
 	<div>
-		<h2 class="text-xl sm:text-2xl font-bold mb-2">💰 Pricing & Details</h2>
+		<h2 class="text-xl sm:text-2xl font-bold mb-2">Pricing & Details</h2>
 		<p class="text-sm sm:text-base text-gray-600">Set your price and describe the item's condition</p>
 	</div>
 	
@@ -219,24 +214,24 @@
 		
 		<!-- Smart pricing suggestion -->
 		{#if suggestedPriceRange && form.formData.price > 0}
-			<div class="mt-2 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200" transition:slide>
-				<p class="text-sm text-purple-900 font-medium flex items-center gap-2">
-					✨ Price Intelligence
+			<div class="mt-2 p-3 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-lg border border-blue-200" transition:slide>
+				<p class="text-sm text-blue-900 font-medium">
+					Price Intelligence
 				</p>
-				<p class="text-sm text-purple-800 mt-1">
+				<p class="text-sm text-blue-800 mt-1">
 					Similar items sell for <span class="font-semibold">${suggestedPriceRange.min} - ${suggestedPriceRange.max}</span>
 				</p>
 				{#if form.formData.price < suggestedPriceRange.min * 0.7}
-					<p class="text-xs text-purple-700 mt-2 flex items-center gap-1">
-						📈 Your price seems low. Consider pricing higher for faster profit.
+					<p class="text-xs text-blue-700 mt-2">
+						Your price seems low. Consider pricing higher for faster profit.
 					</p>
 				{:else if form.formData.price > suggestedPriceRange.max * 1.5}
-					<p class="text-xs text-purple-700 mt-2 flex items-center gap-1">
-						📉 Your price is above market average. It might take longer to sell.
+					<p class="text-xs text-blue-700 mt-2">
+						Your price is above market average. It might take longer to sell.
 					</p>
 				{:else}
-					<p class="text-xs text-green-700 mt-2 flex items-center gap-1">
-						✅ Great pricing! Your item is competitively priced.
+					<p class="text-xs text-green-700 mt-2">
+						Great pricing! Your item is competitively priced.
 					</p>
 				{/if}
 			</div>
@@ -252,28 +247,25 @@
 			{#each conditions as condition}
 				<label class={cn(
 					"flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all",
-					"hover:shadow-md hover:scale-[1.02]",
+					"hover:shadow-sm",
 					form.formData.condition === condition.value 
-						? "border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50" 
+						? "border-[#6BB6D8] bg-gradient-to-br from-blue-50 to-white" 
 						: "border-gray-200 hover:border-gray-300"
 				)}>
 					<input
 						type="radio"
 						bind:group={form.formData.condition}
 						value={condition.value}
-						class="mt-0.5 mr-3 accent-purple-600"
+						class="mt-0.5 mr-3 accent-[#6BB6D8]"
 					/>
 					<div class="flex-1">
-						<div class="flex items-center gap-2">
-							<span class="text-xl">{condition.icon}</span>
-							<span class={cn(
-								"font-medium",
-								form.formData.condition === condition.value && "text-purple-900"
-							)}>{condition.label}</span>
-						</div>
+						<span class={cn(
+							"font-medium",
+							form.formData.condition === condition.value && "text-blue-900"
+						)}>{condition.label}</span>
 						<p class={cn(
 							"text-sm mt-1",
-							form.formData.condition === condition.value ? "text-purple-700" : "text-gray-600"
+							form.formData.condition === condition.value ? "text-blue-700" : "text-gray-600"
 						)}>{condition.description}</p>
 					</div>
 				</label>

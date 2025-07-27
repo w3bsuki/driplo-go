@@ -228,51 +228,43 @@
 	}
 </script>
 
-<section bind:this={heroRef} class="relative bg-gradient-to-b from-blue-50 to-white py-3 md:py-4 pb-0">
-	<div class="container px-4">
+<section bind:this={heroRef} class="relative bg-gradient-to-b from-blue-50 to-white py-3 md:py-6 pb-0">
+	<div class="container px-5 md:px-6">
 		<div class="max-w-3xl mx-auto">
 			
 			<!-- Desktop Layout - Keep existing integrated design -->
 			<div class="hidden md:block">
 				<div class="relative overflow-visible">
 					<div class={cn(
-						"relative bg-white rounded border border-gray-200 transition-all duration-fast",
+						"relative bg-white rounded-sm border border-gray-200 transition-all duration-100",
 						isFocused ? "border-blue-500 ring-1 ring-blue-500" : "border-gray-200"
 					)}>
-						<div class="flex items-center min-w-0">
+						<div class="flex items-center min-w-0 py-2 px-3">
 							<!-- Category Dropdown Button -->
-							<div class="relative flex-shrink-0 pl-3 pr-2">
+							<div class="relative flex-shrink-0">
 								<button
 									data-categories-button
 									onclick={toggleCategoryDropdown}
 									class={cn(
-										"btn-sm font-medium focus:outline-none transition-all duration-fast rounded-md",
+										"h-9 px-3 font-medium focus:outline-none transition-all duration-100 rounded-sm flex items-center gap-2",
 										isCategoryDropdownOpen 
 											? "bg-blue-500 text-white hover:bg-blue-600" 
 											: "bg-gray-900 text-white hover:bg-gray-800"
 									)}
 								>
-									<span>{header_categories()}</span>
+									<span class="text-sm">{header_categories()}</span>
 									<ChevronDown class={cn(
-										"h-3 w-3 transition-transform duration-fast",
+										"h-3.5 w-3.5 transition-transform duration-100",
 										isCategoryDropdownOpen && "rotate-180"
 									)} />
 								</button>
-								
-								<!-- Category Dropdown -->
-								<CategoryDropdown
-									{categories}
-									isOpen={isCategoryDropdownOpen}
-									onToggle={toggleCategoryDropdown}
-									onClose={closeCategoryDropdown}
-								/>
 							</div>
 							
 							<!-- Divider -->
-							<div class="w-px h-6 bg-gray-200 flex-shrink-0"></div>
+							<div class="w-px h-7 bg-gray-200 flex-shrink-0 mx-3"></div>
 							
 							<!-- Search Input with Icon -->
-							<div class="flex-1 min-w-0 flex items-center px-3">
+							<div class="flex-1 min-w-0 flex items-center">
 								<input
 									type="search"
 									placeholder={browse_search_placeholder()}
@@ -282,11 +274,11 @@
 									onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 									oninput={handleSearch}
 									aria-label={browse_search_placeholder()}
-									class="input-sm w-full border-0 focus:ring-0 bg-transparent"
+									class="h-9 w-full border-0 focus:ring-0 bg-transparent text-sm"
 								/>
 								<button
 									onclick={handleSearch}
-									class="p-1.5 hover:opacity-75 transition-opacity duration-fast focus:outline-none focus:ring-1 focus:ring-blue-500 rounded"
+									class="h-9 w-9 hover:opacity-75 transition-opacity duration-100 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm flex items-center justify-center flex-shrink-0"
 									aria-label={quick_filter_search_button()}
 								>
 									<span class="text-base" aria-hidden="true">🔍</span>
@@ -296,8 +288,8 @@
 						
 						
 						<!-- Trending Category Links -->
-						<div class="border-t border-gray-100 py-1.5 relative overflow-hidden rounded-b">
-							<div class="px-2 flex items-center gap-1.5">
+						<div class="border-t border-gray-100 py-2 relative overflow-hidden rounded-b-sm">
+							<div class="px-3 flex items-center gap-2">
 								<span class="text-xs text-gray-500 flex-shrink-0 hidden md:block">{search_trending()}:</span>
 								
 								<!-- Quick Filters Component -->
@@ -326,7 +318,7 @@
 										<button
 											onclick={() => handleCategorySelect(category.slug)}
 											aria-label="{filter_categories()}: {getCategoryName(category)}"
-											class="flex items-center gap-1.5 px-2 py-1.5 rounded-sm bg-background border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 focus:ring-brand-400"
+											class="flex items-center gap-1.5 px-3 py-2 rounded-sm bg-background border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 focus:ring-brand-400"
 										>
 											<span class="text-sm" aria-hidden="true">{category.icon_url || category.icon || '📦'}</span>
 											<span>{getCategoryName(category)}</span>
@@ -337,39 +329,43 @@
 						</div>
 					</div>
 				</div>
+				
+				<!-- Desktop Category Dropdown - positioned to match search container width -->
+				{#if isCategoryDropdownOpen}
+					<div class="relative">
+						<CategoryDropdown
+							{categories}
+							isOpen={isCategoryDropdownOpen}
+							onToggle={toggleCategoryDropdown}
+							onClose={closeCategoryDropdown}
+							class="!absolute !top-2 !left-0 !right-0 !w-full"
+						/>
+					</div>
+				{/if}
 			</div>
 			
 			<!-- Mobile Layout - Optimized for better UX -->
 			<div class="block md:hidden">
 				<!-- Search Bar Container -->
 				<div class={cn(
-					"relative bg-white rounded-md border border-gray-200 transition-all duration-fast shadow-sm",
+					"relative bg-white rounded-sm border border-gray-200 transition-all duration-100 shadow-sm",
 					isFocused ? "border-blue-500 shadow-md" : "border-gray-200"
 				)}>
 					<!-- Main Search Row -->
-					<div class="flex items-center">
+					<div class="flex items-center py-2 px-3 gap-2">
 						<!-- Categories Icon Button -->
 						<div class="relative">
 							<button
 								data-categories-button
 								onclick={toggleCategoryDropdown}
-								class="btn-sm ml-2 rounded-md bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-fast flex items-center justify-center"
+								class="h-9 w-9 rounded-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-100 flex items-center justify-center flex-shrink-0"
 								aria-label={quick_filter_categories_menu()}
 							>
 								<Menu class="h-4 w-4" />
 							</button>
-							
-							<!-- Mobile Category Dropdown - positioned relative to button -->
-							<CategoryDropdown
-								{categories}
-								isOpen={isCategoryDropdownOpen}
-								onToggle={toggleCategoryDropdown}
-								onClose={closeCategoryDropdown}
-								class="!left-0 !mt-2"
-							/>
 						</div>
 						<!-- Divider -->
-						<div class="w-px h-6 bg-gray-200 mx-2"></div>
+						<div class="w-px h-8 bg-gray-200 flex-shrink-0"></div>
 						<!-- Search Input -->
 						<input
 							type="search"
@@ -380,30 +376,28 @@
 							onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 							oninput={handleSearch}
 							aria-label={browse_search_placeholder()}
-							class="input-sm flex-1 border-0 focus:ring-0 bg-transparent"
+							class="h-9 flex-1 border-0 focus:ring-0 bg-transparent text-sm min-w-0"
 						/>
 						<button
 							onclick={handleSearch}
-							class="btn-sm mr-2 !p-0 w-9 hover:opacity-75 transition-opacity duration-fast focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md"
+							class="h-9 w-9 hover:opacity-75 transition-opacity duration-100 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm flex items-center justify-center flex-shrink-0"
 							aria-label={quick_filter_search_button()}
 						>
-							<span class="text-lg" aria-hidden="true">🔍</span>
+							<span class="text-base" aria-hidden="true">🔍</span>
 						</button>
 					</div>
 					
 					<!-- Pills Section -->
 					<div class="border-t border-gray-100">
-						<div class="pt-2 pb-2 px-3 relative">
-							<!-- Pills Container aligned with search input area -->
-							<div class="ml-1 mr-1">
-								<!-- Quick Filters -->
-								<div class="overflow-x-auto relative">
-									<div class="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
+						<div class="py-2 px-3 relative">
+							<!-- Quick Filters -->
+							<div class="overflow-x-auto relative">
+								<div class="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
 										{#each quickFilters.slice(0, 4) as filter}
 											<button
 												onclick={() => handleQuickFilter(filter.action)}
 												class={cn(
-													"flex items-center gap-1 px-2 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
+													"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
 													filter.color === 'golden' && "bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-300 hover:from-yellow-100 hover:to-amber-100 hover:border-amber-400 text-amber-800",
 													filter.color === 'blue' && "bg-gradient-to-r from-blue-50 to-sky-50 border-blue-300 hover:from-blue-100 hover:to-sky-100 hover:border-blue-400 text-blue-800",
 													filter.color === 'pink' && "bg-gradient-to-r from-pink-50 to-rose-50 border-pink-300 hover:from-pink-100 hover:to-rose-100 hover:border-pink-400 text-pink-800",
@@ -423,7 +417,7 @@
 											<button
 												onclick={() => handleQuickFilter(filter.action)}
 												class={cn(
-													"flex items-center gap-1 px-2 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
+													"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
 													filter.color === 'golden' && "bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-300 hover:from-yellow-100 hover:to-amber-100 hover:border-amber-400 text-amber-800",
 													filter.color === 'blue' && "bg-gradient-to-r from-blue-50 to-sky-50 border-blue-300 hover:from-blue-100 hover:to-sky-100 hover:border-blue-400 text-blue-800",
 													filter.color === 'pink' && "bg-gradient-to-r from-pink-50 to-rose-50 border-pink-300 hover:from-pink-100 hover:to-rose-100 hover:border-pink-400 text-pink-800",
@@ -442,7 +436,7 @@
 										{#each categories.slice(0, 2) as category}
 											<button
 												onclick={() => handleCategorySelect(category.slug)}
-												class="flex items-center gap-1 px-2 py-1.5 rounded-sm bg-background border border-gray-200 text-gray-700 text-sm font-medium whitespace-nowrap flex-shrink-0"
+												class="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-background border border-gray-200 text-gray-700 text-sm font-medium whitespace-nowrap flex-shrink-0"
 											>
 												<span class="text-sm">{category.icon_url || category.icon || '📦'}</span>
 												<span>{getCategoryName(category)}</span>
@@ -450,11 +444,22 @@
 										{/each}
 									</div>
 								</div>
-							</div>
 						</div>
 					</div>
 				</div>
 				
+				<!-- Mobile Category Dropdown - positioned to match search container width -->
+				{#if isCategoryDropdownOpen}
+					<div class="relative">
+						<CategoryDropdown
+							{categories}
+							isOpen={isCategoryDropdownOpen}
+							onToggle={toggleCategoryDropdown}
+							onClose={closeCategoryDropdown}
+							class="!absolute !top-2 !left-0 !right-0 !w-full"
+						/>
+					</div>
+				{/if}
 			</div>
 			
 			<!-- Trending Searches - Compact -->

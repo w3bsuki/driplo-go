@@ -16,7 +16,6 @@
 			label: 'Standard Shipping',
 			description: '3-5 business days',
 			icon: Package,
-			emoji: '📦',
 			avgCost: '$5-10'
 		},
 		{
@@ -24,7 +23,6 @@
 			label: 'Express Shipping', 
 			description: '1-2 business days',
 			icon: Truck,
-			emoji: '🚚',
 			avgCost: '$15-25'
 		},
 		{
@@ -32,7 +30,6 @@
 			label: 'Local Pickup',
 			description: 'Buyer picks up in person',
 			icon: Users,
-			emoji: '🤝',
 			avgCost: 'Free'
 		}
 	]
@@ -137,14 +134,14 @@
 <div class="space-y-8">
 	<!-- Step Header -->
 	<div>
-		<h2 class="text-xl sm:text-2xl font-bold mb-2">📦 Shipping & Location</h2>
+		<h2 class="text-xl sm:text-2xl font-bold mb-2">Shipping & Location</h2>
 		<p class="text-sm sm:text-base text-gray-600">Where are you shipping from and how?</p>
 	</div>
 	
 	<!-- Location Input -->
 	<div>
-		<Label for="location" class="mb-3 flex items-center gap-2">
-			📍 Your City <span class="text-red-500">*</span>
+		<Label for="location" class="mb-3">
+			Your City <span class="text-red-500">*</span>
 		</Label>
 		<div class="relative">
 			<Input
@@ -196,9 +193,9 @@
 				{@const Icon = option.icon}
 				<label class={cn(
 					"flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all",
-					"hover:shadow-md hover:scale-[1.02]",
+					"hover:shadow-sm",
 					form.formData.shipping_type === option.value 
-						? "border-purple-500 bg-gradient-to-r from-purple-50 to-pink-50" 
+						? "border-[#6BB6D8] bg-gradient-to-br from-blue-50 to-white" 
 						: "border-gray-200 hover:border-gray-300"
 				)}>
 					<input
@@ -209,20 +206,23 @@
 						onchange={() => handleShippingTypeChange(option.value)}
 						class="sr-only"
 					/>
-					<span class="text-2xl mr-3">{option.emoji}</span>
+					<Icon class={cn(
+						"w-5 h-5 mr-3",
+						form.formData.shipping_type === option.value ? "text-[#6BB6D8]" : "text-gray-500"
+					)} />
 					<div class="flex-1">
 						<div class={cn(
 							"font-medium",
-							form.formData.shipping_type === option.value && "text-purple-900"
+							form.formData.shipping_type === option.value && "text-blue-900"
 						)}>{option.label}</div>
 						<div class={cn(
 							"text-sm",
-							form.formData.shipping_type === option.value ? "text-purple-700" : "text-gray-600"
+							form.formData.shipping_type === option.value ? "text-blue-700" : "text-gray-600"
 						)}>{option.description}</div>
 					</div>
 					<div class={cn(
 						"text-sm font-medium",
-						form.formData.shipping_type === option.value ? "text-purple-600" : "text-gray-500"
+						form.formData.shipping_type === option.value ? "text-[#4F9FC5]" : "text-gray-500"
 					)}>{option.avgCost}</div>
 				</label>
 			{/each}
@@ -261,19 +261,20 @@
 				</div>
 				
 				<!-- Worldwide Shipping -->
-				<div class="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+				<div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
 					<label class="flex items-center cursor-pointer space-x-3">
 						<input
 							type="checkbox"
 							bind:checked={form.formData.ships_worldwide}
-							class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500 accent-purple-600"
+							class="w-4 h-4 text-[#6BB6D8] rounded focus:ring-[#6BB6D8] accent-[#6BB6D8]"
 						/>
 						<div>
-							<div class="font-medium flex items-center gap-2 text-blue-900">
-								🌍 Ship worldwide
+							<div class="font-medium flex items-center gap-2 text-gray-900">
+								<Globe class="w-4 h-4" />
+								Ship worldwide
 							</div>
-							<p class="text-sm text-blue-700">
-								Reach buyers globally and expand your market!
+							<p class="text-sm text-gray-600">
+								Reach buyers globally and expand your market
 							</p>
 						</div>
 					</label>
@@ -370,27 +371,15 @@
 	</div>
 	
 	<!-- Final tips -->
-	<div class="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 border border-transparent rounded-lg p-4 relative overflow-hidden">
-		<div class="absolute inset-0 bg-gradient-to-br from-green-200/20 via-blue-200/20 to-purple-200/20"></div>
-		<div class="relative">
-			<h3 class="font-medium text-purple-900 mb-2 text-lg">Almost done! 🎉</h3>
-			<p class="text-sm text-purple-800 mb-3">
-				You're just one step away from listing your item! 🚀
-			</p>
-			<div class="space-y-2 text-sm">
-				<p class="flex items-start gap-2 text-purple-700">
-					<span>✨</span>
-					<span>Your listing will be visible to thousands of buyers instantly</span>
-				</p>
-				<p class="flex items-start gap-2 text-purple-700">
-					<span>💡</span>
-					<span>You can always edit your listing later if needed</span>
-				</p>
-				<p class="flex items-start gap-2 text-purple-700">
-					<span>📱</span>
-					<span>Get notifications when buyers message you</span>
-				</p>
-			</div>
-		</div>
+	<div class="bg-gradient-to-br from-blue-50 to-white border border-blue-200 rounded-lg p-4">
+		<h3 class="font-medium text-blue-900 mb-2">Almost done!</h3>
+		<p class="text-sm text-blue-800 mb-3">
+			You're just one step away from listing your item.
+		</p>
+		<ul class="space-y-2 text-sm text-blue-700 list-disc list-inside">
+			<li>Your listing will be visible to thousands of buyers instantly</li>
+			<li>You can always edit your listing later if needed</li>
+			<li>Get notifications when buyers message you</li>
+		</ul>
 	</div>
 </div>

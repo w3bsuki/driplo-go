@@ -40,7 +40,7 @@
 <div class="space-y-8">
 	<!-- Step Header -->
 	<div>
-		<h2 class="text-xl sm:text-2xl font-bold mb-2">📸 Add Photos</h2>
+		<h2 class="text-xl sm:text-2xl font-bold mb-2">Add Photos</h2>
 		<p class="text-sm sm:text-base text-gray-600">Upload up to 10 photos of your item</p>
 	</div>
 	
@@ -62,31 +62,31 @@
 	</div>
 	
 	<!-- Photo requirements -->
-	<div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 space-y-3 border border-blue-200">
-		<h3 class="font-medium text-blue-900 flex items-center gap-2">
-			📷 Photo Guidelines
+	<div class="bg-gray-50 rounded-lg p-4 space-y-3 border border-gray-200">
+		<h3 class="font-medium text-gray-900">
+			Photo Guidelines
 		</h3>
 		
 		<div class="grid md:grid-cols-2 gap-4 text-sm">
-			<div class="bg-white/60 rounded-lg p-3">
-				<h4 class="font-medium text-green-700 mb-2">✅ Do's</h4>
-				<ul class="text-green-700 space-y-1.5">
-					<li>☀️ Use good lighting (natural is best)</li>
-					<li>👁️ Show the actual item clearly</li>
-					<li>📐 Include different angles</li>
-					<li>🔍 Show any flaws or wear</li>
-					<li>🏷️ Include brand tags/labels</li>
+			<div class="bg-white rounded-lg p-3">
+				<h4 class="font-medium text-green-700 mb-2">Do's</h4>
+				<ul class="text-gray-600 space-y-1.5 list-disc list-inside">
+					<li>Use good lighting (natural is best)</li>
+					<li>Show the actual item clearly</li>
+					<li>Include different angles</li>
+					<li>Show any flaws or wear</li>
+					<li>Include brand tags/labels</li>
 				</ul>
 			</div>
 			
-			<div class="bg-white/60 rounded-lg p-3">
-				<h4 class="font-medium text-red-700 mb-2">❌ Don'ts</h4>
-				<ul class="text-red-700 space-y-1.5">
-					<li>🚫 No filters or heavy editing</li>
-					<li>📵 No stock photos</li>
-					<li>❎ No watermarks or text</li>
-					<li>🙈 No unrelated items in frame</li>
-					<li>⚠️ No inappropriate content</li>
+			<div class="bg-white rounded-lg p-3">
+				<h4 class="font-medium text-red-700 mb-2">Don'ts</h4>
+				<ul class="text-gray-600 space-y-1.5 list-disc list-inside">
+					<li>No filters or heavy editing</li>
+					<li>No stock photos</li>
+					<li>No watermarks or text</li>
+					<li>No unrelated items in frame</li>
+					<li>No inappropriate content</li>
 				</ul>
 			</div>
 		</div>
@@ -95,14 +95,14 @@
 	<!-- Quick tips -->
 	{#if form.formData.images.length === 0}
 		<div class="text-center py-8">
-			<div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full mb-4 shadow-sm">
-				<span class="text-4xl">📸</span>
+			<div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+				<Camera class="w-8 h-8 text-gray-600" />
 			</div>
-			<h3 class="text-lg font-medium mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-				Great photos = Faster sales! 🚀
+			<h3 class="text-lg font-medium mb-2 text-gray-900">
+				Great photos = Faster sales
 			</h3>
 			<p class="text-gray-600 max-w-md mx-auto">
-				Listings with high-quality photos sell <span class="font-semibold text-purple-600">3x faster</span>. 
+				Listings with high-quality photos sell <span class="font-semibold text-[#4F9FC5]">3x faster</span>. 
 				Make sure your first photo clearly shows what you're selling!
 			</p>
 		</div>
@@ -136,7 +136,7 @@
 					</div>
 					<div class="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
 						<div 
-							class="bg-blue-600 h-full rounded-full transition-all duration-300"
+							class="bg-gradient-to-r from-primary to-[#6BB6D8] h-full rounded-full transition-all duration-300"
 							style="width: {progress.percentage}%"
 						/>
 					</div>

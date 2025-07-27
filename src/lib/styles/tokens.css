@@ -231,17 +231,17 @@
     --color-border-primary: #e2e8f0;   /* gray-200 */
     --color-border-secondary: #cbd5e1;  /* gray-300 */
     --color-border-hover: #cbd5e1;     /* gray-300 */
-    --color-border-focus: #3b82f6;     /* blue-500 */
+    --color-border-focus: var(--color-brand-500);     /* baby blue */
 
     /* Component-specific */
-    --button-primary-bg: #3b82f6;      /* blue-500 */
-    --button-primary-bg-hover: #2563eb; /* blue-600 */
+    --button-primary-bg: var(--color-brand-500);      /* baby blue */
+    --button-primary-bg-hover: var(--color-brand-600); /* darker blue */
     --button-primary-text: #ffffff;
 
     --input-bg: #ffffff;
     --input-border: #e2e8f0;    /* gray-200 */
     --input-border-hover: #cbd5e1; /* gray-300 */
-    --input-border-focus: #3b82f6; /* blue-500 */
+    --input-border-focus: var(--color-brand-500); /* baby blue */
   }
 
   /* Dark Mode */
@@ -268,8 +268,8 @@
     --color-border-hover: var(--color-gray-600);
     --color-border-focus: var(--color-brand-500);
 
-    --button-primary-bg: var(--color-brand-600);
-    --button-primary-bg-hover: var(--color-brand-700);
+    --button-primary-bg: var(--color-brand-500);
+    --button-primary-bg-hover: var(--color-brand-600);
     --button-primary-text: var(--color-gray-0);
 
     --input-bg: var(--color-gray-900);

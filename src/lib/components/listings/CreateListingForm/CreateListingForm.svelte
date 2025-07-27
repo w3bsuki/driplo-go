@@ -293,7 +293,7 @@
 								disabled={status === 'upcoming'}
 								class={cn(
 									"text-xs font-medium transition-all duration-200 flex items-center gap-1",
-									status === 'current' && "text-purple-600 scale-110 font-semibold",
+									status === 'current' && "text-[#4F9FC5] scale-110 font-semibold",
 									status === 'completed' && "text-green-600",
 									status === 'upcoming' && "text-gray-400 cursor-not-allowed"
 								)}
@@ -313,7 +313,7 @@
 					</div>
 					<div class="bg-gray-200 rounded-full h-2 overflow-hidden">
 						<div 
-							class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-full rounded-full transition-all duration-500 ease-out shadow-sm"
+							class="bg-gradient-to-r from-primary to-[#6BB6D8] h-full rounded-full transition-all duration-500 ease-out shadow-sm"
 							style="width: {(formStore.currentStep / formStore.totalSteps) * 100}%"
 						/>
 					</div>
@@ -393,7 +393,7 @@
 							class={cn(
 								"inline-flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 text-sm sm:text-base font-medium rounded-lg transition-all duration-200",
 								formStore.canProceedToNextStep()
-									? "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 hover:shadow-lg"
+									? "bg-gradient-to-r from-primary to-[#6BB6D8] text-white hover:from-[#6BB6D8] hover:to-[#4F9FC5] hover:shadow-md"
 									: "bg-gray-100 text-gray-400 cursor-not-allowed"
 							)}
 						>
@@ -407,7 +407,7 @@
 							class={cn(
 								"inline-flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 text-sm sm:text-base font-medium rounded-lg transition-all duration-200",
 								formStore.canSubmit
-									? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-lg"
+									? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-md"
 									: "bg-gray-100 text-gray-400 cursor-not-allowed"
 							)}
 						>
@@ -448,8 +448,8 @@
 					onclick={() => goToStep(step.id)}
 					disabled={status === 'upcoming'}
 					class={cn(
-						"w-2 h-2 rounded-full transition-all duration-200 shadow-sm",
-						status === 'current' && "w-8 bg-gradient-to-r from-purple-600 to-pink-600",
+						"w-2 h-2 rounded-full transition-all duration-200",
+						status === 'current' && "w-8 bg-gradient-to-r from-primary to-[#6BB6D8]",
 						status === 'completed' && "bg-green-500",
 						status === 'upcoming' && "bg-gray-300"
 					)}
