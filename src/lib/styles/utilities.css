@@ -1,0 +1,187 @@
+/* /src/lib/styles/utilities.css */
+@layer utilities {
+  /* Layout */
+  .container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+  }
+
+  /* Typography utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Truncation */
+  .truncate-lines {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate-2 {
+    -webkit-line-clamp: 2;
+  }
+
+  .truncate-3 {
+    -webkit-line-clamp: 3;
+  }
+
+  /* Button sizes (compact) */
+  .btn-xs {
+    height: var(--button-height-xs);
+    padding-inline: var(--space-2);
+    font-size: var(--text-xs);
+    gap: var(--space-1);
+  }
+
+  .btn-sm {
+    height: var(--button-height-sm);
+    padding-inline: var(--space-2-5);
+    font-size: var(--text-sm);
+    gap: var(--space-1);
+  }
+
+  .btn-md {
+    height: var(--button-height-md);
+    padding-inline: var(--space-3);
+    font-size: var(--text-sm);
+    gap: var(--space-1-5);
+  }
+
+  .btn-lg {
+    height: var(--button-height-lg);
+    padding-inline: var(--space-4);
+    font-size: var(--text-base);
+    gap: var(--space-2);
+  }
+
+  /* Input sizes */
+  .input-sm {
+    height: var(--input-height-sm);
+    padding-inline: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .input-md {
+    height: var(--input-height-md);
+    padding-inline: var(--space-2-5);
+    font-size: var(--text-sm);
+  }
+
+  .input-lg {
+    height: var(--input-height-lg);
+    padding-inline: var(--space-3);
+    font-size: var(--text-base);
+  }
+
+  /* Micro-interactions - FAST */
+  .hover-bright {
+    transition: background-color var(--duration-fast) var(--ease-sharp),
+                border-color var(--duration-fast) var(--ease-sharp);
+  }
+
+  .hover-bright:hover {
+    filter: brightness(1.1);
+  }
+
+  .active-scale {
+    transition: transform var(--duration-instant);
+  }
+
+  .active-scale:active {
+    transform: scale(0.97);
+  }
+
+  /* Instant hover states */
+  .instant-hover {
+    transition-duration: var(--duration-instant) !important;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Glass morphism */
+  .glass {
+    background: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgb(255 255 255 / 0.2);
+  }
+
+  .dark .glass {
+    background: rgb(0 0 0 / 0.3);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-gray-200) 0%,
+      var(--color-gray-100) 50%,
+      var(--color-gray-200) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Scrollbar utilities */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Touch target expansion (invisible tap area) */
+  .touch-target {
+    position: relative;
+  }
+
+  .touch-target::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--tap-area-min));
+    height: max(100%, var(--tap-area-min));
+    transform: translate(-50%, -50%);
+  }
+
+  /* Compact button utilities */
+  @media (pointer: coarse) {
+    /* On touch devices, add invisible padding for better tap targets */
+    .btn-compact-safe {
+      position: relative;
+      /* Visual size stays compact */
+    }
+    
+    .btn-compact-safe::after {
+      content: '';
+      position: absolute;
+      inset: -0.5rem; /* Expands tap area by 8px on all sides */
+    }
+  }
+}

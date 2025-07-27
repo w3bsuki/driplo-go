@@ -1,0 +1,59 @@
+/* /src/lib/styles/animations.css */
+@layer utilities {
+  /* Entrance animations - INSTANT */
+  .fade-in-fast {
+    animation: fade-in var(--duration-fast) var(--ease-sharp);
+  }
+
+  .pop-in {
+    animation: pop-in var(--duration-normal) var(--ease-sharp);
+  }
+
+  /* Page transitions only */
+  .slide-in-page {
+    animation: slide-in var(--duration-page) var(--ease-sharp);
+  }
+
+  /* No exit animations - instant removal */
+  .remove {
+    display: none !important;
+  }
+
+  /* Minimal keyframes - performance focused */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pop-in {
+    from { 
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slide-in {
+    from { transform: translateX(-8px); }
+    to { transform: translateX(0); }
+  }
+
+  /* Loading states only - no decorative animations */
+  .animate-spin {
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Skeleton loading - subtle */
+  @keyframes skeleton-pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+  }
+}

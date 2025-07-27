@@ -1,0 +1,1 @@
+// Manager configuration is now handled through preview.ts parameters
