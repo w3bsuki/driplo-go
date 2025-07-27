@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '$lib/types/database.types'
+import type { Database } from '$lib/types/database'
 
 export interface BrowseFilters {
 	category?: string
@@ -25,7 +25,8 @@ export interface BrowseResult {
 
 export async function browseListings(
 	supabase: SupabaseClient<Database>,
-	filters: BrowseFilters
+	filters: BrowseFilters,
+	userId?: string
 ): Promise<BrowseResult> {
 	const {
 		category = '',
@@ -42,165 +43,81 @@ export async function browseListings(
 	} = filters
 
 	try {
-		// Build the base query with proper joins
-		let query = supabase
-			.from('listings')
-			.select(`
-				id,
-				title,
-				description,
-				price,
-				currency,
-				brand,
-				size,
-				condition,
-				images,
-				location,
-				view_count,
-				favorite_count,
-				shipping_cost,
-				created_at,
-				seller:profiles!seller_id(
-					id,
-					username,
-					full_name,
-					avatar_url,
-					account_type,
-					is_verified
-				),
-				category:categories!category_id(
-					id,
-					name,
-					slug,
-					icon_url
-				)
-			`)
-			.eq('status', 'active')
-
-		// Apply filters
+		// Get category ID if category filter is provided
+		let categoryId: string | null = null
 		if (category) {
-			// First, get the category ID from slug or name
 			const categoryQuery = category.includes('-')
 				? supabase.from('categories').select('id').eq('slug', category).single()
 				: supabase.from('categories').select('id').eq('name', category).single()
 			
 			const { data: categoryData } = await categoryQuery
-			
-			if (categoryData) {
-				query = query.eq('category_id', categoryData.id)
-			}
+			categoryId = categoryData?.id || null
 		}
 
-		if (subcategory) {
-			// For subcategory, we need to join with the subcategory table
-			query = query.eq('subcategory_id', subcategory)
-		}
-
-		if (search) {
-			// Use full-text search if available, otherwise fallback to ILIKE
-			const searchTerms = search.split(' ').map(term => `'${term.replace(/'/g, "''")}'`).join(' | ')
-			query = query.or(`title.fts.${searchTerms},description.fts.${searchTerms},brand.ilike.%${search}%,title.ilike.%${search}%,description.ilike.%${search}%`)
-		}
-
-		if (minPrice !== null && minPrice !== undefined) {
-			query = query.gte('price', minPrice)
-		}
-
-		if (maxPrice !== null && maxPrice !== undefined) {
-			query = query.lte('price', maxPrice)
-		}
-
-		if (sizes.length > 0) {
-			query = query.in('size', sizes)
-		}
-
-		if (brands.length > 0) {
-			query = query.in('brand', brands)
-		}
-
-		if (conditions.length > 0) {
-			query = query.in('condition', conditions)
-		}
-
-		// Apply sorting
+		// Map sort options to database columns
+		let sortColumn = 'created_at'
+		let sortOrder = 'desc'
+		
 		switch (sortBy) {
 			case 'price-low':
-				query = query.order('price', { ascending: true })
+				sortColumn = 'price'
+				sortOrder = 'asc'
 				break
 			case 'price-high':
-				query = query.order('price', { ascending: false })
+				sortColumn = 'price'
+				sortOrder = 'desc'
 				break
 			case 'popular':
-				query = query.order('view_count', { ascending: false })
+				sortColumn = 'view_count'
+				sortOrder = 'desc'
 				break
 			case 'favorites':
-				query = query.order('favorite_count', { ascending: false })
+				sortColumn = 'like_count'
+				sortOrder = 'desc'
 				break
 			case 'ending':
-				// For ending soon, we'd need an end_date field
-				// For now, sort by created_at ascending (oldest first)
-				query = query.order('created_at', { ascending: true })
+				sortColumn = 'created_at'
+				sortOrder = 'asc'
 				break
 			case 'recent':
 			default:
-				query = query.order('created_at', { ascending: false })
+				sortColumn = 'created_at'
+				sortOrder = 'desc'
 				break
 		}
 
-		// Get total count for pagination
-		const countQuery = supabase
-			.from('listings')
-			.select('*', { count: 'exact', head: true })
-			.eq('status', 'active')
-
-		// Apply same filters to count query
-		if (category) {
-			// Use the same category ID we already fetched
-			const categoryQuery = category.includes('-')
-				? supabase.from('categories').select('id').eq('slug', category).single()
-				: supabase.from('categories').select('id').eq('name', category).single()
-			
-			const { data: categoryData } = await categoryQuery
-			
-			if (categoryData) {
-				countQuery.eq('category_id', categoryData.id)
-			}
-		}
-
-		if (subcategory) {
-			countQuery.eq('subcategory_id', subcategory)
-		}
-
-		if (search) {
-			const searchTerms = search.split(' ').map(term => `'${term.replace(/'/g, "''")}'`).join(' | ')
-			countQuery.or(`title.fts.${searchTerms},description.fts.${searchTerms},brand.ilike.%${search}%,title.ilike.%${search}%,description.ilike.%${search}%`)
-		}
-
-		if (minPrice !== null && minPrice !== undefined) {
-			countQuery.gte('price', minPrice)
-		}
-
-		if (maxPrice !== null && maxPrice !== undefined) {
-			countQuery.lte('price', maxPrice)
-		}
-
-		if (sizes.length > 0) {
-			countQuery.in('size', sizes)
-		}
-
-		if (brands.length > 0) {
-			countQuery.in('brand', brands)
-		}
-
-		if (conditions.length > 0) {
-			countQuery.in('condition', conditions)
-		}
-
-		// Execute queries in parallel
+		// Execute optimized queries in parallel
 		const offset = (page - 1) * limit
 		const [listingsResult, countResult] = await Promise.all([
-			query.range(offset, offset + limit - 1),
-			countQuery
+			// Get listings with all related data in a single query
+			supabase.rpc('get_listings_with_favorites', {
+				p_user_id: userId || null,
+				p_limit: limit,
+				p_offset: offset,
+				p_status: 'active',
+				p_category_id: categoryId,
+				p_subcategory_id: subcategory || null,
+				p_min_price: minPrice,
+				p_max_price: maxPrice,
+				p_brands: brands.length > 0 ? brands : null,
+				p_sizes: sizes.length > 0 ? sizes : null,
+				p_conditions: conditions.length > 0 ? conditions : null,
+				p_sort_by: sortColumn,
+				p_sort_order: sortOrder,
+				p_search: search || null
+			}),
+			// Get total count
+			supabase.rpc('get_listings_count', {
+				p_status: 'active',
+				p_category_id: categoryId,
+				p_subcategory_id: subcategory || null,
+				p_min_price: minPrice,
+				p_max_price: maxPrice,
+				p_brands: brands.length > 0 ? brands : null,
+				p_sizes: sizes.length > 0 ? sizes : null,
+				p_conditions: conditions.length > 0 ? conditions : null,
+				p_search: search || null
+			})
 		])
 
 		if (listingsResult.error) {
@@ -210,13 +127,26 @@ export async function browseListings(
 
 		if (countResult.error) {
 			console.error('Browse count error:', countResult.error)
+			throw countResult.error
 		}
 
-		const totalCount = countResult.count || 0
+		// Transform the RPC result to match the expected format
+		const listings = (listingsResult.data || []).map((item: any) => {
+			const listingData = item.listing_data || {}
+			return {
+				...listingData,
+				is_favorited: item.is_favorited || false,
+				// Ensure backward compatibility
+				location: listingData.location_city || listingData.location,
+				favorite_count: listingData.like_count || 0
+			}
+		})
+
+		const totalCount = Number(countResult.data) || 0
 		const hasMore = offset + limit < totalCount
 
 		return {
-			listings: listingsResult.data || [],
+			listings,
 			totalCount,
 			hasMore,
 			page,

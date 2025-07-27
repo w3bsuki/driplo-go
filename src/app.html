@@ -4,6 +4,17 @@
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		
+		<!-- DNS Prefetch for external resources -->
+		<link rel="dns-prefetch" href="https://cdn.supabase.co">
+		<link rel="dns-prefetch" href="https://js.stripe.com">
+		
+		<!-- Preconnect to critical domains -->
+		<link rel="preconnect" href="https://cdn.supabase.co" crossorigin>
+		
+		<!-- Note: Actual chunk preloading will be handled dynamically by SvelteKit -->
+		<!-- These hints help the browser prepare for upcoming requests -->
+		
 		%sveltekit.head%
 		
 		<!-- Cookie Consent Default State -->

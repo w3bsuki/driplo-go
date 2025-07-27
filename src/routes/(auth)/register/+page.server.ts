@@ -60,27 +60,33 @@ export const actions = {
 			captchaToken 
 		} = result.data
 		
-		// Verify CAPTCHA with Google (skip in development if not configured)
-		const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY
+		// Verify CAPTCHA with Cloudflare Turnstile (skip in development if not configured)
+		const turnstileSecret = process.env.TURNSTILE_SECRET_KEY || '1x0000000000000000000000000000000AA' // Test key
 		
-		// In development, skip CAPTCHA if not configured
-		if (process.env.NODE_ENV !== 'production' && !recaptchaSecret) {
-			// Skip CAPTCHA verification in development
-		} else if (recaptchaSecret && captchaToken) {
+		// In development with test keys, always pass
+		if (captchaToken === 'development-test-token' || turnstileSecret === '1x0000000000000000000000000000000AA') {
+			// Skip verification with test keys
+		} else if (process.env.NODE_ENV === 'production' && !captchaToken) {
+			// In production, CAPTCHA is required
+			return fail(400, {
+				error: 'CAPTCHA verification is required'
+			})
+		} else if (captchaToken) {
 			try {
-				const verifyResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+				const formData = new FormData()
+				formData.append('secret', turnstileSecret)
+				formData.append('response', captchaToken)
+				formData.append('remoteip', getClientAddress())
+				
+				const verifyResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
 					method: 'POST',
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: new URLSearchParams({
-						secret: recaptchaSecret,
-						response: captchaToken,
-						remoteip: getClientAddress()
-					})
+					body: formData
 				})
 				
 				const verifyData = await verifyResponse.json()
 				
 				if (!verifyData.success) {
+					console.error('Turnstile verification failed:', verifyData)
 					return fail(400, {
 						error: 'CAPTCHA verification failed. Please try again.'
 					})
@@ -94,11 +100,6 @@ export const actions = {
 					})
 				}
 			}
-		} else if (process.env.NODE_ENV === 'production' && !captchaToken) {
-			// In production, CAPTCHA is required
-			return fail(400, {
-				error: 'CAPTCHA verification is required'
-			})
 		}
 		
 		// Check rate limit using RPC function

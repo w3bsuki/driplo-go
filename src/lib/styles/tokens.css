@@ -14,9 +14,9 @@
     --grid-16: calc(var(--grid-unit) * 16); /* 64px */
 
     /* ===== Typography Scale (Compact) ===== */
-    --font-sans: Inter, system-ui, -apple-system, sans-serif;
-    --font-display: 'Plus Jakarta Sans', var(--font-sans);
-    --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+    --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
+    --font-display: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', var(--font-sans);
+    --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', monospace;
 
     /* Font Sizes - Comfortable compact */
     --text-2xs: 0.6875rem;   /* 11px - tiny labels only */

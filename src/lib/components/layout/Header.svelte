@@ -5,7 +5,7 @@
 	import { getAuthContext } from '$lib/stores/auth-context.svelte';
 	import { unreadCount, initializeUnreadCount, subscribeToUnreadUpdates, unsubscribeFromUnreadUpdates } from '$lib/stores/messages';
 	import type { SupabaseClient } from '@supabase/supabase-js';
-	import type { Database } from '$lib/types/database.types';
+	import type { Database } from '$lib/types/database';
 	import * as m from '$lib/paraglide/messages.js';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import DriploLogo from '$lib/components/ui/DriploLogo.svelte';
@@ -22,23 +22,21 @@
 	
 	const authContext = getAuthContext();
 
-	// Initialize unread count and real-time subscriptions
-	onMount(() => {
-		if (authContext?.user) {
-			initializeUnreadCount();
-			subscribeToUnreadUpdates(authContext.user.id, supabase);
-		}
-	});
-
 	onDestroy(() => {
 		unsubscribeFromUnreadUpdates(supabase);
 	});
 
-	// Re-initialize when user changes
+	// Initialize unread count and real-time subscriptions when user changes
 	$effect(() => {
 		if (authContext?.user) {
+			// Clean up any existing subscription first
+			unsubscribeFromUnreadUpdates(supabase);
+			// Initialize fresh subscription
 			initializeUnreadCount();
 			subscribeToUnreadUpdates(authContext.user.id, supabase);
+		} else {
+			// Clean up subscription when user logs out
+			unsubscribeFromUnreadUpdates(supabase);
 		}
 	});
 	

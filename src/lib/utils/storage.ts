@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '$lib/types/database.types'
+import type { Database } from '$lib/types/database'
 import { ImageOptimizer } from '$lib/server/image-optimizer'
 
 export type UploadResult = {

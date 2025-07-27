@@ -3,7 +3,7 @@
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
     import { formatDistanceToNow } from 'date-fns';
-    import type { Database } from '$lib/types/database.types';
+    import type { Database } from '$lib/types/database';
     import Spinner from '$lib/components/ui/Spinner.svelte';
     
     type Conversation = Database['public']['Tables']['conversations']['Row'] & {

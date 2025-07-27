@@ -11,7 +11,7 @@
 	import BrandInfoForm from './BrandInfoForm.svelte';
 	import SetupComplete from './SetupComplete.svelte';
 	import type { User, SupabaseClient } from '@supabase/supabase-js';
-	import type { Tables } from '$lib/types/database.types';
+	import type { Tables } from '$lib/types/database';
 	import type { ExtendedProfile } from '$lib/types/database.extended';
 
 	interface Props {

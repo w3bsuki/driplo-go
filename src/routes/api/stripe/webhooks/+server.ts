@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from '$env/static/private';
 import type { RequestHandler } from './$types';
 import { emailService } from '$lib/server/email';
-import { rateLimiters } from '$lib/server/rate-limit';
+import { databaseRateLimiters } from '$lib/server/database-rate-limit';
 
 const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2024-06-20'
@@ -12,8 +12,8 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 export const POST: RequestHandler = async (event) => {
   const { request, locals } = event;
   
-  // Apply rate limiting (per IP for webhooks)
-  const rateLimitResponse = await rateLimiters.webhook(event);
+  // Apply database-backed rate limiting (per IP for webhooks)
+  const rateLimitResponse = await databaseRateLimiters.webhook(event);
   if (rateLimitResponse) {
     return rateLimitResponse;
   }

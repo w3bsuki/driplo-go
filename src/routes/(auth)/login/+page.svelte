@@ -10,7 +10,7 @@
 	import { Button, Input } from '$lib/components/ui'
 	import Icon from '$lib/components/ui/icon.svelte'
 	import { onMount } from 'svelte'
-	import CaptchaWrapper from '$lib/components/auth/CaptchaWrapper.svelte'
+	import TurnstileWrapper from '$lib/components/auth/TurnstileWrapper.svelte'
 
 	const auth = getAuthContext()
 	console.log('Auth context in login page:', auth)
@@ -24,7 +24,7 @@
 	// CAPTCHA state
 	let captchaToken: string | null = null
 	let showCaptchaError = false
-	let captchaRef: CaptchaWrapper
+	let captchaRef: TurnstileWrapper
 
 	// Show error messages based on URL parameters
 	onMount(() => {
@@ -289,7 +289,7 @@
 				
 				<!-- CAPTCHA -->
 				<div>
-					<CaptchaWrapper
+					<TurnstileWrapper
 						bind:this={captchaRef}
 						onVerify={(token) => {
 							captchaToken = token
@@ -302,6 +302,8 @@
 							captchaToken = null
 							toast.error('CAPTCHA verification failed. Please try again.')
 						}}
+						theme="light"
+						size="normal"
 					/>
 					{#if showCaptchaError && !captchaToken}
 						<p class="text-red-500 text-xs mt-1">Please complete the CAPTCHA verification</p>

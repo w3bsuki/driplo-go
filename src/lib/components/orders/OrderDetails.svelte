@@ -1,7 +1,7 @@
 <script lang="ts">
     import { format } from 'date-fns';
     import ShippingForm from './ShippingForm.svelte';
-    import type { Database } from '$lib/types/database.types';
+    import type { Database } from '$lib/types/database';
     
     type Order = Database['public']['Tables']['orders']['Row'] & {
         buyer: {
@@ -361,10 +361,10 @@
 {#if showShippingForm && order}
     <ShippingForm 
         orderId={order.id}
-        on:shipped={() => {
+        onshipped={() => {
             showShippingForm = false;
             loadOrder();
         }}
-        on:cancel={() => showShippingForm = false}
+        oncancel={() => showShippingForm = false}
     />
 {/if}

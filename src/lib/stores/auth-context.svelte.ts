@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte'
 import type { User, Session, SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from '$lib/types/database.types'
+import type { Database } from '$lib/types/database'
 import { goto, invalidateAll } from '$app/navigation'
 import { browser } from '$app/environment'
 

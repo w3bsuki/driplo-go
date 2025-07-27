@@ -5,7 +5,7 @@
   import { Button } from '$lib/components/ui';
   import { ChevronRight } from 'lucide-svelte';
   import type { SupabaseClient } from '@supabase/supabase-js';
-  import type { Database } from '$lib/types/database.types';
+  import type { Database } from '$lib/types/database';
   
   interface Props {
     category: Category;

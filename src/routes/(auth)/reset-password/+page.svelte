@@ -9,6 +9,7 @@
 	import { Lock, Eye, EyeOff } from 'lucide-svelte';
 	import { z } from 'zod';
 	import type { ActionData } from './$types';
+	import TurnstileWrapper from '$lib/components/auth/TurnstileWrapper.svelte';
 
 	interface Props {
 		form?: ActionData;
@@ -26,6 +27,11 @@
 	let loading = $state(false);
 	let success = $state(false);
 	let error = $state('');
+	
+	// CAPTCHA state
+	let captchaToken = $state<string | null>(null);
+	let showCaptchaError = $state(false);
+	let captchaRef: TurnstileWrapper;
 
 	const passwordSchema = z
 		.string()
@@ -46,6 +52,13 @@
 
 	async function handleSubmit() {
 		error = '';
+		
+		// Check CAPTCHA in production
+		if (import.meta.env.MODE === 'production' && !captchaToken) {
+			showCaptchaError = true;
+			error = 'Please complete the CAPTCHA verification';
+			return;
+		}
 
 		// Validate passwords
 		if (password !== confirmPassword) {
@@ -73,6 +86,11 @@
 				error = updateError.message;
 			} else {
 				success = true;
+				// Reset CAPTCHA for security
+				if (captchaRef) {
+					captchaRef.reset();
+				}
+				captchaToken = null;
 				// Redirect to login after 3 seconds
 				setTimeout(() => {
 					goto('/login?reset=success');
@@ -185,8 +203,31 @@
 							<li>Include at least one number</li>
 						</ul>
 					</div>
+					
+					<!-- CAPTCHA -->
+					<div>
+						<TurnstileWrapper
+							bind:this={captchaRef}
+							onVerify={(token) => {
+								captchaToken = token;
+								showCaptchaError = false;
+							}}
+							onExpire={() => {
+								captchaToken = null;
+							}}
+							onError={() => {
+								captchaToken = null;
+								error = 'CAPTCHA verification failed. Please try again.';
+							}}
+							theme="light"
+							size="normal"
+						/>
+						{#if showCaptchaError && !captchaToken}
+							<p class="text-red-500 text-sm mt-1">Please complete the CAPTCHA verification</p>
+						{/if}
+					</div>
 
-					<Button type="submit" class="w-full" disabled={loading || !password || !confirmPassword}>
+					<Button type="submit" class="w-full" disabled={loading || !password || !confirmPassword || (import.meta.env.MODE === 'production' && !captchaToken)}>
 						{loading ? 'Resetting...' : 'Reset password'}
 					</Button>
 				</form>

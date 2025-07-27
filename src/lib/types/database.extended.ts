@@ -1,7 +1,7 @@
-// Extended database types for tables and columns not yet in database.types.ts
+// Extended database types for tables and columns not yet in database.ts
 // This file provides temporary type definitions until the database types are regenerated
 
-import type { Database as GeneratedDatabase } from './database.types';
+import type { Database as GeneratedDatabase } from './database';
 
 // Extended profile type with brand account fields
 export interface ExtendedProfile extends GeneratedDatabase['public']['Tables']['profiles']['Row'] {

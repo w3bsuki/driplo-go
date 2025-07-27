@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
     import { formatDistanceToNow } from 'date-fns';
-    import type { Database } from '$lib/types/database.types';
+    import type { Database } from '$lib/types/database';
     import type { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
     import { decrementUnreadCount } from '$lib/stores/messages';
     // import VirtualList from '$lib/components/ui/VirtualList.svelte';

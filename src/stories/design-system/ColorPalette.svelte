@@ -72,7 +72,7 @@
         {#each colors as color}
           <button
             class="group relative overflow-hidden rounded-lg border border-gray-200 hover:border-gray-300 transition-all hover:shadow-md"
-            on:click={() => copyToClipboard(color.class, color.name)}
+            onclick={() => copyToClipboard(color.class, color.name)}
           >
             <div class="{color.class} h-24 relative">
               {#if copied === color.name}

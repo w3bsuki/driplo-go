@@ -4,14 +4,16 @@ import { browser } from '$app/environment'
 // Motion preference store
 function createMotionStore() {
   const { subscribe, set, update } = writable<boolean>(true)
+  let mediaQuery: MediaQueryList | null = null
+  let handleChange: ((e: MediaQueryListEvent) => void) | null = null
   
   // Check system preference on initialization
   if (browser) {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     set(!mediaQuery.matches)
     
     // Listen for changes to system preference
-    const handleChange = (e: MediaQueryListEvent) => {
+    handleChange = (e: MediaQueryListEvent) => {
       set(!e.matches)
     }
     
@@ -24,7 +26,15 @@ function createMotionStore() {
     update,
     toggle: () => update(n => !n),
     enable: () => set(true),
-    disable: () => set(false)
+    disable: () => set(false),
+    // Cleanup function for removing event listener
+    destroy: () => {
+      if (browser && mediaQuery && handleChange) {
+        mediaQuery.removeEventListener('change', handleChange)
+        mediaQuery = null
+        handleChange = null
+      }
+    }
   }
 }
 

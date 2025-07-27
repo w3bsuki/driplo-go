@@ -7,6 +7,7 @@
 	import { Mail, ArrowLeft } from 'lucide-svelte';
 	import { z } from 'zod';
 	import type { ActionData } from './$types';
+	import TurnstileWrapper from '$lib/components/auth/TurnstileWrapper.svelte';
 
 	interface Props {
 		form?: ActionData;
@@ -20,11 +21,23 @@
 	let loading = $state(false);
 	let success = $state(false);
 	let error = $state('');
+	
+	// CAPTCHA state
+	let captchaToken = $state<string | null>(null);
+	let showCaptchaError = $state(false);
+	let captchaRef: TurnstileWrapper;
 
 	const emailSchema = z.string().email('Please enter a valid email address');
 
 	async function handleSubmit() {
 		error = '';
+		
+		// Check CAPTCHA in production
+		if (import.meta.env.MODE === 'production' && !captchaToken) {
+			showCaptchaError = true;
+			error = 'Please complete the CAPTCHA verification';
+			return;
+		}
 		
 		try {
 			emailSchema.parse(email);
@@ -46,6 +59,11 @@
 				error = resetError.message;
 			} else {
 				success = true;
+				// Reset CAPTCHA for security
+				if (captchaRef) {
+					captchaRef.reset();
+				}
+				captchaToken = null;
 			}
 		} catch (err) {
 			error = 'An error occurred. Please try again.';
@@ -110,8 +128,31 @@
 							disabled={loading}
 						/>
 					</div>
+					
+					<!-- CAPTCHA -->
+					<div>
+						<TurnstileWrapper
+							bind:this={captchaRef}
+							onVerify={(token) => {
+								captchaToken = token;
+								showCaptchaError = false;
+							}}
+							onExpire={() => {
+								captchaToken = null;
+							}}
+							onError={() => {
+								captchaToken = null;
+								error = 'CAPTCHA verification failed. Please try again.';
+							}}
+							theme="light"
+							size="normal"
+						/>
+						{#if showCaptchaError && !captchaToken}
+							<p class="text-red-500 text-sm mt-1">Please complete the CAPTCHA verification</p>
+						{/if}
+					</div>
 
-					<Button type="submit" class="w-full" disabled={loading || !email}>
+					<Button type="submit" class="w-full" disabled={loading || !email || (import.meta.env.MODE === 'production' && !captchaToken)}>
 						{loading ? 'Sending...' : 'Send reset instructions'}
 					</Button>
 				</form>

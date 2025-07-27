@@ -29,10 +29,10 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 
 	try {
 		// Cache browse results for 5 minutes
-		const cacheKey = cacheKeys.browseResults(filters)
+		const cacheKey = cacheKeys.browseResults(filters) + (session?.user?.id || '')
 		const browseResult = await getCachedData(
 			cacheKey,
-			() => browseListings(supabase, filters),
+			() => browseListings(supabase, filters, session?.user?.id),
 			cacheTTL.browseResults
 		)
 
@@ -57,17 +57,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 			cacheTTL.categories
 		)
 
-		// Get user's favorites if logged in
-		let userFavorites: string[] = []
-		if (session?.user) {
-			const { data: favorites } = await supabase
-				.from('favorites')
-				.select('listing_id')
-				.eq('user_id', session.user.id)
-			
-			userFavorites = favorites?.map(f => f.listing_id) || []
-		}
-
 		// Calculate pagination info
 		const totalPages = Math.ceil(browseResult.totalCount / browseResult.limit)
 		const hasNextPage = browseResult.page < totalPages
@@ -88,7 +77,7 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 				is_verified: listing.seller?.is_verified
 			},
 			likes: listing.favorite_count || 0,
-			isLiked: userFavorites.includes(listing.id),
+			isLiked: listing.is_favorited || false,
 			condition: listing.condition,
 			// Include full listing data for other components
 			...listing,
@@ -101,7 +90,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 			totalCount: browseResult.totalCount,
 			categories,
 			popularBrands: filterOptions.brands,
-			userFavorites,
 			pagination: {
 				currentPage: browseResult.page,
 				totalPages,

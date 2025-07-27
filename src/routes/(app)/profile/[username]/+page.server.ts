@@ -28,44 +28,60 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		brandProfile = brandData
 	}
 	
-	// Load user's listings
-	const { data: listings } = await locals.supabase
-		.from('listings')
-		.select('*')
-		.eq('seller_id', profileData.id)
-		.eq('status', 'active')
-		.order('created_at', { ascending: false })
-		.limit(12)
+	// Use optimized RPC function to get profile listings with stats
+	const { data: profileListingsData, error: profileListingsError } = await locals.supabase
+		.rpc('get_profile_listings_with_stats', {
+			p_seller_id: profileData.id,
+			p_viewer_id: session?.user?.id || null,
+			p_limit: 12
+		})
+
+	if (profileListingsError) {
+		console.error('Error loading profile listings:', profileListingsError)
+	}
+
+	// Extract listings from RPC result
+	const profileResult = profileListingsData?.[0] || {}
+	const listings = profileResult.listings || []
 	
-	// Check if current user follows this profile
-	let isFollowing = false
+	// Check if current user follows this profile and load other data in parallel
+	const parallelQueries = []
+	
+	// Following check
 	if (session?.user && session.user.id !== profileData.id) {
-		const { data: followData } = await locals.supabase
-			.from('user_follows')
-			.select('id')
-			.eq('follower_id', session.user.id)
-			.eq('following_id', profileData.id)
-			.maybeSingle()
-		
-		isFollowing = !!followData
+		parallelQueries.push(
+			locals.supabase
+				.from('user_follows')
+				.select('id')
+				.eq('follower_id', session.user.id)
+				.eq('following_id', profileData.id)
+				.maybeSingle()
+		)
 	}
 	
-	// Load social media accounts
-	const { data: socialAccounts } = await locals.supabase
-		.from('social_media_accounts')
-		.select('*')
-		.eq('user_id', profileData.id)
+	// Social media accounts
+	parallelQueries.push(
+		locals.supabase
+			.from('social_media_accounts')
+			.select('*')
+			.eq('user_id', profileData.id)
+	)
 	
-	// Calculate stats
-	const { count: totalListings } = await locals.supabase
-		.from('listings')
-		.select('*', { count: 'exact', head: true })
-		.eq('seller_id', profileData.id)
+	const results = await Promise.all(parallelQueries)
 	
-	const { data: likesData } = await locals.supabase
-		.from('favorites')
-		.select('id')
-		.in('listing_id', listings?.map(l => l.id) || [])
+	let isFollowing = false
+	let socialAccounts = []
+	
+	if (session?.user && session.user.id !== profileData.id) {
+		isFollowing = !!results[0]?.data
+		socialAccounts = results[1]?.data || []
+	} else {
+		socialAccounts = results[0]?.data || []
+	}
+
+	// Get stats from RPC result (already optimized)
+	const totalListings = profileResult.total_listings || 0
+	const totalLikes = profileResult.total_likes || 0
 	
 	return {
 		profile: {
@@ -84,9 +100,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		socialAccounts: socialAccounts || [],
 		isFollowing,
 		stats: {
-			totalListings: totalListings || 0,
-			totalLikes: likesData?.length || 0,
-			followers: profileData.followers_count || 0,
+			totalListings,
+			totalLikes,
+			followers: profileData.follower_count || 0,
 			following: profileData.following_count || 0
 		},
 		isOwnProfile: session?.user?.id === profileData.id,

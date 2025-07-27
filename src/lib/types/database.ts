@@ -264,6 +264,9 @@ export type Database = {
           website: string | null
           account_type: 'personal' | 'brand' | null
           setup_completed: boolean | null
+          two_factor_enabled: boolean | null
+          two_factor_secret: string | null
+          backup_codes: string[] | null
         }
         Insert: {
           avatar_url?: string | null
@@ -298,6 +301,9 @@ export type Database = {
           website?: string | null
           account_type?: 'personal' | 'brand' | null
           setup_completed?: boolean | null
+          two_factor_enabled?: boolean | null
+          two_factor_secret?: string | null
+          backup_codes?: string[] | null
         }
         Update: {
           avatar_url?: string | null
@@ -332,6 +338,9 @@ export type Database = {
           website?: string | null
           account_type?: 'personal' | 'brand' | null
           setup_completed?: boolean | null
+          two_factor_enabled?: boolean | null
+          two_factor_secret?: string | null
+          backup_codes?: string[] | null
         }
         Relationships: []
       }

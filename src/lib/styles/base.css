@@ -1,5 +1,21 @@
 /* /src/lib/styles/base.css */
 @layer base {
+  /* Font-display optimization for variable fonts */
+  @font-face {
+    font-family: 'Inter Variable';
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Plus Jakarta Sans Variable';
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'JetBrains Mono Variable';
+    font-display: swap;
+  }
+
   /* Modern CSS Reset */
   *, *::before, *::after {
     box-sizing: border-box;

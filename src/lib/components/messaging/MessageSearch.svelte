@@ -1,7 +1,7 @@
 <script lang="ts">
     import { formatDistanceToNow } from 'date-fns';
     import { createEventDispatcher } from 'svelte';
-    import type { Database } from '$lib/types/database.types';
+    import type { Database } from '$lib/types/database';
     
     type Message = Database['public']['Tables']['messages']['Row'] & {
         sender: {
@@ -204,7 +204,7 @@
                                                     </span>
                                                 </div>
                                                 <p class="text-sm text-gray-600 truncate">
-                                                    {@html highlightText(message.message_text, searchQuery)}
+                                                    {message.message_text}
                                                 </p>
                                             </div>
                                         </div>

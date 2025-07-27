@@ -8,29 +8,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 		redirect(302, '/login')
 	}
 
-	const { data: favorites, error: favoritesError } = await locals.supabase
-		.from('favorites')
-		.select(`
-			id,
-			created_at,
-			listing_id,
-			listings (
-				id,
-				title,
-				price,
-				images,
-				size,
-				brand,
-				condition,
-				seller_id,
-				profiles (
-					username,
-					avatar_url
-				)
-			)
-		`)
-		.eq('user_id', session.user.id)
-		.order('created_at', { ascending: false })
+	// Use optimized RPC function to get favorites with all related data in single query
+	const { data: favoritesData, error: favoritesError } = await locals.supabase
+		.rpc('get_user_favorites_with_listings', {
+			p_user_id: session.user.id,
+			p_limit: 50,
+			p_offset: 0
+		})
 
 	if (favoritesError) {
 		console.error('Error fetching favorites:', favoritesError)
@@ -39,7 +23,20 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}
 	}
 
+	// Transform RPC result to match expected format
+	const favorites = (favoritesData || []).map((item: any) => ({
+		id: item.favorite_id,
+		created_at: item.created_at,
+		listing_id: item.listing_data.id,
+		listings: {
+			...item.listing_data,
+			// Map 'images' from RPC (image_urls) to match expected format
+			images: item.listing_data.images,
+			profiles: item.listing_data.profiles
+		}
+	}))
+
 	return {
-		favorites: favorites || []
+		favorites
 	}
 }

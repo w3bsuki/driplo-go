@@ -1,13 +1,13 @@
 import { json, error } from '@sveltejs/kit'
 import type { RequestHandler } from './$types'
 import { v4 as uuidv4 } from 'uuid'
-import { rateLimiters } from '$lib/server/rate-limit'
+import { databaseRateLimiters } from '$lib/server/database-rate-limit'
 
 export const POST: RequestHandler = async (event) => {
 	const { request, locals: { supabase, safeGetSession } } = event
 	
-	// Apply rate limiting
-	const rateLimitResponse = await rateLimiters.upload(event)
+	// Apply database-backed rate limiting
+	const rateLimitResponse = await databaseRateLimiters.upload(event)
 	if (rateLimitResponse) {
 		return rateLimitResponse
 	}

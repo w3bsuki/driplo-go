@@ -3,8 +3,9 @@
 	import { getAuthContext } from '$lib/stores/auth-context.svelte'
 	import { onMount } from 'svelte'
 	import ImageUpload from '$lib/components/upload/ImageUpload.svelte'
-	import { Save, ArrowLeft, User, Image as ImageIcon, MapPin, Globe, FileText, Loader2, Camera, Instagram, Music2, Facebook, Twitter, Youtube, Link } from 'lucide-svelte'
+	import { Save, ArrowLeft, User, Image as ImageIcon, MapPin, Globe, FileText, Loader2, Camera, Instagram, Music2, Facebook, Twitter, Youtube, Link, Shield } from 'lucide-svelte'
 	import { toast } from 'svelte-sonner'
+	import TwoFactorSettings from '$lib/components/auth/TwoFactorSettings.svelte'
 	import type { PageData } from './$types'
 	import * as m from '$lib/paraglide/messages.js'
 
@@ -39,7 +40,12 @@
 		pinterest: ''
 	})
 	
-	// Load existing social media accounts on mount
+	// 2FA state
+	let twoFactorEnabled = $state(false)
+	let backupCodesCount = $state(0)
+	let is2FARequired = $state(false)
+	
+	// Load existing social media accounts and 2FA status on mount
 	onMount(async () => {
 		if (auth.user?.id) {
 			try {
@@ -57,6 +63,28 @@
 				}
 			} catch (error) {
 				console.error('Error loading social media accounts:', error)
+			}
+			
+			// Load 2FA status
+			try {
+				const response = await fetch('/api/auth/2fa/backup-codes')
+				if (response.ok) {
+					const result = await response.json()
+					twoFactorEnabled = true
+					backupCodesCount = result.count || 0
+				} else {
+					// 2FA not enabled or error
+					twoFactorEnabled = false
+					backupCodesCount = 0
+				}
+				
+				// Check if 2FA is required based on profile data
+				is2FARequired = profile?.account_type === 'brand' || profile?.role === 'admin'
+			} catch (error) {
+				console.error('Error loading 2FA status:', error)
+				// Default to false on error
+				twoFactorEnabled = false
+				backupCodesCount = 0
 			}
 		}
 	})
@@ -235,7 +263,7 @@
 	<div class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
 		<div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center">
 			<button
-				onclick={handleGoBack}
+				onclick={goBack}
 				class="p-2 -ml-2 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
 			>
 				<ArrowLeft class="w-5 h-5 text-gray-600 group-hover:text-gray-900 transition-colors" />
@@ -551,13 +579,13 @@
 					</p>
 					<div class="flex gap-3">
 						<button
-							onclick={handleGoBack}
+							onclick={goBack}
 							class="flex-1 sm:flex-initial px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 hover:shadow-sm"
 						>
 							Cancel
 						</button>
 						<button
-							onclick={handleSaveProfile}
+							onclick={saveProfile}
 							disabled={saving || !username.trim()}
 							class="flex-1 sm:flex-initial bg-primary text-white py-3 px-8 rounded-xl font-medium hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-primary/20 flex items-center justify-center gap-2 min-w-[140px]"
 						>
@@ -571,6 +599,22 @@
 						</button>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<!-- Two-Factor Authentication Section -->
+		<div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+			<div class="p-6 sm:p-8">
+				<h2 class="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
+					<Shield class="w-5 h-5 text-primary" />
+					Security Settings
+				</h2>
+				
+				<TwoFactorSettings 
+					enabled={twoFactorEnabled}
+					backupCodesCount={backupCodesCount}
+					isRequired={is2FARequired}
+				/>
 			</div>
 		</div>
 

@@ -2,8 +2,35 @@ import { json } from '@sveltejs/kit'
 import { createAdminClient } from '$lib/server/supabase-admin'
 import type { RequestHandler } from './$types'
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	try {
+		// CRITICAL SECURITY: Require authentication
+		const { user } = await locals.safeGetSession()
+		if (!user) {
+			return json({ error: 'Unauthorized' }, { status: 401 })
+		}
+		
+		// Check if user is already an admin
+		const { data: profile } = await locals.supabase
+			.from('profiles')
+			.select('role')
+			.eq('id', user.id)
+			.single()
+		
+		if (profile?.role !== 'admin') {
+			return json({ error: 'Forbidden - Admin access required' }, { status: 403 })
+		}
+		
+		// Only allow creating admin if no other admins exist (first-time setup)
+		const { count } = await locals.supabase
+			.from('profiles')
+			.select('*', { count: 'exact', head: true })
+			.eq('role', 'admin')
+		
+		if (count && count > 1) {
+			return json({ error: 'Admin accounts already exist' }, { status: 403 })
+		}
+		
 		const { email, password } = await request.json()
 		
 		if (!email || !password) {

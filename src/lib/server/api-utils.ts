@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Session } from '@supabase/supabase-js';
-import type { Tables } from '$lib/types/database.types';
+import type { Tables } from '$lib/types/database';
 import { z } from 'zod';
 import { dev } from '$app/environment';
 

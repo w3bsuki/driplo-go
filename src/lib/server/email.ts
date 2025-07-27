@@ -1,4 +1,4 @@
-import type { Database } from '$lib/types/database.types';
+import type { Database } from '$lib/types/database';
 import { truncateText } from '$lib/utils/format';
 import { logger } from '$lib/services/logger';
 

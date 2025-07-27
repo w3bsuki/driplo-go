@@ -74,7 +74,7 @@
       {#if import.meta.env['DEV'] && error}
         <div class="mt-4">
           <button
-            on:click={() => showDetails = !showDetails}
+            onclick={() => showDetails = !showDetails}
             class="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
           >
             {showDetails ? 'Hide' : 'Show'} technical details
@@ -90,7 +90,7 @@
 
       <div class="mt-6 flex gap-3">
         <button
-          on:click={handleReset}
+          onclick={handleReset}
           class="flex-1 bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 transition-colors"
         >
           {m.error_boundary_retry()}

@@ -5,6 +5,7 @@ import type { Database } from '$lib/types/database'
 import { sequence } from '@sveltejs/kit/hooks'
 import { setLocale, isLocale } from '$lib/paraglide/runtime.js'
 import { dev } from '$app/environment'
+import { check2FAMiddleware } from '$lib/server/auth-middleware'
 
 const handleI18n: Handle = async ({ event, resolve }) => {
 	// Get language from cookie or Accept-Language header
@@ -238,4 +239,4 @@ const handleCaching: Handle = async ({ event, resolve }) => {
 	return response
 }
 
-export const handle = sequence(handleI18n, handleSupabase, handleCaching)
+export const handle = sequence(handleI18n, handleSupabase, check2FAMiddleware, handleCaching)

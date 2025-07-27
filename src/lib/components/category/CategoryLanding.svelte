@@ -3,11 +3,14 @@
   import HeroSearch from '$lib/components/home/HeroSearch.svelte';
   import ListingGrid from '$lib/components/listings/ListingGrid.svelte';
   import ReusableFilters from '$lib/components/shared/ReusableFilters.svelte';
+  import LazyAvatar from '$lib/components/common/LazyAvatar.svelte';
   import { cn } from '$lib/utils';
   import { ChevronRight } from 'lucide-svelte';
   import type { SupabaseClient } from '@supabase/supabase-js';
-  import type { Database } from '$lib/types/database.types';
+  import type { Database } from '$lib/types/database';
   import { getFiltersForCategory } from '$lib/config/categoryFilters';
+  import { browser } from '$app/environment';
+  import { onMount } from 'svelte';
   
   interface Props {
     category: Category;
@@ -19,6 +22,13 @@
   }
   
   let { category, subcategories, products = [], topSellers = [], supabase, theme = 'blue' }: Props = $props();
+  
+  // Progressive loading state
+  let visibleSections = $state({
+    topSellers: true, // Hero section loads immediately
+    filters: false,
+    products: false
+  });
   
   // State for filtering
   let selectedSubcategory = $state('all');
@@ -159,6 +169,50 @@
       return value !== '';
     });
   });
+  
+  // Progressive section loading
+  onMount(() => {
+    if (!browser) return;
+    
+    const observers = new Map();
+    
+    // Set up intersection observers for lazy sections
+    const sectionsToObserve = [
+      { id: 'category-filters', stateKey: 'filters' },
+      { id: 'category-products', stateKey: 'products' }
+    ];
+    
+    sectionsToObserve.forEach(({ id, stateKey }) => {
+      // Create a placeholder element we can observe
+      const placeholder = document.createElement('div');
+      placeholder.id = id;
+      placeholder.style.height = '1px';
+      
+      // Find insertion point
+      const targetElement = document.querySelector(`[data-section="${id}"]`);
+      if (targetElement && targetElement.parentNode) {
+        targetElement.parentNode.insertBefore(placeholder, targetElement);
+      
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              visibleSections[stateKey] = true;
+              observer.disconnect();
+              placeholder.remove();
+            }
+          },
+          { rootMargin: '200px' }
+        );
+        
+        observer.observe(placeholder);
+        observers.set(id, observer);
+      }
+    });
+    
+    return () => {
+      observers.forEach(observer => observer.disconnect());
+    };
+  });
 </script>
 
 
@@ -182,14 +236,15 @@
                     <div class="absolute -top-1 -right-1 text-sm z-10">👑</div>
                   {/if}
                   <div class={cn(
-                    "relative w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden ring-2 ring-white transition-all duration-100",
+                    "relative ring-2 ring-white transition-all duration-100",
                     "group-hover:scale-105",
                     theme === 'pink' ? "group-hover:ring-pink-300" : "group-hover:ring-blue-300"
                   )}>
-                    <img 
-                      src={seller.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${seller.username}`} 
-                      alt={seller.username || seller.full_name}
-                      class="w-full h-full object-cover bg-gray-100"
+                    <LazyAvatar
+                      src={seller.avatar_url}
+                      username={seller.username || seller.full_name || 'user'}
+                      size="md"
+                      eager={index === 0}
                     />
                   </div>
                   {#if seller.is_verified}
@@ -260,17 +315,35 @@
 </section>
 
 <!-- Category Filters -->
-<ReusableFilters 
-  filters={filterGroups}
-  {selectedFilters}
-  {subcategories}
-  showSubcategories={true}
-  {selectedSubcategory}
-  onFilterChange={handleFilterChange}
-  onSubcategoryChange={handleSubcategoryChange}
-  onClearFilters={handleClearFilters}
-  {theme}
-/>
+<div data-section="category-filters">
+  {#if visibleSections.filters}
+    <ReusableFilters 
+      filters={filterGroups}
+      {selectedFilters}
+      {subcategories}
+      showSubcategories={true}
+      {selectedSubcategory}
+      onFilterChange={handleFilterChange}
+      onSubcategoryChange={handleSubcategoryChange}
+      onClearFilters={handleClearFilters}
+      {theme}
+    />
+  {:else}
+    <!-- Loading placeholder -->
+    <div class="bg-white border-b">
+      <div class="container mx-auto px-4 py-4">
+        <div class="animate-pulse space-y-3">
+          <div class="h-10 bg-gray-200 rounded-sm w-full"></div>
+          <div class="flex gap-3">
+            <div class="h-8 bg-gray-200 rounded-sm w-24"></div>
+            <div class="h-8 bg-gray-200 rounded-sm w-24"></div>
+            <div class="h-8 bg-gray-200 rounded-sm w-24"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {/if}
+</div>
 
 <!-- Sort Bar -->
 <div class="bg-white border-b">
@@ -304,24 +377,40 @@
 </div>
 
 <!-- Products Grid -->
-<div class="container mx-auto px-4 py-8">
-  {#if filteredProducts().length > 0}
-    <ListingGrid 
-      listings={filteredProducts()}
-      showLoading={false}
-      {supabase}
-    />
+<div data-section="category-products" class="container mx-auto px-4 py-8">
+  {#if visibleSections.products}
+    {#if filteredProducts().length > 0}
+      <ListingGrid 
+        listings={filteredProducts()}
+        showLoading={false}
+        {supabase}
+      />
+    {:else}
+      <div class="text-center py-12">
+        <p class="text-gray-500 text-sm mb-4">No items found</p>
+        {#if hasActiveFilters}
+          <button
+            onclick={handleClearFilters}
+            class="text-primary hover:text-primary/80 font-medium"
+          >
+            Clear filters and show all
+          </button>
+        {/if}
+      </div>
+    {/if}
   {:else}
-    <div class="text-center py-12">
-      <p class="text-gray-500 text-sm mb-4">No items found</p>
-      {#if hasActiveFilters}
-        <button
-          onclick={handleClearFilters}
-          class="text-primary hover:text-primary/80 font-medium"
-        >
-          Clear filters and show all
-        </button>
-      {/if}
+    <!-- Loading skeleton for products -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
+      {#each Array(10) as _, i}
+        <div class="animate-pulse">
+          <div class="aspect-[3/4] bg-gray-200 rounded-t-sm"></div>
+          <div class="p-3 space-y-2 bg-white rounded-b-sm border border-gray-200">
+            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-3 bg-gray-200 rounded w-1/3"></div>
+          </div>
+        </div>
+      {/each}
     </div>
   {/if}
 </div>

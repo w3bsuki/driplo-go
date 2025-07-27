@@ -24,7 +24,7 @@
 	import ShippingStep from './steps/ShippingStep.svelte'
 	
 	// Types
-	import type { Database } from '$lib/types/database.types'
+	import type { Database } from '$lib/types/database'
 	type Category = Database['public']['Tables']['categories']['Row']
 	
 	interface Props {

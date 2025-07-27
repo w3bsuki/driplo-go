@@ -41,28 +41,28 @@
 		}
 	}
 
-	onMount(() => {
-		if ($isOpen) {
-			document.addEventListener('click', handleClickOutside);
-			document.addEventListener('keydown', handleEscape);
-			
-			return () => {
-				document.removeEventListener('click', handleClickOutside);
-				document.removeEventListener('keydown', handleEscape);
-			};
-		}
-	});
-
 	$effect(() => {
 		if ($isOpen) {
+			// Clean up any existing listeners first
+			document.removeEventListener('click', handleClickOutside);
+			document.removeEventListener('keydown', handleEscape);
+			
+			// Add new listeners after a tick to ensure DOM is ready
 			tick().then(() => {
 				document.addEventListener('click', handleClickOutside);
 				document.addEventListener('keydown', handleEscape);
 			});
 		} else {
+			// Clean up listeners when closed
 			document.removeEventListener('click', handleClickOutside);
 			document.removeEventListener('keydown', handleEscape);
 		}
+		
+		// Cleanup on component unmount
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+			document.removeEventListener('keydown', handleEscape);
+		};
 	});
 
 	const alignClasses = {

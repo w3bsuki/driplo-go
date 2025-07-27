@@ -4,6 +4,8 @@
 	import { Badge } from '$lib/components/ui';
 	import BrandBadge from '$lib/components/ui/BrandBadge.svelte';
 	import ConditionBadge from '$lib/components/badges/ConditionBadge.svelte';
+	import EnhancedImage from '$lib/components/common/EnhancedImage.svelte';
+	import LazyAvatar from '$lib/components/common/LazyAvatar.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	
 	// Constants
@@ -155,13 +157,18 @@
 	>
 		<div class="relative aspect-[3/4] overflow-hidden rounded-t-md bg-gray-100">
 			{#if !imageError && primaryImageUrl()}
-				<img
+				<EnhancedImage
 					src={primaryImageUrl()}
 					alt={title}
-					class="absolute inset-0 h-full w-full object-cover transition-transform duration-base group-hover:scale-105"
 					loading={eagerLoading ? 'eager' : 'lazy'}
-					onerror={handleImageError}
+					priority={eagerLoading}
 					sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+					className="absolute inset-0 h-full w-full object-cover transition-transform duration-base group-hover:scale-105"
+					lazyOptions={{
+						rootMargin: '100px',
+						threshold: 0.01
+					}}
+					onerror={handleImageError}
 				/>
 			{:else}
 				<div class="h-full w-full flex items-center justify-center bg-gray-100" role="img" aria-label={m.listing_no_image()}>
@@ -217,23 +224,13 @@
 			{/if}
 			
 			<div class="flex items-center gap-1.5 pt-1">
-				{#if seller.avatar}
-					<img
-						src={seller.avatar}
-						alt=""
-						class="h-5 w-5 rounded-md object-cover"
-						aria-hidden="true"
-					/>
-				{:else}
-					<div 
-						class="h-5 w-5 rounded-md bg-gradient-to-br {avatarGradient} flex items-center justify-center"
-						aria-hidden="true"
-					>
-						<span class="text-xs font-medium text-white">
-							{seller.username.charAt(0).toUpperCase()}
-						</span>
-					</div>
-				{/if}
+				<LazyAvatar 
+					src={seller.avatar}
+					username={seller.username}
+					size="xs"
+					class="rounded-md"
+					eager={eagerLoading}
+				/>
 				<span class="text-sm text-gray-600 truncate">{seller.username}</span>
 				{#if seller.account_type === 'brand'}
 					<BrandBadge size="xs" isVerified={seller.is_verified} showText={false} />

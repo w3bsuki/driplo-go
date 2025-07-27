@@ -119,8 +119,8 @@
 		{sizes}
 		{fetchpriority}
 		{decoding}
-		on:load={handleLoad}
-		on:error={handleError}
+		onload={handleLoad}
+		onerror={handleError}
 		class="main-image"
 		class:loading={!isLoaded}
 	/>

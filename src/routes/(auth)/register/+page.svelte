@@ -11,7 +11,7 @@
 	import { onMount } from 'svelte'
 	import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 	import { createBrowserClient } from '@supabase/ssr'
-	import CaptchaWrapper from '$lib/components/auth/CaptchaWrapper.svelte'
+	import TurnstileWrapper from '$lib/components/auth/TurnstileWrapper.svelte'
 
 	const auth = getAuthContext()
 	
@@ -36,7 +36,7 @@
 	// CAPTCHA state
 	let captchaToken = $state<string | null>(null)
 	let showCaptchaError = $state(false)
-	let captchaRef: CaptchaWrapper
+	let captchaRef: TurnstileWrapper
 	
 	// Check if showing success message
 	let showSuccess = $derived($page.url.searchParams.get('success') === 'true')
@@ -494,7 +494,7 @@
 				
 				<!-- CAPTCHA -->
 				<div class="mb-4">
-					<CaptchaWrapper
+					<TurnstileWrapper
 						bind:this={captchaRef}
 						onVerify={(token) => {
 							captchaToken = token
@@ -507,6 +507,8 @@
 							captchaToken = null
 							toast.error('CAPTCHA verification failed. Please try again.')
 						}}
+						theme="light"
+						size="normal"
 					/>
 					{#if showCaptchaError && !captchaToken}
 						<p class="text-red-500 text-xs mt-1">Please complete the CAPTCHA verification</p>

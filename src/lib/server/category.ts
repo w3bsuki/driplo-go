@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '$lib/types/database.types';
+import type { Database } from '$lib/types/database';
 
 export async function loadCategoryPage(categorySlug: string, supabase: SupabaseClient<Database>) {
   // Get category info
@@ -15,37 +15,45 @@ export async function loadCategoryPage(categorySlug: string, supabase: SupabaseC
     throw error(404, 'Category not found');
   }
 
-  // Get subcategories
-  const { data: subcategories } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('parent_id', category.id)
-    .eq('is_active', true)
-    .order('sort_order')
-    .order('name');
+  // Execute optimized queries in parallel
+  const [subcategoriesResult, productsResult, topSellersResult] = await Promise.all([
+    // Get subcategories
+    supabase
+      .from('categories')
+      .select('*')
+      .eq('parent_id', category.id)
+      .eq('is_active', true)
+      .order('sort_order')
+      .order('name'),
 
-  // Get all products for this category
-  const { data: products } = await supabase
-    .from('listings')
-    .select(`
-      *,
-      seller:profiles!seller_id(username, avatar_url)
-    `)
-    .eq('category_id', category.id)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false });
+    // Get products using optimized RPC function
+    supabase.rpc('get_category_listings', {
+      p_category_id: category.id,
+      p_limit: 50,
+      p_offset: 0
+    }),
 
-  // Get top sellers for this category
-  const { data: topSellers } = await supabase
-    .rpc('get_top_category_sellers', { 
+    // Get top sellers for this category
+    supabase.rpc('get_top_category_sellers', { 
       category_uuid: category.id
-    });
+    })
+  ]);
+
+  if (productsResult.error) {
+    console.error('Error loading category products:', productsResult.error);
+  }
+
+  // Transform RPC result to match expected format
+  const products = (productsResult.data || []).map((item: any) => ({
+    ...item.listing_data,
+    seller: item.listing_data.seller
+  }));
 
   return {
     category,
-    subcategories: subcategories || [],
-    products: products || [],
-    topSellers: topSellers || []
+    subcategories: subcategoriesResult.data || [],
+    products,
+    topSellers: topSellersResult.data || []
   };
 }
 
@@ -77,60 +85,67 @@ export async function loadSubcategoryPage(categorySlug: string, subcategorySlug:
   // Build filters from URL params
   const filters = Object.fromEntries(url.searchParams);
   
-  // Build query
-  let query = supabase
-    .from('listings')
-    .select(`
-      *,
-      seller:profiles!seller_id(username, avatar_url),
-      category:categories!category_id(name, slug),
-      subcategory:categories!subcategory_id(name, slug)
-    `, { count: 'exact' })
-    .eq('category_id', category.id)
-    .eq('subcategory_id', subcategory.id)
-    .eq('status', 'active');
-
-  // Apply filters
-  if (filters['min_price']) query = query.gte('price', parseFloat(filters['min_price']));
-  if (filters['max_price']) query = query.lte('price', parseFloat(filters['max_price']));
-  if (filters['brand']) query = query.eq('brand', filters['brand']);
-  if (filters['condition']) query = query.eq('condition', filters['condition']);
-  if (filters['size']) query = query.eq('size', filters['size']);
-  if (filters['color']) query = query.eq('color', filters['color']);
-
-  // Apply sorting
-  const sortBy = filters['sort'] || 'newest';
-  switch (sortBy) {
+  // Map sorting options
+  let sortBy = 'created_at';
+  let sortOrder = 'desc';
+  
+  switch (filters['sort']) {
     case 'price_low':
-      query = query.order('price', { ascending: true });
+      sortBy = 'price';
+      sortOrder = 'asc';
       break;
     case 'price_high':
-      query = query.order('price', { ascending: false });
+      sortBy = 'price';
+      sortOrder = 'desc';
       break;
     case 'popular':
-      query = query.order('view_count', { ascending: false });
+      sortBy = 'view_count';
+      sortOrder = 'desc';
       break;
-    default:
-      query = query.order('created_at', { ascending: false });
   }
 
   // Pagination
   const page = parseInt(filters['page'] || '1');
   const limit = 24;
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
+  const offset = (page - 1) * limit;
 
-  query = query.range(from, to);
+  // Use optimized RPC function for subcategory listings
+  const { data: productsData, error: productsError } = await supabase.rpc('get_category_listings', {
+    p_category_id: category.id,
+    p_subcategory_id: subcategory.id,
+    p_limit: limit,
+    p_offset: offset,
+    p_sort_by: sortBy,
+    p_sort_order: sortOrder,
+    p_min_price: filters['min_price'] ? parseFloat(filters['min_price']) : null,
+    p_max_price: filters['max_price'] ? parseFloat(filters['max_price']) : null,
+    p_brands: filters['brand'] ? [filters['brand']] : null,
+    p_sizes: filters['size'] ? [filters['size']] : null,
+    p_conditions: filters['condition'] ? [filters['condition']] : null,
+    p_colors: filters['color'] ? [filters['color']] : null
+  });
 
-  const { data: products, count } = await query;
+  if (productsError) {
+    console.error('Error loading subcategory products:', productsError);
+  }
+
+  // Extract products and count from RPC result
+  const products = (productsData || []).map((item: any) => ({
+    ...item.listing_data,
+    seller: item.listing_data.seller,
+    category: item.listing_data.category,
+    subcategory: item.listing_data.subcategory
+  }));
+
+  const totalCount = productsData?.[0]?.total_count || 0;
 
   return {
     category,
     subcategory,
-    products: products || [],
-    totalCount: count || 0,
+    products,
+    totalCount,
     filters,
     currentPage: page,
-    totalPages: Math.ceil((count || 0) / limit)
+    totalPages: Math.ceil(totalCount / limit)
   };
 }
