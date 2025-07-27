@@ -3,6 +3,7 @@
     import type { Database } from '$lib/types/database';
     import type { SupabaseClient } from '@supabase/supabase-js';
     import Spinner from '$lib/components/ui/Spinner.svelte';
+    import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
     import { createLazyComponent } from '$lib/utils/lazy-load';
     
     export let conversationId: string;
@@ -36,13 +37,22 @@
             </div>
         </div>
     {:else if lazyThread.component}
-        <svelte:component 
-            this={lazyThread.component} 
-            {conversationId}
-            {userId}
-            {supabase}
-            {useVirtualScrolling}
-            {...$$restProps} 
-        />
+        <ErrorBoundary 
+            level="detailed" 
+            isolate={true}
+            onError={(error, context) => {
+                console.error('Message thread error:', error, context);
+            }}
+            resetKeys={[conversationId, userId]}
+        >
+            <svelte:component 
+                this={lazyThread.component} 
+                {conversationId}
+                {userId}
+                {supabase}
+                {useVirtualScrolling}
+                {...$$restProps} 
+            />
+        </ErrorBoundary>
     {/if}
 {/if}

@@ -14,10 +14,21 @@
         };
     };
 
-    export let conversationId: string;
-    export let userId: string;
-    export let supabase: SupabaseClient<Database>;
-    export let useVirtualScrolling = false;
+    import type { MessageThreadProps } from '$lib/types/components';
+    
+    type Props = MessageThreadProps;
+    
+    let {
+        conversationId,
+        userId,
+        supabase,
+        useVirtualScrolling = false,
+        autoFocus = false,
+        initialMessageLimit = 50,
+        enableAttachments = true,
+        onMessageSent,
+        onClose
+    }: Props = $props();
     
     let messages: Message[] = [];
     let newMessage = '';
@@ -32,7 +43,7 @@
     // let virtualListRef: VirtualList;
     
     // Virtual scrolling configuration
-    $: shouldUseVirtualScrolling = useVirtualScrolling && messages.length > 100;
+    let shouldUseVirtualScrolling = $derived(useVirtualScrolling && messages.length > 100);
 
     async function loadMessages(before?: string) {
         try {

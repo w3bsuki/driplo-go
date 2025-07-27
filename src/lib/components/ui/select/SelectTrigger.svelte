@@ -7,21 +7,24 @@
 	interface Props {
 		children: Snippet;
 		class?: string;
+		size?: 'sm' | 'md' | 'lg';
 		[key: string]: any;
 	}
 
 	let {
 		children,
 		class: className,
+		size = 'md',
 		...restProps
 	}: Props = $props();
 </script>
 
 <SelectPrimitive.Trigger
 	class={cn(
-		'flex h-9 w-full items-center justify-between rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all duration-100 placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50',
+		'flex w-full items-center justify-between rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all duration-100 placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe',
 		className
 	)}
+	style={`height: var(--input-height-${size})`}
 	{...restProps}
 >
 	{@render children()}

@@ -4,6 +4,7 @@
 	import MobileNav from '$lib/components/layout/MobileNav.svelte';
 	import PromotionalBanner from '$lib/components/layout/PromotionalBanner.svelte';
 	import CookieConsent from '$lib/components/cookie-consent/CookieConsent.svelte';
+	import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
 	import { Toaster } from 'svelte-sonner';
 	import { setAuthContext } from '$lib/stores/auth-context.svelte.ts';
 	import { notifyAuthStateChange } from '$lib/stores/auth-compat';
@@ -124,48 +125,68 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
-	<div class="min-h-screen bg-background">
-		{#if !isAuthPage}
-			{#if !data.user}
-				<PromotionalBanner 
-					message={m.banner_launch_message()} 
-					secondaryMessage={m.banner_launch_secondary()}
-					ctaText={m.banner_launch_cta()} 
-					ctaHref="/register"
-					variant="launch"
-					countdown={true}
-				/>
-			{:else}
-				<PromotionalBanner 
-					message={m.banner_welcome_message()} 
-					ctaText={m.banner_welcome_cta()} 
-					ctaHref="/sell"
-					variant="gradient"
-				/>
+	<ErrorBoundary 
+		level="detailed"
+		onError={(error, context) => {
+			// Custom error handling for layout errors
+			console.error('Layout error:', error, context);
+			
+			// In production, send to error tracking service
+			if (!dev && browser) {
+				// Example: Send to analytics or error tracking service
+			}
+		}}
+		resetKeys={[data.user?.id, $page.url.pathname]}
+	>
+		<div class="min-h-screen bg-background">
+			{#if !isAuthPage}
+				{#if !data.user}
+					<PromotionalBanner 
+						message={m.banner_launch_message()} 
+						secondaryMessage={m.banner_launch_secondary()}
+						ctaText={m.banner_launch_cta()} 
+						ctaHref="/register"
+						variant="launch"
+						countdown={true}
+					/>
+				{:else}
+					<PromotionalBanner 
+						message={m.banner_welcome_message()} 
+						ctaText={m.banner_welcome_cta()} 
+						ctaHref="/sell"
+						variant="gradient"
+					/>
+				{/if}
+				<ErrorBoundary level="minimal" isolate={true}>
+					<Header categories={data.categories} supabase={data.supabase} />
+				</ErrorBoundary>
 			{/if}
-			<Header categories={data.categories} supabase={data.supabase} />
-		{/if}
-		<main class={shouldHideMobileNav ? "pb-0 md:pb-0" : "pb-20 md:pb-0"}>
-			<slot />
-		</main>
-		{#if !shouldHideMobileNav}
-			<MobileNav />
-		{/if}
-	</div>
-
-	<CookieConsent />
-	<Toaster richColors position="top-center" />
-	<NotificationPopup position="top-right" />
-	
-	
-	<!-- Page transition loading indicator -->
-	{#if $navigating}
-		<div class="fixed top-0 left-0 right-0 z-[100]">
-			<div class="h-1 bg-blue-200">
-				<div class="h-full bg-blue-400 animate-pulse" style="animation: loading-bar 1s ease-in-out infinite"></div>
-			</div>
+			<main class={shouldHideMobileNav ? "pb-0 md:pb-0" : "pb-20 md:pb-0"}>
+				<ErrorBoundary level="detailed" isolate={true} resetKeys={[$page.url.pathname]}>
+					<slot />
+				</ErrorBoundary>
+			</main>
+			{#if !shouldHideMobileNav}
+				<ErrorBoundary level="minimal" isolate={true}>
+					<MobileNav />
+				</ErrorBoundary>
+			{/if}
 		</div>
-	{/if}
+
+		<CookieConsent />
+		<Toaster richColors position="top-center" />
+		<NotificationPopup position="top-right" />
+		
+		
+		<!-- Page transition loading indicator -->
+		{#if $navigating}
+			<div class="fixed top-0 left-0 right-0 z-[100]">
+				<div class="h-1 bg-blue-200">
+					<div class="h-full bg-blue-400 animate-pulse" style="animation: loading-bar 1s ease-in-out infinite"></div>
+				</div>
+			</div>
+		{/if}
+	</ErrorBoundary>
 </QueryClientProvider>
 
 <style>

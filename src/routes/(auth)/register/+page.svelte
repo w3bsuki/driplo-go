@@ -521,8 +521,7 @@
 
 				<button 
 					type="submit" 
-					style="background-color: #87CEEB; color: white; width: 100%; padding: 10px; border-radius: 8px; font-weight: 500; margin-top: 10px;"
-					class="w-full py-2 bg-primary text-white font-medium rounded-sm hover:bg-primary/90 transition-colors duration-fast disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+					class="w-full py-2 bg-brand-500 text-white font-medium rounded-sm hover:bg-brand-600 transition-colors duration-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mt-3"
 					disabled={loading || !agreedToTerms || (import.meta.env.MODE === 'production' && !captchaToken)}
 				>
 					{#if loading}

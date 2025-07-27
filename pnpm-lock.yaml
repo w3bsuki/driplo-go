@@ -17,6 +17,15 @@ importers:
       '@fontsource-variable/plus-jakarta-sans':
         specifier: ^5.2.6
         version: 5.2.6
+      '@fontsource/inter':
+        specifier: ^5.2.6
+        version: 5.2.6
+      '@fontsource/jetbrains-mono':
+        specifier: ^5.2.6
+        version: 5.2.6
+      '@fontsource/plus-jakarta-sans':
+        specifier: ^5.2.6
+        version: 5.2.6
       '@inlang/paraglide-js':
         specifier: ^2.2.0
         version: 2.2.0
@@ -494,6 +503,15 @@ packages:
 
   '@fontsource-variable/plus-jakarta-sans@5.2.6':
     resolution: {integrity: sha512-w0954jYDlHvzABXY5NgkBtitBiHcULblm1cScowZrRV5V6KtgB17Ubw3knFr82P3qvN48kgQk5DLPhB27OlTnQ==}
+
+  '@fontsource/inter@5.2.6':
+    resolution: {integrity: sha512-CZs9S1CrjD0jPwsNy9W6j0BhsmRSQrgwlTNkgQXTsAeDRM42LBRLo3eo9gCzfH4GvV7zpyf78Ozfl773826csw==}
+
+  '@fontsource/jetbrains-mono@5.2.6':
+    resolution: {integrity: sha512-nz//dBr99hXZmHp10wgNI00qThWImkzRR5PQjvRM+rpmuHO5rYBJCqPPWufidCvmkkryXx/GOP/lgqsM3R3Org==}
+
+  '@fontsource/plus-jakarta-sans@5.2.6':
+    resolution: {integrity: sha512-mvUiz1ta3bCVhP/DPmAOmuzhHQi6ddOo1GgaW58rpojr510Rx9BkqXqcnMhGEOMZZB3+84frvfFmw/jKCctHLw==}
 
   '@formatjs/ecma402-abstract@2.3.4':
     resolution: {integrity: sha512-qrycXDeaORzIqNhBOx0btnhpD1c+/qFIHAN9znofuMJX6QBwtbrmlpWfD4oiUUD2vJUOIYFA/gYtg2KAMGG7sA==}
@@ -5046,6 +5064,12 @@ snapshots:
   '@fontsource-variable/jetbrains-mono@5.2.6': {}
 
   '@fontsource-variable/plus-jakarta-sans@5.2.6': {}
+
+  '@fontsource/inter@5.2.6': {}
+
+  '@fontsource/jetbrains-mono@5.2.6': {}
+
+  '@fontsource/plus-jakarta-sans@5.2.6': {}
 
   '@formatjs/ecma402-abstract@2.3.4':
     dependencies:

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import Spinner from '$lib/components/ui/Spinner.svelte';
+    import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
     import { createLazyComponent } from '$lib/utils/lazy-load';
     
     export let open = false;
@@ -34,6 +35,15 @@
             </div>
         </div>
     {:else if lazyForm.component}
-        <svelte:component this={lazyForm.component} {open} {...$$restProps} />
+        <ErrorBoundary 
+            level="detailed" 
+            isolate={true}
+            onError={(error, context) => {
+                console.error('Create listing form error:', error, context);
+            }}
+            resetKeys={[open]}
+        >
+            <svelte:component this={lazyForm.component} {open} {...$$restProps} />
+        </ErrorBoundary>
     {/if}
 {/if}

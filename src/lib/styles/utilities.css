@@ -1,187 +1,190 @@
-/* /src/lib/styles/utilities.css */
-@layer utilities {
-  /* Layout */
-  .container {
-    width: 100%;
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding-inline: var(--container-padding);
-  }
+/* /src/lib/styles/utilities.css - Tailwind v4 Native Utilities */
 
-  /* Typography utilities */
-  .text-balance {
-    text-wrap: balance;
-  }
+/* ===== TAILWIND V4 @utility DIRECTIVES ===== */
 
-  .text-pretty {
-    text-wrap: pretty;
-  }
+/* Layout utilities */
+@utility container {
+  width: 100%;
+  max-width: var(--container-screens-2xl);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
+}
 
-  /* Truncation */
-  .truncate-lines {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+/* Typography utilities */
+@utility text-balance {
+  text-wrap: balance;
+}
 
-  .truncate-2 {
-    -webkit-line-clamp: 2;
-  }
+@utility text-pretty {
+  text-wrap: pretty;
+}
 
-  .truncate-3 {
-    -webkit-line-clamp: 3;
-  }
+/* Truncation utilities */
+@utility truncate-lines {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-  /* Button sizes (compact) */
-  .btn-xs {
-    height: var(--button-height-xs);
-    padding-inline: var(--space-2);
-    font-size: var(--text-xs);
-    gap: var(--space-1);
-  }
+@utility truncate-2 {
+  -webkit-line-clamp: 2;
+}
 
-  .btn-sm {
-    height: var(--button-height-sm);
-    padding-inline: var(--space-2-5);
-    font-size: var(--text-sm);
-    gap: var(--space-1);
-  }
+@utility truncate-3 {
+  -webkit-line-clamp: 3;
+}
 
-  .btn-md {
-    height: var(--button-height-md);
-    padding-inline: var(--space-3);
-    font-size: var(--text-sm);
-    gap: var(--space-1-5);
-  }
+/* Component size utilities - buttons */
+@utility btn-xs {
+  height: calc(1.75rem); /* 28px */
+  padding-inline: var(--spacing-2);
+  font-size: var(--font-size-xs);
+  gap: var(--spacing-1);
+}
 
-  .btn-lg {
-    height: var(--button-height-lg);
-    padding-inline: var(--space-4);
-    font-size: var(--text-base);
-    gap: var(--space-2);
-  }
+@utility btn-sm {
+  height: calc(2.25rem); /* 36px */
+  padding-inline: var(--spacing-2-5);
+  font-size: var(--font-size-sm);
+  gap: var(--spacing-1);
+}
 
-  /* Input sizes */
-  .input-sm {
-    height: var(--input-height-sm);
-    padding-inline: var(--space-2);
-    font-size: var(--text-sm);
-  }
+@utility btn-md {
+  height: calc(2.5rem); /* 40px */
+  padding-inline: var(--spacing-3);
+  font-size: var(--font-size-sm);
+  gap: var(--spacing-1-5);
+}
 
-  .input-md {
-    height: var(--input-height-md);
-    padding-inline: var(--space-2-5);
-    font-size: var(--text-sm);
-  }
+@utility btn-lg {
+  height: calc(2.75rem); /* 44px */
+  padding-inline: var(--spacing-4);
+  font-size: var(--font-size-base);
+  gap: var(--spacing-2);
+}
 
-  .input-lg {
-    height: var(--input-height-lg);
-    padding-inline: var(--space-3);
-    font-size: var(--text-base);
-  }
+/* Input size utilities */
+@utility input-sm {
+  height: calc(2.25rem); /* 36px */
+  padding-inline: var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
 
-  /* Micro-interactions - FAST */
-  .hover-bright {
-    transition: background-color var(--duration-fast) var(--ease-sharp),
-                border-color var(--duration-fast) var(--ease-sharp);
-  }
+@utility input-md {
+  height: calc(2.5rem); /* 40px */
+  padding-inline: var(--spacing-2-5);
+  font-size: var(--font-size-sm);
+}
 
-  .hover-bright:hover {
-    filter: brightness(1.1);
-  }
+@utility input-lg {
+  height: calc(2.75rem); /* 44px */
+  padding-inline: var(--spacing-3);
+  font-size: var(--font-size-base);
+}
 
-  .active-scale {
-    transition: transform var(--duration-instant);
-  }
+/* Performance-optimized micro-interactions */
+@utility hover-bright {
+  transition: background-color var(--transition-duration-75) var(--transition-timing-function-out),
+              border-color var(--transition-duration-75) var(--transition-timing-function-out);
+}
 
-  .active-scale:active {
-    transform: scale(0.97);
-  }
+/* Invalid @utility syntax - convert to regular CSS */
+.hover-bright:hover {
+  filter: brightness(1.1);
+}
 
-  /* Instant hover states */
-  .instant-hover {
-    transition-duration: var(--duration-instant) !important;
-  }
+@utility active-scale {
+  transition: transform var(--transition-duration-75);
+}
 
-  /* Gradient text */
-  .gradient-text {
-    background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+/* Invalid @utility syntax - convert to regular CSS */
+.active-scale:active {
+  transform: scale(0.97);
+}
 
-  /* Glass morphism */
-  .glass {
-    background: rgb(255 255 255 / 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgb(255 255 255 / 0.2);
-  }
+@utility instant-hover {
+  transition-duration: var(--transition-duration-75) !important;
+}
 
-  .dark .glass {
-    background: rgb(0 0 0 / 0.3);
-    border: 1px solid rgb(255 255 255 / 0.1);
-  }
+/* Advanced visual utilities */
+@utility gradient-text {
+  background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  /* Loading skeleton */
-  .skeleton {
-    background: linear-gradient(
-      90deg,
-      var(--color-gray-200) 0%,
-      var(--color-gray-100) 50%,
-      var(--color-gray-200) 100%
-    );
-    background-size: 200% 100%;
-    animation: skeleton 1.5s ease-in-out infinite;
-  }
+@utility glass {
+  background: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgb(255 255 255 / 0.2);
+}
 
-  @keyframes skeleton {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
+@utility glass-dark {
+  background: rgb(0 0 0 / 0.3);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
 
-  /* Scrollbar utilities */
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+/* Loading skeleton with optimized animation */
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200) 0%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
 
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+/* Scrollbar utilities */
+/* Invalid @utility syntax - convert to regular CSS */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
-  /* Touch target expansion (invisible tap area) */
-  .touch-target {
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Invalid @utility syntax - convert to regular CSS */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Accessibility - Touch target expansion */
+@utility touch-target {
+  position: relative;
+}
+
+/* Invalid @utility syntax - convert to regular CSS */
+.touch-target::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, calc(2.75rem)); /* 44px min */
+  height: max(100%, calc(2.75rem)); /* 44px min */
+  transform: translate(-50%, -50%);
+}
+
+/* Mobile-first responsive utilities */
+@media (pointer: coarse) {
+  /* Invalid @utility syntax - convert to regular CSS */
+  .btn-compact-safe {
     position: relative;
   }
-
-  .touch-target::before {
+  
+  .btn-compact-safe::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: max(100%, var(--tap-area-min));
-    height: max(100%, var(--tap-area-min));
-    transform: translate(-50%, -50%);
-  }
-
-  /* Compact button utilities */
-  @media (pointer: coarse) {
-    /* On touch devices, add invisible padding for better tap targets */
-    .btn-compact-safe {
-      position: relative;
-      /* Visual size stays compact */
-    }
-    
-    .btn-compact-safe::after {
-      content: '';
-      position: absolute;
-      inset: -0.5rem; /* Expands tap area by 8px on all sides */
-    }
+    inset: -0.5rem; /* Expands tap area by 8px on all sides */
   }
 }

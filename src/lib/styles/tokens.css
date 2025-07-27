@@ -1,8 +1,149 @@
-/* /src/lib/styles/tokens.css */
-@layer tokens {
-  :root {
-    /* ===== Grid System ===== */
-    --grid-unit: 4px;  /* Base 4px grid */
+/* /src/lib/styles/tokens.css - Tailwind v4 CSS-First Configuration */
+
+/* ===== TAILWIND V4 THEME CONFIGURATION ===== */
+@theme {
+  /* ===== Brand Colors ===== */
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #87ceeb;
+  --color-brand-600: #6bb6d8;
+  --color-brand-700: #4f9fc5;
+  --color-brand-800: #3a88ae;
+  --color-brand-900: #1e5a7e;
+
+  /* ===== Neutrals ===== */
+  --color-gray-0: #ffffff;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
+  --color-gray-950: #020617;
+
+  /* ===== Semantic Colors ===== */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-info-50: #eff6ff;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+
+  /* ===== Utility Color System (for Tailwind classes) ===== */
+  --color-white: #ffffff;
+  --color-red-500: #ef4444;
+
+  /* ===== Spacing Scale ===== */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0-5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1-5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-2-5: 0.625rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 1.75rem;
+  --spacing-8: 2rem;
+  --spacing-9: 2.25rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+
+  /* ===== Typography ===== */
+  --font-family-sans: 'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', var(--font-family-sans);
+  --font-family-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Font Sizes */
+  --font-size-2xs: 0.6875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-base: 0.875rem;
+  --font-size-md: 0.9375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 2.5rem;
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 1.75;
+
+  /* ===== Border Radius ===== */
+  --border-radius-none: 0;
+  --border-radius-xs: 0.125rem;
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.375rem;
+  --border-radius-lg: 0.5rem;
+  --border-radius-xl: 0.75rem;
+  --border-radius-2xl: 1rem;
+  --border-radius-full: 9999px;
+
+  /* ===== Shadows ===== */
+  --box-shadow-none: none;
+  --box-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --box-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --box-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --box-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+  
+  /* Special shadows */
+  --box-shadow-border: 0 0 0 1px var(--color-border-primary);
+  --box-shadow-dropdown: 0 4px 12px rgb(0 0 0 / 0.08);
+  --box-shadow-modal: 0 8px 24px rgb(0 0 0 / 0.12);
+  --box-shadow-focus: 0 0 0 2px var(--color-gray-0), 0 0 0 4px var(--color-brand-500);
+
+  /* ===== Animation ===== */
+  --transition-duration-75: 75ms;
+  --transition-duration-100: 100ms;
+  --transition-duration-150: 150ms;
+  --transition-duration-200: 200ms;
+  --transition-duration-250: 250ms;
+  --transition-duration-300: 300ms;
+  
+  --transition-timing-function-linear: linear;
+  --transition-timing-function-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-timing-function-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-timing-function-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ===== Container ===== */
+  --container-center: true;
+  --container-padding: 1rem;
+  --container-screens-sm: 640px;
+  --container-screens-md: 768px;
+  --container-screens-lg: 1024px;
+  --container-screens-xl: 1280px;
+  --container-screens-2xl: 1280px;
+}
+
+/* ===== LEGACY COMPATIBILITY MAPPINGS ===== */
+/* These allow existing components to work during migration */
+:root {
+    /* Grid System for custom components */
+    --grid-unit: 4px;
     --grid-2: calc(var(--grid-unit) * 2);   /* 8px */
     --grid-3: calc(var(--grid-unit) * 3);   /* 12px */
     --grid-4: calc(var(--grid-unit) * 4);   /* 16px */
@@ -13,61 +154,41 @@
     --grid-12: calc(var(--grid-unit) * 12); /* 48px */
     --grid-16: calc(var(--grid-unit) * 16); /* 64px */
 
-    /* ===== Typography Scale (Compact) ===== */
-    --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
-    --font-display: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', var(--font-sans);
-    --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', monospace;
+    /* Legacy font family mappings */
+    --font-sans: var(--font-family-sans);
+    --font-display: var(--font-family-display);
+    --font-mono: var(--font-family-mono);
 
-    /* Font Sizes - Comfortable compact */
-    --text-2xs: 0.6875rem;   /* 11px - tiny labels only */
-    --text-xs: 0.75rem;      /* 12px - secondary micro text */
-    --text-sm: 0.8125rem;    /* 13px - secondary text */
-    --text-base: 0.875rem;   /* 14px - body default */
-    --text-md: 0.9375rem;    /* 15px - emphasis */
-    --text-lg: 1.125rem;     /* 18px - headings */
-    --text-xl: 1.25rem;      /* 20px - section titles */
-    --text-2xl: 1.5rem;      /* 24px - page titles */
-    --text-3xl: 1.875rem;    /* 30px - hero */
-    --text-4xl: 2.25rem;     /* 36px - display */
-    --text-5xl: 2.5rem;      /* 40px - big numbers */
-
-    /* Line Heights - Readable but compact */
-    --leading-none: 1;
-    --leading-tight: 1.25;
-    --leading-snug: 1.375;
-    --leading-normal: 1.5;
-    --leading-relaxed: 1.625;
-    --leading-loose: 1.75;
-
-    /* Letter Spacing */
-    --tracking-tighter: -0.04em;
-    --tracking-tight: -0.02em;
-    --tracking-normal: 0;
-    --tracking-wide: 0.02em;
-    --tracking-wider: 0.04em;
-
-    /* Font Weights */
-    --font-light: 300;
-    --font-normal: 400;
-    --font-medium: 500;
-    --font-semibold: 600;
-    --font-bold: 700;
-
-    /* ===== Color System ===== */
-    /* Brand Colors - Baby Blue */
-    --color-brand-50: #f0f9ff;
-    --color-brand-100: #e0f2fe;
-    --color-brand-200: #bae6fd;
-    --color-brand-300: #7dd3fc;
-    --color-brand-400: #38bdf8;
-    --color-brand-500: #87ceeb;  /* Primary */
-    --color-brand-600: #6bb6d8;
-    --color-brand-700: #4f9fc5;
-    --color-brand-800: #3a88ae;
-    --color-brand-900: #1e5a7e;
-
-    /* Neutrals - Blue-tinted grays */
-    --color-gray-0: #ffffff;
+    /* Legacy text size mappings */
+    --text-2xs: var(--font-size-2xs);
+    
+    /* Legacy button height mappings */
+    --button-height-xs: 1.75rem;    /* 28px */
+    --button-height-sm: 2.25rem;    /* 36px */
+    --button-height-md: 2.5rem;     /* 40px */
+    --button-height-lg: 2.75rem;    /* 44px */
+    --button-height-xl: 3rem;       /* 48px */
+    
+    /* Legacy input height mappings */
+    --input-height-sm: 2.25rem;     /* 36px */
+    --input-height-md: 2.5rem;      /* 40px */
+    --input-height-lg: 2.75rem;     /* 44px */
+    
+    /* Legacy spacing mappings */
+    --space-1: var(--spacing-1);
+    --space-2: var(--spacing-2);
+    --space-3: var(--spacing-3);
+    --space-4: var(--spacing-4);
+    --space-5: var(--spacing-5);
+    --space-6: var(--spacing-6);
+    --space-8: var(--spacing-8);
+    --space-10: var(--spacing-10);
+    --space-12: var(--spacing-12);
+    --space-16: var(--spacing-16);
+    --space-20: var(--spacing-20);
+    
+    /* Legacy color mappings for navbar and components */
+    --color-white: #ffffff;
     --color-gray-50: #f8fafc;
     --color-gray-100: #f1f5f9;
     --color-gray-200: #e2e8f0;
@@ -78,117 +199,85 @@
     --color-gray-700: #334155;
     --color-gray-800: #1e293b;
     --color-gray-900: #0f172a;
-    --color-gray-950: #020617;
-
-    /* Semantic Colors */
-    --color-success-50: #f0fdf4;
-    --color-success-500: #22c55e;
-    --color-success-600: #16a34a;
     
-    --color-warning-50: #fffbeb;
-    --color-warning-500: #f59e0b;
-    --color-warning-600: #d97706;
+    --color-red-500: #ef4444;
+    --color-brand-500: #87ceeb;
     
-    --color-error-50: #fef2f2;
-    --color-error-500: #ef4444;
-    --color-error-600: #dc2626;
-    
-    --color-info-50: #eff6ff;
-    --color-info-500: #3b82f6;
-    --color-info-600: #2563eb;
+    --text-xs: var(--font-size-xs);
+    --text-sm: var(--font-size-sm);
+    --text-base: var(--font-size-base);
+    --text-md: var(--font-size-md);
+    --text-lg: var(--font-size-lg);
+    --text-xl: var(--font-size-xl);
+    --text-2xl: var(--font-size-2xl);
+    --text-3xl: var(--font-size-3xl);
+    --text-4xl: var(--font-size-4xl);
+    --text-5xl: var(--font-size-5xl);
 
-    /* ===== Spacing Scale (Comfortable 4px base) ===== */
-    --space-0: 0;
-    --space-px: 1px;
-    --space-0-5: 0.125rem;  /* 2px */
-    --space-1: 0.25rem;     /* 4px - base unit */
-    --space-1-5: 0.375rem;  /* 6px */
-    --space-2: 0.5rem;      /* 8px - tight */
-    --space-2-5: 0.625rem;  /* 10px */
-    --space-3: 0.75rem;     /* 12px - default gap */
-    --space-4: 1rem;        /* 16px - comfortable */
-    --space-5: 1.25rem;     /* 20px - section spacing */
-    --space-6: 1.5rem;      /* 24px - card padding */
-    --space-7: 1.75rem;     /* 28px */
-    --space-8: 2rem;        /* 32px - major sections */
-    --space-9: 2.25rem;     /* 36px */
-    --space-10: 2.5rem;     /* 40px */
-    --space-12: 3rem;       /* 48px - page sections */
-    --space-16: 4rem;       /* 64px - hero sections */
-    --space-20: 5rem;       /* 80px - large sections */
+    /* Legacy line height mappings */
+    --leading-none: var(--line-height-none);
+    --leading-tight: var(--line-height-tight);
+    --leading-snug: var(--line-height-snug);
+    --leading-normal: var(--line-height-normal);
+    --leading-relaxed: var(--line-height-relaxed);
+    --leading-loose: var(--line-height-loose);
 
-    /* ===== Component Sizing ===== */
-    /* Buttons - Comfortable compact */
-    --button-height-xs: 1.75rem;    /* 28px - micro actions */
-    --button-height-sm: 2.25rem;    /* 36px - small */
-    --button-height-md: 2.5rem;     /* 40px - default */
-    --button-height-lg: 2.75rem;    /* 44px - primary CTAs */
-    --button-height-xl: 3rem;       /* 48px - hero actions */
+    /* Legacy spacing mappings */
+    --space-0: var(--spacing-0);
+    --space-px: var(--spacing-px);
+    --space-0-5: var(--spacing-0-5);
+    --space-1: var(--spacing-1);
+    --space-1-5: var(--spacing-1-5);
+    --space-2: var(--spacing-2);
+    --space-2-5: var(--spacing-2-5);
+    --space-3: var(--spacing-3);
+    --space-4: var(--spacing-4);
+    --space-5: var(--spacing-5);
+    --space-6: var(--spacing-6);
+    --space-7: var(--spacing-7);
+    --space-8: var(--spacing-8);
+    --space-9: var(--spacing-9);
+    --space-10: var(--spacing-10);
+    --space-12: var(--spacing-12);
+    --space-16: var(--spacing-16);
+    --space-20: var(--spacing-20);
 
-    /* Inputs - Comfortable compact */
-    --input-height-sm: 2.25rem;     /* 36px */
-    --input-height-md: 2.5rem;      /* 40px - default */
-    --input-height-lg: 2.75rem;     /* 44px */
+    /* Legacy border radius mappings */
+    --radius-none: var(--border-radius-none);
+    --radius-xs: var(--border-radius-xs);
+    --radius-sm: var(--border-radius-sm);
+    --radius-md: var(--border-radius-md);
+    --radius-lg: var(--border-radius-lg);
+    --radius-xl: var(--border-radius-xl);
+    --radius-2xl: var(--border-radius-2xl);
+    --radius-full: var(--border-radius-full);
 
-    /* Mobile adjustments (for critical CTAs) */
-    --button-height-mobile-lg: 2.75rem; /* 44px - mobile primary CTAs */
-    --button-height-mobile-xl: 3rem;    /* 48px - mobile hero */
+    /* Legacy shadow mappings */
+    --shadow-none: var(--box-shadow-none);
+    --shadow-xs: var(--box-shadow-xs);
+    --shadow-sm: var(--box-shadow-sm);
+    --shadow-md: var(--box-shadow-md);
+    --shadow-lg: var(--box-shadow-lg);
+    --shadow-xl: var(--box-shadow-xl);
+    --shadow-border: var(--box-shadow-border);
+    --shadow-dropdown: var(--box-shadow-dropdown);
+    --shadow-modal: var(--box-shadow-modal);
+    --shadow-focus: var(--box-shadow-focus);
 
-    /* Minimum tap areas (invisible expansion) */
-    --tap-area-min: 2.75rem;        /* 44px - expand via padding/pseudo-elements */
-
-    /* ===== Borders & Radius ===== */
-    /* Border Widths */
-    --border-width-thin: 0.5px;
-    --border-width-default: 1px;
-    --border-width-thick: 2px;
-
-    /* Border Radius - Modern subtle curves */
-    --radius-none: 0;
-    --radius-xs: 0.125rem;   /* 2px - minimal */
-    --radius-sm: 0.25rem;    /* 4px - subtle */
-    --radius-md: 0.375rem;   /* 6px - default */
-    --radius-lg: 0.5rem;     /* 8px - cards/modals */
-    --radius-xl: 0.75rem;    /* 12px - large elements */
-    --radius-2xl: 1rem;      /* 16px - extra large */
-    --radius-full: 9999px;   /* pills/circles */
-
-    /* ===== Shadows - Subtle depth ===== */
-    --shadow-none: none;
-    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.06);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.06);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.04);
-    
-    /* Borders as shadows for flat design */
-    --shadow-border: 0 0 0 1px var(--color-border-primary);
-    --shadow-border-strong: 0 0 0 1px var(--color-border-secondary);
-    
-    /* Critical floating elements */
-    --shadow-dropdown: 0 4px 12px rgb(0 0 0 / 0.08);
-    --shadow-modal: 0 8px 24px rgb(0 0 0 / 0.12);
-    --shadow-popover: var(--shadow-lg);
-
-    /* Focus Ring */
-    --shadow-focus: 0 0 0 2px var(--color-gray-0), 0 0 0 4px var(--color-brand-500);
-
-    /* ===== Animation Tokens ===== */
-    /* Durations - Smooth but fast */
+    /* Legacy animation mappings */
     --duration-instant: 0ms;
-    --duration-fast: 75ms;    /* Micro interactions */
-    --duration-base: 150ms;   /* Default transitions */
-    --duration-slow: 200ms;   /* Complex animations */
-    --duration-page: 250ms;   /* Page transitions */
+    --duration-fast: var(--transition-duration-75);
+    --duration-base: var(--transition-duration-150);
+    --duration-normal: var(--transition-duration-150);
+    --duration-slow: var(--transition-duration-200);
+    --duration-page: var(--transition-duration-250);
+    --ease-linear: var(--transition-timing-function-linear);
+    --ease-in: var(--transition-timing-function-in);
+    --ease-out: var(--transition-timing-function-out);
+    --ease-in-out: var(--transition-timing-function-in-out);
+    --ease-sharp: var(--transition-timing-function-out);
 
-    /* Easings - Natural motion */
-    --ease-linear: linear;
-    --ease-in: cubic-bezier(0.4, 0, 1, 1);
-    --ease-out: cubic-bezier(0, 0, 0.2, 1);
-    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-spring: cubic-bezier(0.5, 1.25, 0.75, 1.25);
-
-    /* ===== Z-Index Scale ===== */
+    /* Z-index scale (unchanged for custom components) */
     --z-base: 0;
     --z-dropdown: 10;
     --z-sticky: 20;
@@ -200,16 +289,7 @@
     --z-notification: 80;
     --z-max: 99999;
 
-    /* ===== Semantic Mappings ===== */
-    /* Layout */
-    --container-max: 1280px;
-    --container-padding: var(--space-4);
-    --container-padding-mobile: var(--space-3);
-    --header-height: 4rem;    /* 64px - more comfortable */
-    --header-height-mobile: 3.5rem; /* 56px */
-    --sidebar-width: 16rem;   /* 256px - more comfortable */
-    --sidebar-width-collapsed: 4rem; /* 64px */
-
+    /* ===== SEMANTIC COLOR MAPPINGS ===== */
     /* Light Mode (Default) */
     --color-bg-primary: #ffffff;
     --color-bg-secondary: #f8fafc;  /* gray-50 */
@@ -242,10 +322,10 @@
     --input-border: #e2e8f0;    /* gray-200 */
     --input-border-hover: #cbd5e1; /* gray-300 */
     --input-border-focus: var(--color-brand-500); /* baby blue */
-  }
+}
 
-  /* Dark Mode */
-  .dark {
+/* Dark Mode */
+.dark {
     --color-bg-primary: var(--color-gray-950);
     --color-bg-secondary: var(--color-gray-900);
     --color-bg-tertiary: var(--color-gray-800);
@@ -282,5 +362,4 @@
     --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 4px 8px -2px rgb(0 0 0 / 0.4);
     --shadow-xl: 0 8px 16px -4px rgb(0 0 0 / 0.5);
-  }
 }

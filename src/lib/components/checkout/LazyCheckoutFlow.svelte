@@ -2,9 +2,20 @@
 	import { onMount } from 'svelte';
 	import type { Listing } from '$lib/types';
 	import Spinner from '$lib/components/ui/Spinner.svelte';
+	import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
 	
-	export let listing: Listing;
-	export let isOpen: boolean;
+	import type { CheckoutFlowProps } from '$lib/types/components';
+	
+	type Props = Pick<CheckoutFlowProps, 'listing' | 'isOpen'> & {
+		// Additional lazy-specific props
+		preloadOnHover?: boolean;
+	};
+	
+	let {
+		listing,
+		isOpen,
+		preloadOnHover = true
+	}: Props = $props();
 	
 	let CheckoutFlow: any = null;
 	let loading = false;
@@ -65,6 +76,16 @@
 			</div>
 		</div>
 	{:else if CheckoutFlow}
-		<svelte:component this={CheckoutFlow} {listing} {isOpen} {...$$restProps} />
+		<ErrorBoundary 
+			level="detailed" 
+			isolate={true}
+			onError={(error, context) => {
+				console.error('Checkout flow error:', error, context);
+				// In a real app, send to error tracking service
+			}}
+			resetKeys={[listing.id, isOpen]}
+		>
+			<svelte:component this={CheckoutFlow} {listing} {isOpen} {...$$restProps} />
+		</ErrorBoundary>
 	{/if}
 {/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Button } from '$lib/components/ui/button';
-  import { Input } from '$lib/components/ui/input';
-  import { Label } from '$lib/components/ui/label';
+  import Button from '$lib/components/ui/button.svelte';
+  import Input from '$lib/components/ui/input.svelte';
+  import Label from '$lib/components/ui/label.svelte';
   import { toast } from 'svelte-sonner';
   import { Loader2, Shield, ShieldOff, RefreshCw, Download } from 'lucide-svelte';
   import TwoFactorSetup from './TwoFactorSetup.svelte';

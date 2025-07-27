@@ -50,9 +50,9 @@
 	}: Props = $props()
 	
 	const sizeClasses = {
-		sm: 'h-8 px-3 text-sm',
-		md: 'h-9 px-3 text-sm',
-		lg: 'h-9 px-3 text-sm'
+		sm: 'px-3 text-sm',
+		md: 'px-3 text-sm',
+		lg: 'px-3 text-sm'
 	}
 </script>
 
@@ -64,10 +64,11 @@
 	{required}
 	bind:value
 	class={cn(
-		'flex w-full rounded-sm border border-input bg-background ring-offset-background transition-all duration-100 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50',
+		'flex w-full rounded-sm border border-input bg-background ring-offset-background transition-all duration-100 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe',
 		sizeClasses[size],
 		className
 	)}
+	style={`height: var(--input-height-${size})`}
 	{onblur}
 	{onchange}
 	{onclick}
@@ -82,3 +83,51 @@
 	{oninput}
 	{...restProps}
 />
+
+<style>
+	/* Modern 2025 input focus interactions */
+	@media (hover: hover) and (pointer: fine) {
+		input:hover:not(:disabled) {
+			transform: scale(1.005);
+			transition: transform 150ms cubic-bezier(0.5, 1.25, 0.75, 1.25);
+		}
+	}
+
+	/* Enhanced focus-visible for better accessibility */
+	input:focus-visible {
+		transform: scale(1.01);
+		transition: transform 150ms cubic-bezier(0.5, 1.25, 0.75, 1.25),
+		           box-shadow 150ms ease-out;
+	}
+
+	/* Touch devices get subtle feedback */
+	@media (hover: none) and (pointer: coarse) {
+		input:focus {
+			transform: scale(1.005);
+			transition: transform 100ms ease-out;
+		}
+	}
+
+	/* Disabled state should not animate */
+	input:disabled {
+		transform: none !important;
+	}
+
+	/* Respect reduced motion preferences */
+	@media (prefers-reduced-motion: reduce) {
+		input {
+			transition: none !important;
+		}
+		input:hover,
+		input:focus-visible,
+		input:focus {
+			transform: none !important;
+		}
+	}
+
+	/* File input specific styles */
+	input[type="file"]:focus-visible {
+		transform: none;
+	}
+</style>
+

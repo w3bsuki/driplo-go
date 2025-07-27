@@ -137,4 +137,50 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Touch Target Expansion System - Comfortable Compact Philosophy */
+  @media (pointer: coarse) {
+    /* Global touch expansion for elements with btn-compact-safe class */
+    .btn-compact-safe {
+      position: relative;
+    }
+    
+    .btn-compact-safe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      min-height: calc(2.75rem); /* 44px minimum tap target */
+      min-width: calc(2.75rem);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    /* Input touch expansion */
+    .input-compact-safe {
+      position: relative;
+    }
+    
+    .input-compact-safe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      min-height: calc(2.75rem);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    /* Only apply expansion to elements smaller than 44px */
+    /* Buttons and inputs already 44px+ don't need expansion */
+    .btn-compact-safe[style*="--button-height-lg"]::after,
+    .btn-compact-safe[style*="--button-height-xl"]::after,
+    .input-compact-safe[style*="--input-height-lg"]::after {
+      display: none;
+    }
+  }
 }

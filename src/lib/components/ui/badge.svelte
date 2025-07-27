@@ -2,14 +2,16 @@
 	import { cn } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
-	interface Props {
-		variant?: 'default' | 'secondary' | 'success' | 'destructive' | 'outline' | 
+	import type { BadgeProps } from '$lib/types/ui';
+	
+	// Extended badge props with condition variants
+	interface ExtendedBadgeProps extends Omit<BadgeProps, 'variant'> {
+		variant?: BadgeProps['variant'] | 
 			'condition-new-with-tags' | 'condition-new-without-tags' | 'condition-very-good' | 
 			'condition-good' | 'condition-fair';
-		size?: 'sm' | 'md' | 'lg';
-		class?: string;
-		children: Snippet;
 	}
+	
+	type Props = ExtendedBadgeProps;
 
 	let { variant = 'default', size = 'md', class: className, children }: Props = $props();
 

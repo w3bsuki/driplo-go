@@ -3,7 +3,8 @@ import { browseListings } from '$lib/server/browse'
 import { getCachedData, cacheKeys, cacheTTL } from '$lib/server/cache'
 import { apiError, apiSuccess, ApiErrorType, getPagination } from '$lib/server/api-utils'
 import { z } from 'zod'
-import type { BrowseLoadMoreResponse } from '$lib/types/api.types'
+import type { BrowseListingsResponse } from '$lib/types/api'
+import type { BrowseLoadMoreResponse } from '$lib/types/api.types' // Keep for backward compatibility
 
 const filterSchema = z.object({
 	category: z.string().optional().default(''),

@@ -1,89 +1,102 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 import { createServerClient } from '@supabase/ssr'
-import type { Handle } from '@sveltejs/kit'
+import type { Handle, HandleServerError } from '@sveltejs/kit'
 import type { Database } from '$lib/types/database'
 import { sequence } from '@sveltejs/kit/hooks'
 import { setLocale, isLocale } from '$lib/paraglide/runtime.js'
 import { dev } from '$app/environment'
 import { check2FAMiddleware } from '$lib/server/auth-middleware'
+import { logError, createErrorResponse } from '$lib/utils/error-handling'
 
 const handleI18n: Handle = async ({ event, resolve }) => {
-	// Get language from cookie or Accept-Language header
-	// Paraglide uses PARAGLIDE_LOCALE as the cookie name
-	const cookieLocale = event.cookies.get('PARAGLIDE_LOCALE') || event.cookies.get('locale')
-	const acceptLanguage = event.request.headers.get('accept-language')?.split(',')[0]?.split('-')[0]
-	
-	// Determine which language to use
-	let locale = 'en' // default
-	
-	if (cookieLocale && isLocale(cookieLocale)) {
-		locale = cookieLocale
-	} else if (acceptLanguage && isLocale(acceptLanguage)) {
-		locale = acceptLanguage
-	}
-	
-	// Set the language for this request
-	setLocale(locale as 'en' | 'bg', { reload: false })
-	
-	// Store locale for use in components
-	event.locals.locale = locale
-	
-	// Resolve the request
-	const response = await resolve(event, {
-		transformPageChunk: ({ html }) => {
-			// Replace html lang attribute
-			return html.replace('<html lang="en">', `<html lang="${locale}">`)
+	try {
+		// Get language from cookie or Accept-Language header
+		// Paraglide uses PARAGLIDE_LOCALE as the cookie name
+		const cookieLocale = event.cookies.get('PARAGLIDE_LOCALE') || event.cookies.get('locale')
+		const acceptLanguage = event.request.headers.get('accept-language')?.split(',')[0]?.split('-')[0]
+		
+		// Determine which language to use
+		let locale = 'en' // default
+		
+		if (cookieLocale && isLocale(cookieLocale)) {
+			locale = cookieLocale
+		} else if (acceptLanguage && isLocale(acceptLanguage)) {
+			locale = acceptLanguage
 		}
-	})
-	
-	// Set cookie if it's not already set or if locale changed
-	if (!cookieLocale || cookieLocale !== locale) {
-		// Set PARAGLIDE_LOCALE cookie for Paraglide runtime
-		response.headers.append('set-cookie', event.cookies.serialize('PARAGLIDE_LOCALE', locale, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'lax',
-			maxAge: 60 * 60 * 24 * 365, // 1 year
-			secure: !dev
-		}))
+		
+		// Set the language for this request
+		setLocale(locale as 'en' | 'bg', { reload: false })
+		
+		// Store locale for use in components
+		event.locals.locale = locale
+		
+		// Resolve the request
+		const response = await resolve(event, {
+			transformPageChunk: ({ html }) => {
+				// Replace html lang attribute
+				return html.replace('<html lang="en">', `<html lang="${locale}">`)
+			}
+		})
+		
+		// Set cookie if it's not already set or if locale changed
+		if (!cookieLocale || cookieLocale !== locale) {
+			// Set PARAGLIDE_LOCALE cookie for Paraglide runtime
+			response.headers.append('set-cookie', event.cookies.serialize('PARAGLIDE_LOCALE', locale, {
+				path: '/',
+				httpOnly: true,
+				sameSite: 'lax',
+				maxAge: 60 * 60 * 24 * 365, // 1 year
+				secure: !dev
+			}))
+		}
+		
+		return response
+	} catch (error) {
+		logError(error, {
+			handler: 'handleI18n',
+			url: event.url.pathname,
+			method: event.request.method
+		});
+		
+		// Fall back to basic response without i18n
+		return await resolve(event);
 	}
-	
-	return response
 }
 
 const handleSupabase: Handle = async ({ event, resolve }) => {
-	/**
-	 * Creates a Supabase client specific to this server request.
-	 * The Supabase client gets the Auth token from the request cookies.
-	 */
-	event.locals.supabase = createServerClient<Database>(
-		PUBLIC_SUPABASE_URL,
-		PUBLIC_SUPABASE_ANON_KEY,
-		{
-			cookies: {
-				get: (key) => event.cookies.get(key),
-				set: (key, value, options) => {
-					event.cookies.set(key, value, { 
-						...options, 
-						path: '/',
-						httpOnly: true,
-						secure: !dev,
-						sameSite: 'lax',
-						maxAge: options?.maxAge ?? 60 * 60 * 24 * 30 // 30 days default
-					})
-				},
-				remove: (key, _options) => {
-					// Ensure complete cookie removal with all necessary options
-					event.cookies.delete(key, { 
-						path: '/',
-						httpOnly: true,
-						secure: !dev,
-						sameSite: 'lax'
-					})
+	try {
+		/**
+		 * Creates a Supabase client specific to this server request.
+		 * The Supabase client gets the Auth token from the request cookies.
+		 */
+		event.locals.supabase = createServerClient<Database>(
+			PUBLIC_SUPABASE_URL,
+			PUBLIC_SUPABASE_ANON_KEY,
+			{
+				cookies: {
+					get: (key) => event.cookies.get(key),
+					set: (key, value, options) => {
+						event.cookies.set(key, value, { 
+							...options, 
+							path: '/',
+							httpOnly: true,
+							secure: !dev,
+							sameSite: 'lax',
+							maxAge: options?.maxAge ?? 60 * 60 * 24 * 30 // 30 days default
+						})
+					},
+					remove: (key, _options) => {
+						// Ensure complete cookie removal with all necessary options
+						event.cookies.delete(key, { 
+							path: '/',
+							httpOnly: true,
+							secure: !dev,
+							sameSite: 'lax'
+						})
+					}
 				}
 			}
-		}
-	)
+		)
 
 	/**
 	 * Unlike `supabase.auth.getSession()`, which returns the session _without_
@@ -187,10 +200,41 @@ const handleSupabase: Handle = async ({ event, resolve }) => {
 	}
 
 	return response
+	} catch (error) {
+		logError(error, {
+			handler: 'handleSupabase',
+			url: event.url.pathname,
+			method: event.request.method,
+			userAgent: event.request.headers.get('user-agent')
+		});
+		
+		// For auth errors, don't break the entire request
+		// Just create a minimal client for fallback
+		try {
+			event.locals.supabase = createServerClient<Database>(
+				PUBLIC_SUPABASE_URL,
+				PUBLIC_SUPABASE_ANON_KEY,
+				{
+					cookies: {
+						get: () => null,
+						set: () => {},
+						remove: () => {}
+					}
+				}
+			);
+			
+			event.locals.safeGetSession = async () => ({ session: null, user: null });
+		} catch (fallbackError) {
+			logError(fallbackError, { handler: 'handleSupabase-fallback' });
+		}
+		
+		return await resolve(event);
+	}
 }
 
 const handleCaching: Handle = async ({ event, resolve }) => {
-	const response = await resolve(event)
+	try {
+		const response = await resolve(event)
 	
 	// Skip caching for non-GET requests
 	if (event.request.method !== 'GET') {
@@ -237,6 +281,49 @@ const handleCaching: Handle = async ({ event, resolve }) => {
 	response.headers.set('vary', varyHeaders.join(', '))
 	
 	return response
+	} catch (error) {
+		logError(error, {
+			handler: 'handleCaching',
+			url: event.url.pathname,
+			method: event.request.method
+		});
+		
+		// Return response without caching headers on error
+		return await resolve(event);
+	}
+}
+
+// Global error handler for unhandled server errors
+export const handleError: HandleServerError = ({ error, event, status, message }) => {
+	const errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+	
+	// Log the error with context
+	logError(error, {
+		handler: 'handleError',
+		url: event.url.pathname,
+		method: event.request.method,
+		status,
+		message,
+		userAgent: event.request.headers.get('user-agent'),
+		errorId,
+		stack: error?.stack
+	});
+
+	// Return sanitized error for client
+	if (dev) {
+		// In development, return full error details
+		return {
+			message: message || 'Internal server error',
+			errorId,
+			stack: error?.stack
+		};
+	} else {
+		// In production, return minimal error info
+		return {
+			message: 'Something went wrong. Please try again.',
+			errorId
+		};
+	}
 }
 
 export const handle = sequence(handleI18n, handleSupabase, check2FAMiddleware, handleCaching)
