@@ -1,0 +1,86 @@
+/* Temporary Tailwind v4 Compatibility Layer
+ * This file maps old shadcn HSL-based classes to new token-based classes
+ * Remove this file once all components are updated
+ */
+
+/* Primary Colors */
+.bg-primary { background-color: var(--color-brand-500); }
+.hover\:bg-primary:hover { background-color: var(--color-brand-500); }
+.hover\:bg-primary\/90:hover { background-color: var(--color-brand-600); }
+.text-primary { color: var(--color-brand-500); }
+.text-primary-foreground { color: var(--color-white); }
+.border-primary { border-color: var(--color-brand-500); }
+.ring-primary { --tw-ring-color: var(--color-brand-500); }
+
+/* Secondary Colors */
+.bg-secondary { background-color: var(--color-gray-100); }
+.hover\:bg-secondary:hover { background-color: var(--color-gray-100); }
+.hover\:bg-secondary\/80:hover { background-color: var(--color-gray-200); }
+.text-secondary { color: var(--color-gray-600); }
+.text-secondary-foreground { color: var(--color-gray-900); }
+.border-secondary { border-color: var(--color-gray-300); }
+
+/* Semantic Colors */
+.bg-destructive { background-color: var(--color-error-500); }
+.hover\:bg-destructive:hover { background-color: var(--color-error-500); }
+.hover\:bg-destructive\/90:hover { background-color: var(--color-error-600); }
+.text-destructive { color: var(--color-error-500); }
+.text-destructive-foreground { color: var(--color-white); }
+.border-destructive { border-color: var(--color-error-500); }
+
+.bg-success { background-color: var(--color-success-500); }
+.text-success { color: var(--color-success-500); }
+.text-success-foreground { color: var(--color-white); }
+
+.bg-warning { background-color: var(--color-warning-500); }
+.text-warning { color: var(--color-warning-500); }
+.text-warning-foreground { color: var(--color-gray-900); }
+
+/* Neutral Colors */
+.bg-background { background-color: var(--color-white); }
+.text-foreground { color: var(--color-gray-900); }
+
+.bg-card { background-color: var(--color-white); }
+.text-card-foreground { color: var(--color-gray-900); }
+
+.bg-popover { background-color: var(--color-white); }
+.text-popover-foreground { color: var(--color-gray-900); }
+
+.bg-muted { background-color: var(--color-gray-50); }
+.bg-muted\/50 { background-color: rgb(var(--color-gray-50-rgb) / 0.5); }
+.text-muted-foreground { color: var(--color-gray-500); }
+
+/* Accent Colors */
+.bg-accent { background-color: var(--color-brand-500); }
+.hover\:bg-accent:hover { background-color: var(--color-brand-500); }
+.text-accent { color: var(--color-brand-500); }
+.text-accent-foreground { color: var(--color-white); }
+
+/* Border & Input Colors */
+.border-border { border-color: var(--color-gray-200); }
+.border-input { border-color: var(--color-gray-200); }
+
+/* Ring Colors */
+.ring-ring { --tw-ring-color: var(--color-brand-500); }
+.focus\:ring-ring:focus { --tw-ring-color: var(--color-brand-500); }
+.focus-visible\:ring-ring:focus-visible { --tw-ring-color: var(--color-brand-500); }
+
+/* Dark Mode Compatibility */
+.dark .dark\:bg-background { background-color: var(--color-gray-950); }
+.dark .dark\:text-foreground { background-color: var(--color-gray-50); }
+.dark .dark\:bg-card { background-color: var(--color-gray-900); }
+.dark .dark\:text-card-foreground { color: var(--color-gray-50); }
+.dark .dark\:bg-popover { background-color: var(--color-gray-900); }
+.dark .dark\:text-popover-foreground { color: var(--color-gray-50); }
+.dark .dark\:bg-muted { background-color: var(--color-gray-800); }
+.dark .dark\:text-muted-foreground { color: var(--color-gray-400); }
+.dark .dark\:bg-primary { background-color: var(--color-brand-600); }
+.dark .dark\:text-primary { color: var(--color-brand-400); }
+.dark .dark\:bg-secondary { background-color: var(--color-gray-800); }
+.dark .dark\:border-border { border-color: var(--color-gray-800); }
+.dark .dark\:border-input { border-color: var(--color-gray-700); }
+
+/* Opacity variants using OKLCH */
+.bg-background\/80 { background-color: oklch(from var(--color-white) l c h / 0.8); }
+.bg-background\/50 { background-color: oklch(from var(--color-white) l c h / 0.5); }
+.bg-muted\/80 { background-color: oklch(from var(--color-gray-50) l c h / 0.8); }

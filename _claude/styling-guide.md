@@ -45,22 +45,212 @@
 - **Accessibility**: WCAG 2.2 AA compliance in core components
 - **Mobile Optimization**: Smart touch targets with expansion
 
-### 📋 Remaining Implementation Tasks (2/10 Optional):
+### 📋 **EMERGENCY RECOVERY COMPLETED** ✅
+- **Tailwind v4 Vite Plugin**: Successfully migrated for 10x build performance
+- **Styling System Restored**: Fixed broken @layer directives and font loading
+- **Hybrid v3/v4 Setup**: Working configuration with v4 infrastructure + v3 compatibility
 
-#### ⏳ Task 9: Advanced Tailwind v4 Features & CSS-First Config (PENDING)
-- Implement CSS-first configuration approach
-- Leverage advanced Oxide engine optimizations  
-- Set up advanced chunk splitting for CSS
-- Further build time optimizations
+### 🎯 **NEXT PHASE: COMPLETE V4 MODERNIZATION**
 
-#### ⏳ Task 10: Performance Validation & Testing (PENDING)
-- Measure and validate all performance improvements
-- Bundle size analysis and optimization
-- Core Web Vitals testing
-- Cross-browser compatibility validation
+> **Current State**: Hybrid v3/v4 (Working but not fully modern)  
+> **Target State**: Pure Tailwind v4 with modern CSS-first token system  
+> **Timeline**: Gradual migration over 6-8 weeks, 5 components per week  
 
-### 🎊 **MAJOR SUCCESS**: 8/10 tasks completed with excellent results!
-The styling system is now **production-ready** with modern 2025 patterns.
+---
+
+## 🚀 **PHASE 3: Full Tailwind v4 Modernization Roadmap**
+
+### **Week 1-2: Foundation Migration**
+
+#### **Task 9.1: Modernize Core Token System** 
+**Priority**: HIGH | **Impact**: Foundation for all other tasks
+- [ ] **9.1.1** Remove shadcn HSL compatibility layer from app.css
+- [ ] **9.1.2** Convert @layer utilities to @utility directives in utilities.css
+- [ ] **9.1.3** Update @theme configuration to use modern v4 patterns
+- [ ] **9.1.4** **Migrate colors to OKLCH color space** for better perceptual uniformity
+- [ ] **9.1.5** Create component class name mapping guide (bg-primary → bg-brand-500)
+- [ ] **9.1.6** Set up automated testing for visual regression during migration
+
+#### **Task 9.2: Update CSS Architecture**
+**Priority**: HIGH | **Impact**: Clean modern CSS structure
+- [ ] **9.2.1** Migrate animations.css from @layer utilities to @utility syntax
+- [ ] **9.2.2** Modernize ecommerce.css utility classes to v4 patterns  
+- [ ] **9.2.3** Remove all HSL color format dependencies
+- [ ] **9.2.4** Implement CSS custom property fallbacks for gradual migration
+- [ ] **9.2.5** Test that all existing styling still works after architecture changes
+
+### **Week 3-4: Core UI Components (Batch 1)**
+
+#### **Task 9.3: Button & Form Components**
+**Priority**: HIGH | **Components**: 5 core components
+- [ ] **9.3.1** Button.svelte: `bg-primary` → `bg-brand-500`, `text-destructive` → `text-error-500`
+- [ ] **9.3.2** Input.svelte: Update border/focus classes to v4 custom properties
+- [ ] **9.3.3** Textarea.svelte: Migrate sizing and color classes
+- [ ] **9.3.4** Select components: Update dropdown styling to v4 patterns
+- [ ] **9.3.5** Badge.svelte: Migrate condition colors to new token system
+- [ ] **9.3.6** Test all form interactions, focus states, and accessibility
+
+#### **Task 9.4: Layout Components**
+**Priority**: HIGH | **Components**: 5 layout components  
+- [ ] **9.4.1** Header.svelte: Update navigation colors and spacing
+- [ ] **9.4.2** Navigation components: Migrate active/hover states
+- [ ] **9.4.3** Footer components: Update link and text colors
+- [ ] **9.4.4** Sidebar/drawer components: Modernize background/border classes
+- [ ] **9.4.5** Container/grid components: Update spacing utilities
+- [ ] **9.4.6** Test responsive behavior and mobile navigation
+
+### **Week 5-6: Feature Components (Batch 2)**
+
+#### **Task 9.5: E-commerce Components**  
+**Priority**: MEDIUM | **Components**: 10 commerce components
+- [ ] **9.5.1** ListingCard.svelte: Update product card styling to v4
+- [ ] **9.5.2** ProductGrid components: Migrate grid utilities and spacing
+- [ ] **9.5.3** Checkout components: Update form styling and CTAs
+- [ ] **9.5.4** Shopping cart: Modernize item styling and interactions  
+- [ ] **9.5.5** Price/currency components: Update typography and colors
+- [ ] **9.5.6** Condition badges: Full v4 color system migration
+- [ ] **9.5.7** Brand badges: Update styling consistency
+- [ ] **9.5.8** Image components: Modernize aspect ratios and borders
+- [ ] **9.5.9** Search components: Update input and filter styling
+- [ ] **9.5.10** Pagination: Migrate button and state classes
+
+#### **Task 9.6: User Interface Components**
+**Priority**: MEDIUM | **Components**: 10 UI components
+- [ ] **9.6.1** Modal/Dialog components: Update backdrop and content styling
+- [ ] **9.6.2** Dropdown/Popover: Migrate shadow and border classes
+- [ ] **9.6.3** Tooltip components: Update positioning and styling
+- [ ] **9.6.4** Alert/Notification: Modernize semantic color system
+- [ ] **9.6.5** Loading/Skeleton: Update animation and color patterns
+- [ ] **9.6.6** Tab components: Migrate active/inactive states
+- [ ] **9.6.7** Accordion: Update expand/collapse styling
+- [ ] **9.6.8** Breadcrumb: Modernize navigation styling
+- [ ] **9.6.9** Pagination controls: Update interactive states
+- [ ] **9.6.10** Progress indicators: Migrate color and sizing
+
+### **Week 7-8: Specialized Components (Batch 3)**
+
+#### **Task 9.7: Authentication & Profile Components**
+**Priority**: LOW | **Components**: 8 auth components
+- [ ] **9.7.1** Login/Register forms: Update form styling consistency
+- [ ] **9.7.2** Profile components: Migrate avatar and info displays
+- [ ] **9.7.3** Settings panels: Update form and toggle styling
+- [ ] **9.7.4** 2FA components: Modernize security UI patterns
+- [ ] **9.7.5** Password strength: Update progress and color indicators
+- [ ] **9.7.6** Email verification: Migrate status and action styling
+- [ ] **9.7.7** Social login: Update button and icon styling
+- [ ] **9.7.8** Account management: Modernize settings interface
+
+#### **Task 9.8: Messaging & Communication**
+**Priority**: LOW | **Components**: 7 messaging components  
+- [ ] **9.8.1** Message threads: Update conversation styling
+- [ ] **9.8.2** Chat bubbles: Migrate sent/received state colors
+- [ ] **9.8.3** Notification components: Update alert styling
+- [ ] **9.8.4** Unread indicators: Modernize badge and count styling
+- [ ] **9.8.5** Message composer: Update input and attachment styling
+- [ ] **9.8.6** Status indicators: Migrate online/offline states
+- [ ] **9.8.7** Message search: Update result highlighting
+
+### **Week 9: Final Cleanup & Optimization**
+
+#### **Task 9.9: Legacy Cleanup & Performance**
+**Priority**: MEDIUM | **Impact**: Clean codebase and optimization
+- [ ] **9.9.1** Remove all shadcn compatibility CSS from app.css
+- [ ] **9.9.2** Delete unused v3 color mappings and legacy tokens
+- [ ] **9.9.3** Clean up any remaining @layer utilities references
+- [ ] **9.9.4** Optimize CSS bundle size and remove duplicate declarations
+- [ ] **9.9.5** Update design token documentation
+- [ ] **9.9.6** Run full visual regression testing suite
+
+#### **Task 9.10: Performance Validation & Documentation**
+**Priority**: HIGH | **Impact**: Measure improvements and document success
+- [ ] **9.10.1** Measure CSS bundle size improvement (target: 20% reduction)
+- [ ] **9.10.2** Validate build performance improvements sustained
+- [ ] **9.10.3** Core Web Vitals testing and optimization
+- [ ] **9.10.4** Cross-browser compatibility validation
+- [ ] **9.10.5** Update component documentation with v4 patterns
+- [ ] **9.10.6** Create v4 best practices guide for future development
+
+---
+
+## 📊 **Migration Success Metrics**
+
+### **Build Performance Targets**:
+- ✅ Build time: <200ms (achieved with Vite plugin)
+- 🎯 CSS bundle: 20% size reduction
+- 🎯 First paint: <100ms improvement
+- 🎯 Layout stability: Zero CLS regression
+
+### **Code Quality Targets**:
+- 🎯 Zero legacy class names remaining
+- 🎯 100% v4 token system usage
+- 🎯 Modern @utility syntax throughout
+- 🎯 Clean CSS architecture with no compatibility layers
+- 🎯 **OKLCH color space** for all design tokens (better than hex/HSL)
+
+### **Developer Experience**:
+- 🎯 Consistent component API across all components
+- 🎯 Clear v4 migration documentation
+- 🎯 Automated visual regression testing
+- 🎯 Modern development workflows
+
+---
+
+## 🚨 **Migration Safety Guidelines**
+
+### **Before Each Batch**:
+1. **Create feature branch** for component batch
+2. **Screenshot key pages** for visual comparison
+3. **Run existing tests** to establish baseline
+4. **Document current behavior** of components being updated
+
+### **During Migration**:
+1. **Update 5 components maximum** per batch
+2. **Test each component individually** before moving to next
+3. **Maintain visual parity** - no design changes during migration
+4. **Keep fallback classes** until batch is fully tested
+
+### **After Each Batch**:
+1. **Visual regression testing** on key user flows
+2. **Cross-browser testing** on Chrome, Firefox, Safari
+3. **Mobile testing** on actual devices
+4. **Performance measurement** to ensure no regressions
+5. **Merge to main** only after thorough testing
+
+---
+
+## 🎯 **Getting Started: Week 1 Action Plan**
+
+Copy this checklist to start the v4 modernization:
+
+### **Immediate Next Steps**:
+- [ ] Create `feature/v4-migration-foundation` branch
+- [ ] Set up visual regression testing with screenshots
+- [ ] Complete Task 9.1.1: Remove shadcn HSL compatibility layer  
+- [ ] Complete Task 9.1.2: Convert @layer utilities to @utility
+- [ ] Test that no visual changes occurred
+- [ ] Document any issues discovered during foundation migration
+
+**Estimated Time**: 1-2 days for foundation setup  
+**Risk Level**: Medium (affects all components)  
+**Rollback Plan**: Revert branch if any visual regressions detected
+
+---
+
+### 🎊 **VISION: Pure Tailwind v4 by End of Quarter**
+By completing this roadmap, you'll have:
+- **Modern CSS-first architecture** with zero legacy compatibility layers
+- **OKLCH color system** for perceptually uniform colors and better gradients
+- **20% smaller CSS bundle** through elimination of duplicate token systems  
+- **Future-proof styling system** ready for next Tailwind updates
+- **Consistent developer experience** across all 85+ components
+- **Performance optimized** build and runtime characteristics
+
+### 🎨 **Why OKLCH?**
+- **Perceptually uniform** - Equal steps look equal to human eyes
+- **Better gradients** - No muddy colors in the middle
+- **Wider gamut** - Access to more vibrant colors on modern displays
+- **2025 standard** - Supported by all modern browsers
+- **Future-proof** - Works with HDR and P3 displays
 
 ---
 

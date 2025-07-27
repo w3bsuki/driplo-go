@@ -3,48 +3,52 @@
 /* ===== TAILWIND V4 THEME CONFIGURATION ===== */
 @theme {
   /* ===== Brand Colors ===== */
-  --color-brand-50: #f0f9ff;
-  --color-brand-100: #e0f2fe;
-  --color-brand-200: #bae6fd;
-  --color-brand-300: #7dd3fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #87ceeb;
-  --color-brand-600: #6bb6d8;
-  --color-brand-700: #4f9fc5;
-  --color-brand-800: #3a88ae;
-  --color-brand-900: #1e5a7e;
+  /* OKLCH migration - old HEX values kept as comments for rollback */
+  --color-brand-50: oklch(98.36% 0.011 224.89); /* was #f0f9ff */
+  --color-brand-100: oklch(95.97% 0.022 222.78); /* was #e0f2fe */
+  --color-brand-200: oklch(90.54% 0.049 218.04); /* was #bae6fd */
+  --color-brand-300: oklch(82.67% 0.089 214.25); /* was #7dd3fc */
+  --color-brand-400: oklch(73.67% 0.135 211.24); /* was #38bdf8 */
+  --color-brand-500: oklch(81.24% 0.086 210.97); /* was #87ceeb - main baby blue */
+  --color-brand-600: oklch(73.52% 0.094 210.16); /* was #6bb6d8 */
+  --color-brand-700: oklch(65.56% 0.101 209.35); /* was #4f9fc5 */
+  --color-brand-800: oklch(57.73% 0.104 208.84); /* was #3a88ae */
+  --color-brand-900: oklch(42.17% 0.088 212.89); /* was #1e5a7e */
 
   /* ===== Neutrals ===== */
-  --color-gray-0: #ffffff;
-  --color-gray-50: #f8fafc;
-  --color-gray-100: #f1f5f9;
-  --color-gray-200: #e2e8f0;
-  --color-gray-300: #cbd5e1;
-  --color-gray-400: #94a3b8;
-  --color-gray-500: #64748b;
-  --color-gray-600: #475569;
-  --color-gray-700: #334155;
-  --color-gray-800: #1e293b;
-  --color-gray-900: #0f172a;
-  --color-gray-950: #020617;
+  /* OKLCH migration - old HEX values kept as comments for rollback */
+  --color-gray-0: oklch(100% 0 0); /* was #ffffff - pure white */
+  --color-gray-50: oklch(98.47% 0.004 247.86); /* was #f8fafc */
+  --color-gray-100: oklch(96.58% 0.007 249.37); /* was #f1f5f9 */
+  --color-gray-200: oklch(92.27% 0.011 252.37); /* was #e2e8f0 */
+  --color-gray-300: oklch(86.29% 0.014 252.61); /* was #cbd5e1 */
+  --color-gray-400: oklch(69.72% 0.021 252.26); /* was #94a3b8 */
+  --color-gray-500: oklch(52.87% 0.022 252.59); /* was #64748b */
+  --color-gray-600: oklch(41.05% 0.022 254.56); /* was #475569 */
+  --color-gray-700: oklch(32.18% 0.021 254.15); /* was #334155 */
+  --color-gray-800: oklch(23.51% 0.019 252.89); /* was #1e293b */
+  --color-gray-900: oklch(15.85% 0.015 257.28); /* was #0f172a */
+  --color-gray-950: oklch(9.52% 0.012 265.75); /* was #020617 - near black */
 
   /* ===== Semantic Colors ===== */
-  --color-success-50: #f0fdf4;
-  --color-success-500: #22c55e;
-  --color-success-600: #16a34a;
-  --color-warning-50: #fffbeb;
-  --color-warning-500: #f59e0b;
-  --color-warning-600: #d97706;
-  --color-error-50: #fef2f2;
-  --color-error-500: #ef4444;
-  --color-error-600: #dc2626;
-  --color-info-50: #eff6ff;
-  --color-info-500: #3b82f6;
-  --color-info-600: #2563eb;
+  /* OKLCH migration - old HEX values kept as comments for rollback */
+  --color-success-50: oklch(98.24% 0.019 156.94); /* was #f0fdf4 - light green */
+  --color-success-500: oklch(74.89% 0.204 153.94); /* was #22c55e - success green */
+  --color-success-600: oklch(64.09% 0.187 155.63); /* was #16a34a */
+  --color-warning-50: oklch(98.87% 0.019 91.2); /* was #fffbeb - light yellow */
+  --color-warning-500: oklch(72.42% 0.173 74.95); /* was #f59e0b - warning amber */
+  --color-warning-600: oklch(61.74% 0.177 64.38); /* was #d97706 */
+  --color-error-50: oklch(97.67% 0.012 17.08); /* was #fef2f2 - light red */
+  --color-error-500: oklch(62.8% 0.237 25.34); /* was #ef4444 - error red */
+  --color-error-600: oklch(55.8% 0.244 26.64); /* was #dc2626 */
+  --color-info-50: oklch(97.61% 0.014 254.6); /* was #eff6ff - light blue */
+  --color-info-500: oklch(61.42% 0.209 252.42); /* was #3b82f6 - info blue */
+  --color-info-600: oklch(53.24% 0.241 252.44); /* was #2563eb */
 
   /* ===== Utility Color System (for Tailwind classes) ===== */
-  --color-white: #ffffff;
-  --color-red-500: #ef4444;
+  /* OKLCH migration - old HEX values kept as comments for rollback */
+  --color-white: oklch(100% 0 0); /* was #ffffff - pure white */
+  --color-red-500: oklch(62.8% 0.237 25.34); /* was #ef4444 - red utility */
 
   /* ===== Spacing Scale ===== */
   --spacing-0: 0;
@@ -188,20 +192,21 @@
     --space-20: var(--spacing-20);
     
     /* Legacy color mappings for navbar and components */
-    --color-white: #ffffff;
-    --color-gray-50: #f8fafc;
-    --color-gray-100: #f1f5f9;
-    --color-gray-200: #e2e8f0;
-    --color-gray-300: #cbd5e1;
-    --color-gray-400: #94a3b8;
-    --color-gray-500: #64748b;
-    --color-gray-600: #475569;
-    --color-gray-700: #334155;
-    --color-gray-800: #1e293b;
-    --color-gray-900: #0f172a;
+    /* OKLCH migration - old HEX values kept as comments */
+    --color-white: oklch(100% 0 0); /* was #ffffff */
+    --color-gray-50: oklch(98.47% 0.004 247.86); /* was #f8fafc */
+    --color-gray-100: oklch(96.58% 0.007 249.37); /* was #f1f5f9 */
+    --color-gray-200: oklch(92.27% 0.011 252.37); /* was #e2e8f0 */
+    --color-gray-300: oklch(86.29% 0.014 252.61); /* was #cbd5e1 */
+    --color-gray-400: oklch(69.72% 0.021 252.26); /* was #94a3b8 */
+    --color-gray-500: oklch(52.87% 0.022 252.59); /* was #64748b */
+    --color-gray-600: oklch(41.05% 0.022 254.56); /* was #475569 */
+    --color-gray-700: oklch(32.18% 0.021 254.15); /* was #334155 */
+    --color-gray-800: oklch(23.51% 0.019 252.89); /* was #1e293b */
+    --color-gray-900: oklch(15.85% 0.015 257.28); /* was #0f172a */
     
-    --color-red-500: #ef4444;
-    --color-brand-500: #87ceeb;
+    --color-red-500: oklch(62.8% 0.237 25.34); /* was #ef4444 */
+    --color-brand-500: oklch(81.24% 0.086 210.97); /* was #87ceeb */
     
     --text-xs: var(--font-size-xs);
     --text-sm: var(--font-size-sm);
@@ -291,36 +296,37 @@
 
     /* ===== SEMANTIC COLOR MAPPINGS ===== */
     /* Light Mode (Default) */
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f8fafc;  /* gray-50 */
-    --color-bg-tertiary: #f1f5f9;   /* gray-100 */
-    --color-bg-inverse: #0f172a;    /* gray-900 */
+    /* OKLCH migration - old HEX values kept as comments */
+    --color-bg-primary: oklch(100% 0 0); /* was #ffffff */
+    --color-bg-secondary: oklch(98.47% 0.004 247.86);  /* was #f8fafc - gray-50 */
+    --color-bg-tertiary: oklch(96.58% 0.007 249.37);   /* was #f1f5f9 - gray-100 */
+    --color-bg-inverse: oklch(15.85% 0.015 257.28);    /* was #0f172a - gray-900 */
 
-    --color-surface-primary: #ffffff;
-    --color-surface-secondary: #f8fafc;  /* gray-50 */
-    --color-surface-tertiary: #f1f5f9;   /* gray-100 */
-    --color-surface-hover: #f8fafc;      /* gray-50 */
-    --color-surface-active: #f1f5f9;     /* gray-100 */
+    --color-surface-primary: oklch(100% 0 0); /* was #ffffff */
+    --color-surface-secondary: oklch(98.47% 0.004 247.86);  /* was #f8fafc - gray-50 */
+    --color-surface-tertiary: oklch(96.58% 0.007 249.37);   /* was #f1f5f9 - gray-100 */
+    --color-surface-hover: oklch(98.47% 0.004 247.86);      /* was #f8fafc - gray-50 */
+    --color-surface-active: oklch(96.58% 0.007 249.37);     /* was #f1f5f9 - gray-100 */
 
-    --color-text-primary: #0f172a;   /* gray-900 */
-    --color-text-secondary: #475569;  /* gray-600 */
-    --color-text-tertiary: #64748b;   /* gray-500 */
-    --color-text-placeholder: #94a3b8; /* gray-400 */
-    --color-text-inverse: #ffffff;
+    --color-text-primary: oklch(15.85% 0.015 257.28);   /* was #0f172a - gray-900 */
+    --color-text-secondary: oklch(41.05% 0.022 254.56);  /* was #475569 - gray-600 */
+    --color-text-tertiary: oklch(52.87% 0.022 252.59);   /* was #64748b - gray-500 */
+    --color-text-placeholder: oklch(69.72% 0.021 252.26); /* was #94a3b8 - gray-400 */
+    --color-text-inverse: oklch(100% 0 0); /* was #ffffff */
 
-    --color-border-primary: #e2e8f0;   /* gray-200 */
-    --color-border-secondary: #cbd5e1;  /* gray-300 */
-    --color-border-hover: #cbd5e1;     /* gray-300 */
+    --color-border-primary: oklch(92.27% 0.011 252.37);   /* was #e2e8f0 - gray-200 */
+    --color-border-secondary: oklch(86.29% 0.014 252.61);  /* was #cbd5e1 - gray-300 */
+    --color-border-hover: oklch(86.29% 0.014 252.61);     /* was #cbd5e1 - gray-300 */
     --color-border-focus: var(--color-brand-500);     /* baby blue */
 
     /* Component-specific */
     --button-primary-bg: var(--color-brand-500);      /* baby blue */
     --button-primary-bg-hover: var(--color-brand-600); /* darker blue */
-    --button-primary-text: #ffffff;
+    --button-primary-text: oklch(100% 0 0); /* was #ffffff */
 
-    --input-bg: #ffffff;
-    --input-border: #e2e8f0;    /* gray-200 */
-    --input-border-hover: #cbd5e1; /* gray-300 */
+    --input-bg: oklch(100% 0 0); /* was #ffffff */
+    --input-border: oklch(92.27% 0.011 252.37);    /* was #e2e8f0 - gray-200 */
+    --input-border-hover: oklch(86.29% 0.014 252.61); /* was #cbd5e1 - gray-300 */
     --input-border-focus: var(--color-brand-500); /* baby blue */
 }
 

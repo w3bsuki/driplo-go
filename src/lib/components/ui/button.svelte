@@ -9,12 +9,12 @@
 		{
 			variants: {
 				variant: {
-					default: 'bg-primary text-white border border-transparent hover:bg-primary/90 active:bg-primary/80',
-					destructive: 'bg-destructive text-destructive-foreground border border-transparent hover:bg-destructive/90 active:bg-destructive/80',
-					outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-					secondary: 'bg-secondary text-secondary-foreground border border-transparent hover:bg-secondary/80',
-					ghost: 'hover:bg-accent hover:text-accent-foreground',
-					link: 'text-primary underline-offset-4 hover:underline p-0 h-auto'
+					default: 'bg-brand-500 text-white border border-transparent hover:bg-brand-600 active:bg-brand-700',
+					destructive: 'bg-error-500 text-white border border-transparent hover:bg-error-600 active:bg-error-600',
+					outline: 'border border-gray-200 bg-white hover:bg-brand-500 hover:text-white',
+					secondary: 'bg-gray-100 text-gray-900 border border-transparent hover:bg-gray-200',
+					ghost: 'hover:bg-brand-500 hover:text-white',
+					link: 'text-brand-500 underline-offset-4 hover:underline p-0 h-auto'
 				},
 				size: {
 					xs: 'px-2 text-xs rounded-sm',

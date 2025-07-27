@@ -86,20 +86,18 @@
 @utility hover-bright {
   transition: background-color var(--transition-duration-75) var(--transition-timing-function-out),
               border-color var(--transition-duration-75) var(--transition-timing-function-out);
-}
-
-/* Invalid @utility syntax - convert to regular CSS */
-.hover-bright:hover {
-  filter: brightness(1.1);
+  
+  &:hover {
+    filter: brightness(1.1);
+  }
 }
 
 @utility active-scale {
   transition: transform var(--transition-duration-75);
-}
-
-/* Invalid @utility syntax - convert to regular CSS */
-.active-scale:active {
-  transform: scale(0.97);
+  
+  &:active {
+    transform: scale(0.97);
+  }
 }
 
 @utility instant-hover {
@@ -143,48 +141,46 @@
 }
 
 /* Scrollbar utilities */
-/* Invalid @utility syntax - convert to regular CSS */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+@utility scrollbar-thin {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 }
 
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* Invalid @utility syntax - convert to regular CSS */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Accessibility - Touch target expansion */
 @utility touch-target {
   position: relative;
-}
-
-/* Invalid @utility syntax - convert to regular CSS */
-.touch-target::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(100%, calc(2.75rem)); /* 44px min */
-  height: max(100%, calc(2.75rem)); /* 44px min */
-  transform: translate(-50%, -50%);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, calc(2.75rem)); /* 44px min */
+    height: max(100%, calc(2.75rem)); /* 44px min */
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* Mobile-first responsive utilities */
-@media (pointer: coarse) {
-  /* Invalid @utility syntax - convert to regular CSS */
-  .btn-compact-safe {
+@utility btn-compact-safe {
+  @media (pointer: coarse) {
     position: relative;
-  }
-  
-  .btn-compact-safe::after {
-    content: '';
-    position: absolute;
-    inset: -0.5rem; /* Expands tap area by 8px on all sides */
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -0.5rem; /* Expands tap area by 8px on all sides */
+    }
   }
 }

@@ -64,7 +64,7 @@
 	{required}
 	bind:value
 	class={cn(
-		'flex w-full rounded-sm border border-input bg-background ring-offset-background transition-all duration-100 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe',
+		'flex w-full rounded-sm border border-gray-200 bg-white ring-offset-white transition-all duration-100 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe',
 		sizeClasses[size],
 		className
 	)}
