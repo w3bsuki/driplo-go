@@ -28,10 +28,10 @@
   } = $props();
 
   // Internal state
-  let errorMessage = '';
-  let showDetails = false;
-  let errorId = '';
-  let errorCount = 0;
+  let errorMessage = $state('');
+  let showDetails = $state(false);
+  let errorId = $state('');
+  let errorCount = $state(0);
 
   // Error boundary state management
   let hasError = false;

@@ -3,6 +3,73 @@
  * Remove this file once all components are updated
  */
 
+/* Quick Filter Gradient Buttons - High specificity for Tailwind v4 */
+
+/* Blue variant - Men */
+button.bg-gradient-to-r.from-blue-500.to-blue-600,
+.bg-gradient-to-r.from-blue-500.to-blue-600 {
+  background: linear-gradient(to right, #3b82f6, #2563eb) !important;
+  border: none !important;
+  color: white !important;
+}
+button.bg-gradient-to-r.from-blue-500.to-blue-600:hover,
+.bg-gradient-to-r.from-blue-500.to-blue-600:hover {
+  background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+}
+
+/* Pink variant - Women */
+button.bg-gradient-to-r.from-pink-500.to-pink-600,
+.bg-gradient-to-r.from-pink-500.to-pink-600 {
+  background: linear-gradient(to right, #ec4899, #db2777) !important;
+  border: none !important;
+  color: white !important;
+}
+button.bg-gradient-to-r.from-pink-500.to-pink-600:hover,
+.bg-gradient-to-r.from-pink-500.to-pink-600:hover {
+  background: linear-gradient(to right, #db2777, #be185d) !important;
+}
+
+/* Golden variant - Top Sellers */
+button.bg-gradient-to-r.from-yellow-500.to-yellow-600,
+.bg-gradient-to-r.from-yellow-500.to-yellow-600 {
+  background: linear-gradient(to right, #eab308, #ca8a04) !important;
+  border: none !important;
+  color: white !important;
+}
+button.bg-gradient-to-r.from-yellow-500.to-yellow-600:hover,
+.bg-gradient-to-r.from-yellow-500.to-yellow-600:hover {
+  background: linear-gradient(to right, #ca8a04, #a16207) !important;
+}
+
+/* Red variant - Hot */
+button.bg-gradient-to-r.from-red-500.to-red-600,
+.bg-gradient-to-r.from-red-500.to-red-600 {
+  background: linear-gradient(to right, #ef4444, #dc2626) !important;
+  border: none !important;
+  color: white !important;
+}
+button.bg-gradient-to-r.from-red-500.to-red-600:hover,
+.bg-gradient-to-r.from-red-500.to-red-600:hover {
+  background: linear-gradient(to right, #dc2626, #b91c1c) !important;
+}
+
+/* Orange variant - Sale */
+button.bg-gradient-to-r.from-orange-500.to-orange-600,
+.bg-gradient-to-r.from-orange-500.to-orange-600 {
+  background: linear-gradient(to right, #f97316, #ea580c) !important;
+  border: none !important;
+  color: white !important;
+}
+button.bg-gradient-to-r.from-orange-500.to-orange-600:hover,
+.bg-gradient-to-r.from-orange-500.to-orange-600:hover {
+  background: linear-gradient(to right, #ea580c, #c2410c) !important;
+}
+
+/* Ensure no borders on gradient buttons */
+.border-0 {
+  border-width: 0 !important;
+}
+
 /* Primary Colors */
 .bg-primary { background-color: var(--color-brand-500); }
 .hover\:bg-primary:hover { background-color: var(--color-brand-500); }

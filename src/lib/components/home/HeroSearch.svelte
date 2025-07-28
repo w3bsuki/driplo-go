@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronDown, Menu, Search, Star, User, Users, Flame, Tag, Zap, Sparkles, Shirt, Gem, Briefcase, ShirtIcon, ScanEye, DollarSign } from 'lucide-svelte';
+	import { ChevronDown, Menu, Search } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { cn } from '$lib/utils/cn';
 	import { debounce } from '$lib/utils/performance';
@@ -73,7 +73,7 @@
 	let activeCategory = $state('');
 	let isSticky = $state(false);
 	let heroRef: HTMLElement;
-	let StickySearchBar: any = null;
+	let StickySearchBar = $state<any>(null);
 
 	// Debug logging
 	debug.log('HeroSearch initialized', {
@@ -90,22 +90,22 @@
 		search_north_face_jacket()
 	];
 
-	// Quick filters with proper icons
+	// Quick filters with emojis
 	const quickFilters = [
-		{ icon: Star, name: quick_filter_top_sellers(), action: 'top-sellers', ariaLabel: quick_filter_top_sellers(), variant: 'golden' },
-		{ icon: User, name: quick_filter_men(), action: 'men', ariaLabel: category_men(), variant: 'blue' },
-		{ icon: Users, name: quick_filter_women(), action: 'women', ariaLabel: category_women(), variant: 'pink' },
-		{ icon: Sparkles, name: quick_filter_newest(), action: 'newest', ariaLabel: quick_filter_newest(), variant: 'default' },
-		{ icon: Flame, name: quick_filter_hot(), action: 'hot', ariaLabel: quick_filter_hot(), variant: 'hot' },
-		{ icon: Tag, name: quick_filter_with_tags(), action: 'with-tags', ariaLabel: condition_new_with_tags(), variant: 'default' },
-		{ icon: ScanEye, name: quick_filter_shoes(), action: 'shoes', ariaLabel: subcategory_shoes(), variant: 'default' },
-		{ icon: Shirt, name: quick_filter_tshirts(), action: 't-shirts', ariaLabel: subcategory_tshirts(), variant: 'default' },
-		{ icon: Gem, name: quick_filter_accessories(), action: 'accessories', ariaLabel: subcategory_accessories(), variant: 'default' },
-		{ icon: ShirtIcon, name: quick_filter_jeans(), action: 'jeans', ariaLabel: subcategory_jeans(), variant: 'default' },
-		{ icon: Zap, name: quick_filter_dresses(), action: 'dresses', ariaLabel: subcategory_dresses(), variant: 'default' },
-		{ icon: Briefcase, name: quick_filter_jackets(), action: 'jackets', ariaLabel: subcategory_jackets(), variant: 'default' },
-		{ icon: Briefcase, name: quick_filter_bags(), action: 'bags', ariaLabel: subcategory_bags(), variant: 'default' },
-		{ icon: DollarSign, name: quick_filter_sale(), action: 'sale', ariaLabel: filter_browse_all(), variant: 'sale' }
+		{ icon: '⭐', name: quick_filter_top_sellers(), action: 'top-sellers', ariaLabel: quick_filter_top_sellers(), variant: 'golden' },
+		{ icon: '👨', name: quick_filter_men(), action: 'men', ariaLabel: category_men(), variant: 'blue' },
+		{ icon: '👩', name: quick_filter_women(), action: 'women', ariaLabel: category_women(), variant: 'pink' },
+		{ icon: '✨', name: quick_filter_newest(), action: 'newest', ariaLabel: quick_filter_newest(), variant: 'default' },
+		{ icon: '🔥', name: quick_filter_hot(), action: 'hot', ariaLabel: quick_filter_hot(), variant: 'hot' },
+		{ icon: '🏷️', name: quick_filter_with_tags(), action: 'with-tags', ariaLabel: condition_new_with_tags(), variant: 'default' },
+		{ icon: '👟', name: quick_filter_shoes(), action: 'shoes', ariaLabel: subcategory_shoes(), variant: 'default' },
+		{ icon: '👕', name: quick_filter_tshirts(), action: 't-shirts', ariaLabel: subcategory_tshirts(), variant: 'default' },
+		{ icon: '💍', name: quick_filter_accessories(), action: 'accessories', ariaLabel: subcategory_accessories(), variant: 'default' },
+		{ icon: '👖', name: quick_filter_jeans(), action: 'jeans', ariaLabel: subcategory_jeans(), variant: 'default' },
+		{ icon: '👗', name: quick_filter_dresses(), action: 'dresses', ariaLabel: subcategory_dresses(), variant: 'default' },
+		{ icon: '🧥', name: quick_filter_jackets(), action: 'jackets', ariaLabel: subcategory_jackets(), variant: 'default' },
+		{ icon: '👜', name: quick_filter_bags(), action: 'bags', ariaLabel: subcategory_bags(), variant: 'default' },
+		{ icon: '💸', name: quick_filter_sale(), action: 'sale', ariaLabel: filter_browse_all(), variant: 'sale' }
 	];
 
 	// Route mapping for cleaner navigation
@@ -126,17 +126,6 @@
 		'bags': '/bags'
 	};
 
-	// Helper function for filter button classes
-	const getFilterClasses = (variant: string) => cn(
-		"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
-		{
-			'bg-[var(--color-surface-primary)] border-[var(--color-warning-500)] hover:bg-[var(--color-warning-50)] text-[var(--color-text-primary)]': variant === 'golden' || variant === 'sale',
-			'bg-[var(--color-surface-primary)] border-[var(--color-brand-400)] hover:bg-[var(--color-brand-50)] text-[var(--color-text-primary)]': variant === 'blue',
-			'bg-[var(--color-surface-primary)] border-[var(--color-pink-400)] hover:bg-[var(--color-pink-50)] text-[var(--color-text-primary)]': variant === 'pink',
-			'bg-[var(--color-surface-primary)] border-[var(--color-error-500)] hover:bg-[var(--color-error-50)] text-[var(--color-text-primary)]': variant === 'hot',
-			'bg-[var(--color-surface-primary)] border-[var(--color-border-primary)] hover:border-[var(--color-border-secondary)] hover:bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)]': variant === 'default'
-		}
-	);
 
 	// Get localized category name
 	const getCategoryName = (category: Category): string => {
@@ -214,16 +203,6 @@
 		goto(categorySlug ? `/${categorySlug}` : '/browse');
 	};
 
-	// Render quick filter button
-	const renderQuickFilterButton = (filter: typeof quickFilters[0], iconSize = ICON_SIZE_SM) => `
-		<button
-			onclick={() => handleQuickFilter(filter.action)}
-			class="${getFilterClasses(filter.variant)}"
-		>
-			<svelte:component this={filter.icon} class="${iconSize}" />
-			<span>${filter.name}</span>
-		</button>
-	`;
 </script>
 
 <section bind:this={heroRef} class="relative bg-gradient-to-b from-[var(--color-brand-50)] to-[var(--color-white)] py-[var(--spacing-3)] md:py-[var(--spacing-6)] pb-0">
@@ -393,29 +372,13 @@
 								<!-- Quick Filters -->
 								<div class="overflow-x-auto relative">
 									<div class="flex items-center gap-[var(--spacing-1-5)] overflow-x-auto scrollbar-hide">
-										{#each quickFilters.slice(0, MOBILE_QUICK_FILTERS_FIRST_BATCH) as filter}
-											<button
-												onclick={() => handleQuickFilter(filter.action)}
-												class={getFilterClasses(filter.variant)}
-											>
-												<svelte:component this={filter.icon} class={ICON_SIZE_SM} />
-												<span>{filter.name}</span>
-											</button>
-										{/each}
-										
-										<!-- Divider -->
-										<div class="w-px h-4 bg-border flex-shrink-0"></div>
-										
-										<!-- More quick filters -->
-										{#each quickFilters.slice(MOBILE_QUICK_FILTERS_FIRST_BATCH) as filter}
-											<button
-												onclick={() => handleQuickFilter(filter.action)}
-												class={getFilterClasses(filter.variant)}
-											>
-												<svelte:component this={filter.icon} class={ICON_SIZE_SM} />
-												<span>{filter.name}</span>
-											</button>
-										{/each}
+										<!-- Use QuickFilterPills component for consistent styling -->
+										<QuickFilterPills
+											filters={quickFilters}
+											onFilterClick={handleQuickFilter}
+											class="flex-shrink-0"
+											showScrollHint={false}
+										/>
 										
 										<!-- Divider -->
 										<div class="w-px h-4 bg-border flex-shrink-0"></div>

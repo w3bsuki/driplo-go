@@ -151,9 +151,9 @@
 		}
 	}
 
-	let resendEmail = ''
-	let resendLoading = false
-	let showResendForm = false
+	let resendEmail = $state('')
+	let resendLoading = $state(false)
+	let showResendForm = $state(false)
 
 	async function handleResendVerification() {
 		if (!resendEmail) {

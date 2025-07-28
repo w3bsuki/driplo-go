@@ -64,12 +64,12 @@
 		)}
 		aria-label={label || "Progress"}
 	>
-		<Progress.Indicator
+		<div
 			class={cn(
 				"h-full transition-all duration-500 ease-out rounded-full",
 				variantClasses[variant]
 			)}
-			style="transform: translateX(-{100 - percentage}%)"
-		/>
+			style="width: {percentage}%"
+		></div>
 	</Progress.Root>
 </div>

@@ -20,7 +20,7 @@
     appearance = 'always'
   }: Props = $props()
   
-  let turnstileInstance: any
+  let turnstileInstance = $state<any>(null)
   
   // Use test keys if environment variables are not set
   const siteKey = PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'
