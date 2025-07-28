@@ -41,8 +41,9 @@
     <h3 class="text-lg font-semibold mb-4 text-gray-900">Status Indicators</h3>
     <div class="flex flex-wrap gap-2">
       {#each statuses as status}
+        {@const Icon = status.icon}
         <Badge variant={status.variant}>
-          <svelte:component this={status.icon} class="mr-1 h-3 w-3" />
+          <Icon class="mr-1 h-3 w-3" />
           {status.label}
         </Badge>
       {/each}

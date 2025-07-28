@@ -3,6 +3,7 @@
 	import { fade, scale } from 'svelte/transition'
 	import { flip } from 'svelte/animate'
 	import { Upload, X, Image as ImageIcon, Loader2, AlertCircle, Move } from 'lucide-svelte'
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte'
 	import { 
 		validateImageFile, 
 		compressImage, 
@@ -388,12 +389,13 @@
 				>
 					<Loader2 class="w-8 h-8 animate-spin text-gray-400 mb-2" />
 					<p class="text-xs text-gray-600 text-center truncate w-full">{file.name}</p>
-					<div class="w-full bg-gray-200 rounded-full h-1 mt-2">
-						<div 
-							class="bg-blue-600 h-1 rounded-full transition-all duration-300"
-							style="width: {file.progress}%"
-						/>
-					</div>
+					<ProgressBar 
+						value={file.progress}
+						max={100}
+						size="xs"
+						variant="default"
+						class="mt-2"
+					/>
 					<p class="text-xs text-gray-500 mt-1">{file.progress}%</p>
 				</div>
 			{/each}

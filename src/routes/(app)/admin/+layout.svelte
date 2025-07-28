@@ -2,6 +2,8 @@
 	import { page } from '$app/stores'
 	import { Home, Users, ShoppingBag, Settings, Shield, BarChart } from 'lucide-svelte'
 	
+	let { children } = $props();
+	
 	const navItems = [
 		{ href: '/admin', label: 'Dashboard', icon: Home },
 		{ href: '/admin/users', label: 'Users', icon: Users },
@@ -12,22 +14,23 @@
 	]
 </script>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-background">
 	<div class="flex">
 		<!-- Sidebar -->
-		<nav class="w-64 bg-white shadow-lg h-screen sticky top-0">
+		<nav class="w-64 bg-card shadow-lg h-screen sticky top-0">
 			<div class="p-6">
-				<h2 class="text-2xl font-bold text-gray-900">Admin Panel</h2>
+				<h2 class="text-2xl font-bold text-foreground">Admin Panel</h2>
 			</div>
 			<div class="px-4">
 				{#each navItems as item}
+					{@const Icon = item.icon}
 					<a
 						href={item.href}
 						class="flex items-center gap-3 px-4 py-3 rounded-lg mb-1 transition-colors {$page.url.pathname === item.href
-							? 'bg-blue-600 text-white'
-							: 'text-gray-700 hover:bg-gray-100'}"
+							? 'bg-primary text-primary-foreground'
+							: 'text-foreground hover:bg-muted'}"
 					>
-						<svelte:component this={item.icon} class="w-5 h-5" />
+						<Icon class="w-5 h-5" />
 						<span class="font-medium">{item.label}</span>
 					</a>
 				{/each}
@@ -35,8 +38,8 @@
 		</nav>
 		
 		<!-- Main content -->
-		<main class="flex-1 p-8">
-			<slot />
+		<main class="flex-1 p-8 bg-background">
+			{@render children?.()}
 		</main>
 	</div>
 </div>

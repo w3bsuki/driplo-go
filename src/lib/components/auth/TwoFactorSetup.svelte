@@ -8,13 +8,13 @@
 
   const dispatch = createEventDispatcher();
 
-  let step: 'intro' | 'qr' | 'verify' | 'backup' = 'intro';
-  let loading = false;
-  let qrCode = '';
-  let manualEntryKey = '';
-  let verificationCode = '';
-  let backupCodes: string[] = [];
-  let isRequired = false;
+  let step = $state<'intro' | 'qr' | 'verify' | 'backup'>('intro');
+  let loading = $state(false);
+  let qrCode = $state('');
+  let manualEntryKey = $state('');
+  let verificationCode = $state('');
+  let backupCodes = $state<string[]>([]);
+  let isRequired = $state(false);
 
   async function startSetup() {
     loading = true;
@@ -106,13 +106,13 @@ ${backupCodes.join('\n')}`;
 <div class="space-y-6">
   {#if step === 'intro'}
     <div class="text-center space-y-4">
-      <div class="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-        <Shield class="w-8 h-8 text-primary" />
+      <div class="mx-auto w-16 h-16 bg-brand-500/10 rounded-full flex items-center justify-center">
+        <Shield class="w-8 h-8 text-brand-500" />
       </div>
       
       <div>
         <h3 class="text-lg font-semibold">Enable Two-Factor Authentication</h3>
-        <p class="text-sm text-muted-foreground mt-2">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
           Add an extra layer of security to your account by requiring a verification code in addition to your password.
         </p>
       </div>
@@ -127,13 +127,13 @@ ${backupCodes.join('\n')}`;
       
       <div class="text-left space-y-3">
         <h4 class="text-sm font-medium">You'll need:</h4>
-        <ul class="text-sm text-muted-foreground space-y-1">
+        <ul class="text-sm text-gray-500 dark:text-gray-400 space-y-1">
           <li class="flex items-start gap-2">
-            <span class="text-primary mt-0.5">•</span>
+            <span class="text-brand-500 mt-0.5">•</span>
             <span>An authenticator app like Google Authenticator, Authy, or 1Password</span>
           </li>
           <li class="flex items-start gap-2">
-            <span class="text-primary mt-0.5">•</span>
+            <span class="text-brand-500 mt-0.5">•</span>
             <span>Your mobile device to scan a QR code</span>
           </li>
         </ul>
@@ -156,7 +156,7 @@ ${backupCodes.join('\n')}`;
     <div class="space-y-6">
       <div>
         <h3 class="text-lg font-semibold">Scan QR Code</h3>
-        <p class="text-sm text-muted-foreground mt-1">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Scan this QR code with your authenticator app
         </p>
       </div>
@@ -166,15 +166,15 @@ ${backupCodes.join('\n')}`;
       </div>
       
       <details class="border rounded-sm">
-        <summary class="p-3 cursor-pointer text-sm font-medium hover:bg-muted/50">
+        <summary class="p-3 cursor-pointer text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800">
           Can't scan? Enter code manually
         </summary>
         <div class="p-3 pt-0 space-y-3">
-          <p class="text-sm text-muted-foreground">
+          <p class="text-sm text-gray-500 dark:text-gray-400">
             Enter this code in your authenticator app:
           </p>
           <div class="flex items-center gap-2">
-            <code class="flex-1 bg-muted px-3 py-2 rounded-sm text-xs font-mono">
+            <code class="flex-1 bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-sm text-xs font-mono">
               {manualEntryKey}
             </code>
             <Button
@@ -220,7 +220,7 @@ ${backupCodes.join('\n')}`;
     <div class="space-y-6">
       <div>
         <h3 class="text-lg font-semibold">Save Your Backup Codes</h3>
-        <p class="text-sm text-muted-foreground mt-1">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Save these codes in a safe place. You can use them to access your account if you lose your authenticator device.
         </p>
       </div>
@@ -231,7 +231,7 @@ ${backupCodes.join('\n')}`;
         </p>
       </div>
       
-      <div class="bg-muted/50 rounded-sm p-4 space-y-2">
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-sm p-4 space-y-2">
         {#each backupCodes as code}
           <div class="flex items-center justify-between">
             <code class="font-mono text-sm">{code}</code>

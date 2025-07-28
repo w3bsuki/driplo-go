@@ -5,6 +5,7 @@
 	import { getLoadingStrategy } from '$lib/utils/lazy-loading';
 	import * as m from '$lib/paraglide/messages.js';
 	import { browser } from '$app/environment';
+	import { debug } from '$lib/utils/debug-logger';
 	
 	// Constants
 	const RESPONSIVE_BREAKPOINTS = {
@@ -102,67 +103,108 @@
 	}
 	
 	function transformListings(rawListings: any[]): any[] {
+		debug.log('transformListings called', { 
+			component: 'ListingGrid', 
+			data: { 
+				rawListingsCount: rawListings?.length || 0,
+				sampleListing: rawListings?.[0]
+			} 
+		});
+		
 		if (!rawListings || rawListings.length === 0) {
+			debug.warn('No listings to transform', { component: 'ListingGrid' });
 			return [];
 		}
 		
-		return rawListings.map(listing => ({
-			id: listing.id,
-			title: listing.title,
-			price: listing.price,
-			size: listing.size,
-			brand: listing.brand,
-			image: listing.images || listing.image_urls || [],
-			imageUrls: listing.image_urls || listing.images || [],
-			seller: {
-				username: listing.seller?.username || listing.profiles?.username || 'user',
-				avatar: listing.seller?.avatar_url || listing.profiles?.avatar_url,
-				account_type: listing.seller?.account_type || listing.profiles?.account_type,
-				is_verified: listing.seller?.is_verified || listing.profiles?.is_verified
-			},
-			likes: listing.favorite_count || 0,
-			isLiked: userFavorites.includes(listing.id),
-			condition: listing.condition
-		}));
+		const transformed = rawListings.map((listing, index) => {
+			debug.log(`Transforming listing ${index}`, {
+				component: 'ListingGrid',
+				data: {
+					id: listing.id,
+					title: listing.title,
+					image_urls: listing.image_urls,
+					images: listing.images,
+					seller: listing.seller,
+					profiles: listing.profiles
+				}
+			});
+			
+			const result = {
+				id: listing.id,
+				title: listing.title,
+				price: listing.price,
+				size: listing.size,
+				brand: listing.brand,
+				image: listing.image_urls || listing.images || [],
+				imageUrls: listing.image_urls || listing.images || [],
+				seller: {
+					username: listing.seller?.username || listing.profiles?.username || 'user',
+					avatar: listing.seller?.avatar_url || listing.profiles?.avatar_url,
+					account_type: listing.seller?.account_type || listing.profiles?.account_type,
+					is_verified: listing.seller?.is_verified || listing.profiles?.is_verified
+				},
+				likes: listing.favorite_count || 0,
+				isLiked: userFavorites.includes(listing.id),
+				condition: listing.condition
+			};
+			
+			if (index === 0) {
+				debug.log('First transformed listing', {
+					component: 'ListingGrid',
+					data: result
+				});
+			}
+			
+			return result;
+		});
+		
+		debug.log('Transformation complete', {
+			component: 'ListingGrid',
+			data: {
+				transformedCount: transformed.length
+			}
+		});
+		
+		return transformed;
 	}
 </script>
 
-<section class="py-2 md:py-3" aria-labelledby={title ? 'listing-grid-title' : undefined}>
-	<div class="container px-4">
+<section class="py-[var(--spacing-2)] md:py-[var(--spacing-3)]" aria-labelledby={title ? 'listing-grid-title' : undefined}>
+	<div class="container px-[var(--spacing-4)]">
 		{#if title}
-			<h2 id="listing-grid-title" class="mb-2 text-sm font-semibold text-foreground">
+			<h2 id="listing-grid-title" class="mb-[var(--spacing-2)] text-[var(--font-size-sm)] font-semibold text-[var(--color-text-primary)]">
 				{title}
 			</h2>
 		{/if}
 		
 		{#if error && !loading}
 			<!-- Error state -->
-			<div class="rounded-sm border border-destructive/20 bg-destructive/10 p-2" role="alert">
-				<div class="flex items-start gap-2">
-					<span class="text-2xl" aria-hidden="true">⚠️</span>
+			<div class="rounded-[var(--border-radius-sm)] border border-[var(--color-error-500)]/20 bg-[var(--color-error-50)] p-[var(--spacing-2)]" role="alert">
+				<div class="flex items-start gap-[var(--spacing-2)]">
+					<span class="text-[var(--font-size-2xl)]" aria-hidden="true">⚠️</span>
 					<div class="flex-1">
-						<h3 class="font-medium text-destructive">{m.listing_error_title()}</h3>
-						<p class="text-xs text-destructive/80 mt-1">{error}</p>
+						<h3 class="font-medium text-[var(--color-error-600)]">{m.listing_error_title()}</h3>
+						<p class="text-[var(--font-size-xs)] text-[var(--color-error-500)]/80 mt-[var(--spacing-1)]">{error}</p>
 					</div>
 				</div>
 			</div>
 		{:else if loading}
 			<!-- Skeleton loader with proper grid -->
 			<div 
-				class="grid gap-2"
-				style="grid-template-columns: repeat({columns}, minmax(0, 1fr));"
+				class="grid gap-[var(--spacing-2)]"
+				style:grid-template-columns="repeat({columns}, minmax(0, 1fr))"
 				aria-busy="true"
 				aria-label={m.listing_loading()}
 			>
 				{#each Array(SKELETON_COUNT) as _, i (i)}
 					<div class="animate-pulse">
-						<div class="aspect-[3/4] bg-muted rounded-t-sm"></div>
-						<div class="p-2 bg-background rounded-b-sm space-y-1">
-							<div class="h-4 bg-muted rounded w-3/4"></div>
-							<div class="h-3 bg-muted rounded w-1/2"></div>
-							<div class="flex items-center gap-1 mt-2">
-								<div class="h-5 w-5 bg-muted rounded-sm"></div>
-								<div class="h-3 bg-muted rounded w-16"></div>
+						<div class="aspect-[3/4] bg-[var(--color-surface-tertiary)] rounded-t-[var(--border-radius-sm)]"></div>
+						<div class="p-[var(--spacing-2)] bg-[var(--color-surface-primary)] rounded-b-[var(--border-radius-sm)] space-y-[var(--spacing-1)]">
+							<div class="h-4 bg-[var(--color-surface-tertiary)] rounded w-3/4"></div>
+							<div class="h-3 bg-[var(--color-surface-tertiary)] rounded w-1/2"></div>
+							<div class="flex items-center gap-[var(--spacing-1)] mt-[var(--spacing-2)]">
+								<div class="h-5 w-5 bg-[var(--color-surface-tertiary)] rounded-[var(--border-radius-sm)]"></div>
+								<div class="h-3 bg-[var(--color-surface-tertiary)] rounded w-16"></div>
 							</div>
 						</div>
 					</div>
@@ -174,8 +216,8 @@
 			{:else}
 				<!-- Regular responsive grid -->
 				<div 
-					class="grid gap-2 md:gap-3"
-					style="grid-template-columns: repeat({columns}, minmax(0, 1fr));"
+					class="grid gap-[var(--spacing-2)] md:gap-[var(--spacing-3)]"
+					style:grid-template-columns="repeat({columns}, minmax(0, 1fr))"
 					role="list"
 				>
 					{#each transformedListings as listing, index (listing.id)}
@@ -191,18 +233,18 @@
 					{hasMore} 
 					loading={loading} 
 					onLoadMore={onLoadMore}
-					class="mt-8"
+					class="mt-[var(--spacing-8)]"
 				/>
 			{/if}
 		{:else if showEmptyState}
 			<!-- Empty state -->
-			<div class="text-center py-8">
-				<div class="text-5xl mb-3" aria-hidden="true">🛍️</div>
-				<h3 class="text-sm font-medium text-foreground mb-2">{m.listing_empty_title()}</h3>
-				<p class="text-xs text-muted-foreground mb-3">{m.listing_empty_description()}</p>
+			<div class="text-center py-[var(--spacing-8)]">
+				<div class="text-[var(--font-size-5xl)] mb-[var(--spacing-3)]" aria-hidden="true">🛍️</div>
+				<h3 class="text-[var(--font-size-sm)] font-medium text-[var(--color-text-primary)] mb-[var(--spacing-2)]">{m.listing_empty_title()}</h3>
+				<p class="text-[var(--font-size-xs)] text-[var(--color-text-tertiary)] mb-[var(--spacing-3)]">{m.listing_empty_description()}</p>
 				<a 
 					href="/sell" 
-					class="inline-flex items-center px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-sm transition-colors duration-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+					class="inline-flex items-center px-[var(--spacing-3)] py-[var(--spacing-1-5)] bg-[var(--color-brand-500)] hover:bg-[var(--color-brand-600)] text-[var(--color-white)] font-medium rounded-[var(--border-radius-sm)] transition-colors duration-[var(--transition-duration-100)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)] focus:ring-offset-2"
 				>
 					{m.listing_start_selling()}
 				</a>

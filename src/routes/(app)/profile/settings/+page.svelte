@@ -671,6 +671,6 @@
 	}
 	
 	:global(.image-upload-button:hover) {
-		background-color: hsl(var(--primary) / 0.9);
+		background-color: var(--color-brand-600);
 	}
 </style>

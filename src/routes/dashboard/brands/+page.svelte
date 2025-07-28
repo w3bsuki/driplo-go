@@ -196,6 +196,7 @@
 					</tr>
 				{:else}
 					{#each filteredRequests as request}
+						{@const StatusIcon = getStatusIcon(request.verification_status)}
 						<tr class="hover:bg-gray-50">
 							<td class="px-6 py-4">
 								<input
@@ -235,7 +236,7 @@
 							<td class="px-6 py-4">
 								<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
 									{getStatusColor(request.verification_status)}">
-									<svelte:component this={getStatusIcon(request.verification_status)} class="w-3 h-3" />
+									<StatusIcon class="w-3 h-3" />
 									{request.verification_status.replace('_', ' ')}
 								</span>
 							</td>

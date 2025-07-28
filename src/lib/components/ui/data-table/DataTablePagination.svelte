@@ -30,9 +30,9 @@
 		class: className
 	}: Props = $props();
 
-	$: totalPages = Math.ceil(totalItems / pageSize);
-	$: startItem = (page - 1) * pageSize + 1;
-	$: endItem = Math.min(page * pageSize, totalItems);
+	let totalPages = $derived(Math.ceil(totalItems / pageSize));
+	let startItem = $derived((page - 1) * pageSize + 1);
+	let endItem = $derived(Math.min(page * pageSize, totalItems));
 
 	function handlePageSizeChange(value: string) {
 		const newPageSize = parseInt(value);

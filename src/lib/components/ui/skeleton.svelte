@@ -49,9 +49,9 @@
 	.animate-shimmer {
 		background: linear-gradient(
 			90deg,
-			hsl(var(--muted)) 0%,
-			hsl(var(--muted) / 0.5) 50%,
-			hsl(var(--muted)) 100%
+			var(--color-gray-50) 0%,
+			oklch(from var(--color-gray-50) l c h / 0.5) 50%,
+			var(--color-gray-50) 100%
 		);
 		background-size: 200% 100%;
 		animation: shimmer 1.5s ease-in-out infinite;

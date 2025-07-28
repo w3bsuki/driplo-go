@@ -31,18 +31,25 @@
         };
     };
 
-    export let role: 'buyer' | 'seller' | 'all' = 'all';
-    export let status: string | null = null;
-    export let dateFrom: string = '';
-    export let dateTo: string = '';
+    let { 
+        role = 'all', 
+        status = null, 
+        dateFrom = '', 
+        dateTo = '' 
+    }: { 
+        role?: 'buyer' | 'seller' | 'all'; 
+        status?: string | null; 
+        dateFrom?: string; 
+        dateTo?: string 
+    } = $props();
     
-    let transactions: Transaction[] = [];
-    let loading = true;
-    let hasMore = false;
-    let offset = 0;
+    let transactions = $state<Transaction[]>([]);
+    let loading = $state(true);
+    let hasMore = $state(false);
+    let offset = $state(0);
     const limit = 20;
-    let selectedOrders: Set<string> = new Set();
-    let bulkActionLoading = false;
+    let selectedOrders = $state<Set<string>>(new Set());
+    let bulkActionLoading = $state(false);
 
     const statusConfig = {
         pending: { color: 'bg-amber-100 text-amber-800', icon: Clock },
@@ -179,9 +186,9 @@
                             type="checkbox" 
                             class="w-5 h-5 sm:w-4 sm:h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
                             checked={selectedOrders.size === transactions.length}
-                            onchange={handleToggleAllOrders}
+                            onchange={toggleAllOrders}
                         />
-                        <label class="text-sm font-medium text-gray-700 cursor-pointer select-none" onclick={handleToggleAllOrders}>
+                        <label class="text-sm font-medium text-gray-700 cursor-pointer select-none" onclick={toggleAllOrders}>
                             Select All
                             {#if selectedOrders.size > 0}
                                 <span class="text-gray-500 font-normal">({selectedOrders.size} selected)</span>
@@ -217,6 +224,7 @@
         <div class="space-y-3">
             {#each transactions as transaction (transaction.id)}
                 {@const config = statusConfig[transaction.status] || statusConfig.pending}
+                {@const Icon = config.icon}
                 <div class="bg-white rounded-xl border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden">
                     <div class="p-4">
                         <!-- Order header -->
@@ -260,7 +268,7 @@
                                                 {formatPrice(transaction.amount)}
                                             </span>
                                             <span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full {config.color}">
-                                                <svelte:component this={config.icon} class="w-3 h-3" />
+                                                <Icon class="w-3 h-3" />
                                                 <span class="truncate">{transaction.status}</span>
                                             </span>
                                         </div>
@@ -270,7 +278,7 @@
                             <!-- Desktop price & status -->
                             <div class="hidden sm:flex flex-col items-end gap-2">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full {config.color}">
-                                    <svelte:component this={config.icon} class="w-3 h-3" />
+                                    <Icon class="w-3 h-3" />
                                     {transaction.status}
                                 </span>
                                 <span class="text-lg font-semibold text-gray-900">
@@ -325,7 +333,7 @@
             <div class="mt-6 text-center">
                 <button
                     class="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-                    onclick={handleLoadTransactions}
+                    onclick={loadTransactions}
                     disabled={loading}
                 >
                     {#if loading}

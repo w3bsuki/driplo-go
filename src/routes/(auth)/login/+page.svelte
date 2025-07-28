@@ -15,15 +15,15 @@
 	const auth = getAuthContext()
 	console.log('Auth context in login page:', auth)
 
-	let email = ''
-	let password = ''
-	let showPassword = false
-	let rememberMe = false
-	let loading = false
+	let email = $state('')
+	let password = $state('')
+	let showPassword = $state(false)
+	let rememberMe = $state(false)
+	let loading = $state(false)
 	
 	// CAPTCHA state
-	let captchaToken: string | null = null
-	let showCaptchaError = false
+	let captchaToken = $state<string | null>(null)
+	let showCaptchaError = $state(false)
 	let captchaRef: TurnstileWrapper
 
 	// Show error messages based on URL parameters
@@ -277,6 +277,7 @@
 							type="button"
 							class="absolute inset-y-0 right-0 pr-3 flex items-center touch-safe"
 							onclick={() => showPassword = !showPassword}
+							aria-label={showPassword ? 'Hide password' : 'Show password'}
 						>
 							{#if showPassword}
 								<Icon icon={EyeOff} size="sm" class="text-gray-400" />
@@ -306,7 +307,7 @@
 						size="normal"
 					/>
 					{#if showCaptchaError && !captchaToken}
-						<p class="text-red-500 text-xs mt-1">Please complete the CAPTCHA verification</p>
+						<p class="text-red-500 text-xs mt-1" role="alert" aria-live="assertive">Please complete the CAPTCHA verification</p>
 					{/if}
 				</div>
 

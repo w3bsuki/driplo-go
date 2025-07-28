@@ -1,16 +1,14 @@
 <script lang="ts">
-	import { ChevronDown, Menu } from 'lucide-svelte';
+	import { ChevronDown, Menu, Search, Star, User, Users, Flame, Tag, Zap, Sparkles, Shirt, Gem, Briefcase, ShirtIcon, ScanEye, DollarSign } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/utils/cn';
 	import { debounce } from '$lib/utils/performance';
-	import CategoryDropdown from '$lib/components/shared/CategoryDropdown.svelte';
-	// Lazy load non-critical components
-	let StickySearchBar: any = null;
+	import CategoryDropdown from '$lib/components/shared/CategoryDropdownFixed.svelte';
+	import { debug } from '$lib/utils/debug-logger';
 	import QuickFilterPills from '$lib/components/search/QuickFilterPills.svelte';
 	import TrendingSearches from '$lib/components/search/TrendingSearches.svelte';
 	import type { Category } from '$lib/types';
 	import { onMount } from 'svelte';
-	// Only import the messages we actually use
 	import {
 		header_categories,
 		browse_search_placeholder,
@@ -37,7 +35,6 @@
 		quick_filter_sale,
 		category_men,
 		category_women,
-		category_kids,
 		condition_new_with_tags,
 		subcategory_shoes,
 		subcategory_tshirts,
@@ -47,27 +44,44 @@
 		subcategory_jackets,
 		subcategory_bags,
 		filter_browse_all,
-		filter_categories,
 		quick_filter_categories_menu
 	} from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime.js';
 	
 	interface Props {
 		categories?: Category[];
 	}
-	
+
 	let { categories = [] }: Props = $props();
-	
+
 	// Constants
 	const SEARCH_DEBOUNCE_DELAY = 300;
 	const INTERSECTION_ROOT_MARGIN = '-100px 0px 0px 0px';
 	const DESKTOP_QUICK_FILTERS_LIMIT = 4;
+	const DESKTOP_CATEGORY_LIMIT = 3;
 	const MOBILE_CATEGORIES_LIMIT = 2;
+	const MOBILE_QUICK_FILTERS_FIRST_BATCH = 4;
+	const ICON_SIZE_SM = 'h-3.5 w-3.5';
+	const ICON_SIZE_BASE = 'h-4 w-4';
+	const BUTTON_HEIGHT = 'h-9';
+	const INPUT_HEIGHT = 'h-9';
 
+	// State
 	let searchQuery = $state('');
 	let isFocused = $state(false);
 	let isCategoryDropdownOpen = $state(false);
 	let activeCategory = $state('');
-	
+	let isSticky = $state(false);
+	let heroRef: HTMLElement;
+	let StickySearchBar: any = null;
+
+	// Debug logging
+	debug.log('HeroSearch initialized', {
+		component: 'HeroSearch',
+		data: { categoriesCount: categories.length }
+	});
+
+	// Trending searches
 	const trendingSearches = [
 		search_vintage_levis(),
 		search_designer_bags(),
@@ -75,52 +89,74 @@
 		search_zara_dress(),
 		search_north_face_jacket()
 	];
-	
-	// Pre-computed quick filters for better performance
+
+	// Quick filters with proper icons
 	const quickFilters = [
-		{ icon: '⭐', name: quick_filter_top_sellers(), action: 'top-sellers', ariaLabel: quick_filter_top_sellers(), color: 'golden' },
-		{ icon: '👨', name: quick_filter_men(), action: 'men', ariaLabel: category_men(), color: 'blue' },
-		{ icon: '👩', name: quick_filter_women(), action: 'women', ariaLabel: category_women(), color: 'pink' },
-		{ icon: '✨', name: quick_filter_newest(), action: 'newest', ariaLabel: quick_filter_newest() },
-		{ icon: '🔥', name: quick_filter_hot(), action: 'hot', ariaLabel: quick_filter_hot() },
-		{ icon: '🏷️', name: quick_filter_with_tags(), action: 'with-tags', ariaLabel: condition_new_with_tags() },
-		{ icon: '👟', name: quick_filter_shoes(), action: 'shoes', ariaLabel: subcategory_shoes() },
-		{ icon: '👕', name: quick_filter_tshirts(), action: 't-shirts', ariaLabel: subcategory_tshirts() },
-		{ icon: '💍', name: quick_filter_accessories(), action: 'accessories', ariaLabel: subcategory_accessories() },
-		{ icon: '👖', name: quick_filter_jeans(), action: 'jeans', ariaLabel: subcategory_jeans() },
-		{ icon: '👗', name: quick_filter_dresses(), action: 'dresses', ariaLabel: subcategory_dresses() },
-		{ icon: '🧥', name: quick_filter_jackets(), action: 'jackets', ariaLabel: subcategory_jackets() },
-		{ icon: '👜', name: quick_filter_bags(), action: 'bags', ariaLabel: subcategory_bags() },
-		{ icon: '💸', name: quick_filter_sale(), action: 'sale', ariaLabel: filter_browse_all() }
+		{ icon: Star, name: quick_filter_top_sellers(), action: 'top-sellers', ariaLabel: quick_filter_top_sellers(), variant: 'golden' },
+		{ icon: User, name: quick_filter_men(), action: 'men', ariaLabel: category_men(), variant: 'blue' },
+		{ icon: Users, name: quick_filter_women(), action: 'women', ariaLabel: category_women(), variant: 'pink' },
+		{ icon: Sparkles, name: quick_filter_newest(), action: 'newest', ariaLabel: quick_filter_newest(), variant: 'default' },
+		{ icon: Flame, name: quick_filter_hot(), action: 'hot', ariaLabel: quick_filter_hot(), variant: 'hot' },
+		{ icon: Tag, name: quick_filter_with_tags(), action: 'with-tags', ariaLabel: condition_new_with_tags(), variant: 'default' },
+		{ icon: ScanEye, name: quick_filter_shoes(), action: 'shoes', ariaLabel: subcategory_shoes(), variant: 'default' },
+		{ icon: Shirt, name: quick_filter_tshirts(), action: 't-shirts', ariaLabel: subcategory_tshirts(), variant: 'default' },
+		{ icon: Gem, name: quick_filter_accessories(), action: 'accessories', ariaLabel: subcategory_accessories(), variant: 'default' },
+		{ icon: ShirtIcon, name: quick_filter_jeans(), action: 'jeans', ariaLabel: subcategory_jeans(), variant: 'default' },
+		{ icon: Zap, name: quick_filter_dresses(), action: 'dresses', ariaLabel: subcategory_dresses(), variant: 'default' },
+		{ icon: Briefcase, name: quick_filter_jackets(), action: 'jackets', ariaLabel: subcategory_jackets(), variant: 'default' },
+		{ icon: Briefcase, name: quick_filter_bags(), action: 'bags', ariaLabel: subcategory_bags(), variant: 'default' },
+		{ icon: DollarSign, name: quick_filter_sale(), action: 'sale', ariaLabel: filter_browse_all(), variant: 'sale' }
 	];
-	
-	import { getLocale } from '$lib/paraglide/runtime.js';
+
+	// Route mapping for cleaner navigation
+	const routeMap: Record<string, string> = {
+		'newest': '/browse?sort=created_at&order=desc',
+		'sale': '/browse?filter=sale',
+		'hot': '/browse?filter=hot',
+		'top-sellers': '/browse?sort=favorites_count&order=desc',
+		'with-tags': '/browse?filter=with-tags',
+		'men': '/men',
+		'women': '/women',
+		'shoes': '/shoes',
+		't-shirts': '/browse?category=t-shirts',
+		'accessories': '/accessories',
+		'jeans': '/browse?category=jeans',
+		'dresses': '/browse?category=dresses',
+		'jackets': '/browse?category=jackets',
+		'bags': '/bags'
+	};
+
+	// Helper function for filter button classes
+	const getFilterClasses = (variant: string) => cn(
+		"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
+		{
+			'bg-[var(--color-surface-primary)] border-[var(--color-warning-500)] hover:bg-[var(--color-warning-50)] text-[var(--color-text-primary)]': variant === 'golden' || variant === 'sale',
+			'bg-[var(--color-surface-primary)] border-[var(--color-brand-400)] hover:bg-[var(--color-brand-50)] text-[var(--color-text-primary)]': variant === 'blue',
+			'bg-[var(--color-surface-primary)] border-[var(--color-pink-400)] hover:bg-[var(--color-pink-50)] text-[var(--color-text-primary)]': variant === 'pink',
+			'bg-[var(--color-surface-primary)] border-[var(--color-error-500)] hover:bg-[var(--color-error-50)] text-[var(--color-text-primary)]': variant === 'hot',
+			'bg-[var(--color-surface-primary)] border-[var(--color-border-primary)] hover:border-[var(--color-border-secondary)] hover:bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)]': variant === 'default'
+		}
+	);
 
 	// Get localized category name
-	function getCategoryName(category: Category): string {
+	const getCategoryName = (category: Category): string => {
 		const locale = getLocale();
 		return locale === 'bg' && category.name_bg ? category.name_bg : category.name;
-	}
-	
-	// Sticky search state for mobile
-	let isSticky = $state(false);
-	let heroRef: HTMLElement;
-	
-	// Lazy load non-critical components
+	};
+
+	// Lazy load sticky search bar
 	onMount(async () => {
-		// Load sticky search bar after initial render
 		const stickyModule = await import('$lib/components/search/StickySearchBar.svelte');
 		StickySearchBar = stickyModule.default;
 		
-		// Defer intersection observer setup
 		if ('requestIdleCallback' in window) {
 			requestIdleCallback(() => setupIntersectionObserver());
 		} else {
 			setTimeout(() => setupIntersectionObserver(), 100);
 		}
 	});
-	
-	function setupIntersectionObserver() {
+
+	const setupIntersectionObserver = () => {
 		if (typeof window === 'undefined' || !heroRef) return;
 		
 		const observer = new IntersectionObserver(
@@ -132,15 +168,13 @@
 		
 		observer.observe(heroRef);
 		
-		// Cleanup function
 		return () => {
 			if (heroRef) observer.unobserve(heroRef);
 			observer.disconnect();
 		};
-	}
+	};
 
-	
-	// Debounced search handler for performance
+	// Debounced search handler
 	const debouncedHandleSearch = debounce(() => {
 		if (searchQuery.trim()) {
 			const params = new URLSearchParams();
@@ -151,117 +185,82 @@
 		}
 	}, SEARCH_DEBOUNCE_DELAY);
 
-	function handleSearch() {
+	const handleSearch = () => {
+		debug.log('Search initiated', { component: 'HeroSearch', data: { query: searchQuery.trim() } });
 		debouncedHandleSearch();
-	}
+	};
 	
-	function searchTrending(term: string) {
+	const searchTrending = (term: string) => {
+		debug.log('Trending search clicked', { component: 'HeroSearch', data: { term } });
 		searchQuery = term;
 		handleSearch();
-	}
-	
+	};
 
-	function handleQuickFilter(action: string) {
-		switch(action) {
-			case 'newest':
-				goto('/browse?sort=created_at&order=desc');
-				break;
-			case 'sale':
-				goto('/browse?filter=sale');
-				break;
-			case 'hot':
-				goto('/browse?filter=hot');
-				break;
-			case 'top-sellers':
-				goto('/browse?sort=favorites_count&order=desc');
-				break;
-			case 'with-tags':
-				goto('/browse?filter=with-tags');
-				break;
-			case 'men':
-				goto('/men');
-				break;
-			case 'women':
-				goto('/women');
-				break;
-			case 'shoes':
-				goto('/shoes');
-				break;
-			case 't-shirts':
-				goto('/browse?category=t-shirts');
-				break;
-			case 'accessories':
-				goto('/accessories');
-				break;
-			case 'jeans':
-				goto('/browse?category=jeans');
-				break;
-			case 'dresses':
-				goto('/browse?category=dresses');
-				break;
-			case 'jackets':
-				goto('/browse?category=jackets');
-				break;
-			case 'bags':
-				goto('/bags');
-				break;
-			default:
-				goto('/browse');
-		}
-	}
+	const handleQuickFilter = (action: string) => {
+		debug.log('Quick filter clicked', { component: 'HeroSearch', data: { action } });
+		goto(routeMap[action] || '/browse');
+	};
 	
-	function toggleCategoryDropdown() {
+	const toggleCategoryDropdown = () => {
 		isCategoryDropdownOpen = !isCategoryDropdownOpen;
-	}
+	};
 	
-	function closeCategoryDropdown() {
+	const closeCategoryDropdown = () => {
 		isCategoryDropdownOpen = false;
-	}
+	};
 	
-	function handleCategorySelect(categorySlug: string) {
+	const handleCategorySelect = (categorySlug: string) => {
 		activeCategory = categorySlug;
-		if (categorySlug) {
-			goto(`/${categorySlug}`);
-		} else {
-			goto('/browse');
-		}
-	}
+		goto(categorySlug ? `/${categorySlug}` : '/browse');
+	};
+
+	// Render quick filter button
+	const renderQuickFilterButton = (filter: typeof quickFilters[0], iconSize = ICON_SIZE_SM) => `
+		<button
+			onclick={() => handleQuickFilter(filter.action)}
+			class="${getFilterClasses(filter.variant)}"
+		>
+			<svelte:component this={filter.icon} class="${iconSize}" />
+			<span>${filter.name}</span>
+		</button>
+	`;
 </script>
 
-<section bind:this={heroRef} class="relative bg-gradient-to-b from-blue-50 to-white py-3 md:py-6 pb-0">
-	<div class="container px-5 md:px-6">
+<section bind:this={heroRef} class="relative bg-gradient-to-b from-[var(--color-brand-50)] to-[var(--color-white)] py-[var(--spacing-3)] md:py-[var(--spacing-6)] pb-0">
+	<div class="container px-[var(--spacing-4)]">
 		<div class="max-w-3xl mx-auto">
 			
-			<!-- Desktop Layout - Keep existing integrated design -->
+			<!-- Desktop Layout -->
 			<div class="hidden md:block">
-				<div class="relative overflow-visible">
+				<div class="relative">
 					<div class={cn(
-						"relative bg-white rounded-sm border border-gray-200 transition-all duration-100",
-						isFocused ? "border-blue-500 ring-1 ring-blue-500" : "border-gray-200"
+						"relative bg-[var(--color-surface-primary)] rounded-[var(--border-radius-sm)] border border-[var(--color-border-primary)] transition-all duration-[var(--transition-duration-100)]",
+						isFocused ? "border-[var(--color-brand-500)] ring-1 ring-[var(--color-brand-500)]" : "border-[var(--color-border-primary)]"
 					)}>
-						<div class="flex items-center min-w-0 py-2 px-3">
+						<div class="flex items-center min-w-0 py-[var(--spacing-2)] px-[var(--spacing-3)]">
 							<!-- Category Dropdown Button -->
 							<div class="relative flex-shrink-0">
 								<button
 									data-categories-button
 									onclick={toggleCategoryDropdown}
 									class={cn(
-										"h-9 px-3 font-medium focus:outline-none transition-all duration-100 rounded-sm flex items-center gap-2",
+										`${BUTTON_HEIGHT} px-[var(--spacing-3)] font-medium focus:outline-none transition-all duration-[var(--transition-duration-100)] rounded-[var(--border-radius-sm)] flex items-center gap-[var(--spacing-2)]`,
 										isCategoryDropdownOpen 
-											? "bg-blue-500 text-white hover:bg-blue-600" 
-											: "bg-gray-900 text-white hover:bg-gray-800"
+											? "bg-[var(--color-brand-500)] text-[var(--color-white)] hover:bg-[var(--color-brand-600)]" 
+											: "bg-[var(--color-gray-900)] text-[var(--color-white)] hover:bg-[var(--color-gray-800)]"
 									)}
 								>
-									<span class="text-sm">{header_categories()}</span>
+									<span class="text-[var(--font-size-sm)]">{header_categories()}</span>
 									<ChevronDown class={cn(
-										"h-3.5 w-3.5 transition-transform duration-100",
+										ICON_SIZE_SM,
+										"transition-transform duration-[var(--transition-duration-100)]",
 										isCategoryDropdownOpen && "rotate-180"
 									)} />
 								</button>
 							</div>
 							
 							<!-- Divider -->
-							<div class="w-px h-7 bg-gray-200 flex-shrink-0 mx-3"></div>
+							<div class="w-px h-7 bg-[var(--color-border-primary)] flex-shrink-0 mx-[var(--spacing-3)]"></div>
 							
 							<!-- Search Input with Icon -->
 							<div class="flex-1 min-w-0 flex items-center">
@@ -274,18 +273,17 @@
 									onkeydown={(e) => e.key === 'Enter' && handleSearch()}
 									oninput={handleSearch}
 									aria-label={browse_search_placeholder()}
-									class="h-9 w-full border-0 focus:ring-0 bg-transparent text-sm"
+									class={`${INPUT_HEIGHT} w-full border-0 focus:ring-0 bg-transparent text-[var(--font-size-sm)]`}
 								/>
 								<button
 									onclick={handleSearch}
-									class="h-9 w-9 hover:opacity-75 transition-opacity duration-100 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm flex items-center justify-center flex-shrink-0"
+									class={`${BUTTON_HEIGHT} w-9 hover:opacity-75 transition-opacity duration-[var(--transition-duration-100)] focus:outline-none focus:ring-1 focus:ring-[var(--color-brand-500)] rounded-[var(--border-radius-sm)] flex items-center justify-center flex-shrink-0`}
 									aria-label={quick_filter_search_button()}
 								>
-									<span class="text-base" aria-hidden="true">🔍</span>
+									<Search class={ICON_SIZE_BASE} />
 								</button>
 							</div>
 						</div>
-						
 						
 						<!-- Trending Category Links -->
 						<div class="border-t border-gray-100 py-2 relative overflow-hidden rounded-b-sm">
@@ -313,14 +311,14 @@
 								<div class="w-px h-5 bg-border flex-shrink-0" aria-hidden="true"></div>
 								
 								<!-- Category Quick Links -->
-								<div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-									{#each categories.slice(0, 3) as category}
+								<div class="flex items-center gap-[var(--spacing-2)] overflow-x-auto scrollbar-hide">
+									{#each categories.slice(0, DESKTOP_CATEGORY_LIMIT) as category}
 										<button
 											onclick={() => handleCategorySelect(category.slug)}
-											aria-label="{filter_categories()}: {getCategoryName(category)}"
-											class="flex items-center gap-1.5 px-3 py-2 rounded-sm bg-background border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 focus:ring-brand-400"
+											aria-label="Category: {getCategoryName(category)}"
+											class="flex items-center gap-[var(--spacing-1-5)] px-[var(--spacing-3)] py-[var(--spacing-2)] rounded-[var(--border-radius-sm)] bg-[var(--color-surface-primary)] border border-[var(--color-border-primary)] hover:bg-[var(--color-surface-hover)] text-[var(--color-text-secondary)] text-[var(--font-size-sm)] font-medium whitespace-nowrap transition-colors duration-[var(--transition-duration-100)] focus:outline-none focus:ring-1 focus:ring-[var(--color-brand-500)]"
 										>
-											<span class="text-sm" aria-hidden="true">{category.icon_url || category.icon || '📦'}</span>
+											<span class="text-[var(--font-size-sm)]" aria-hidden="true">{category.icon_url || category.icon || '📦'}</span>
 											<span>{getCategoryName(category)}</span>
 										</button>
 									{/each}
@@ -329,82 +327,78 @@
 						</div>
 					</div>
 				</div>
-				
-				<!-- Desktop Category Dropdown - positioned to match search container width -->
+					
+				<!-- Desktop Category Dropdown -->
 				{#if isCategoryDropdownOpen}
-					<div class="relative">
-						<CategoryDropdown
-							{categories}
-							isOpen={isCategoryDropdownOpen}
-							onToggle={toggleCategoryDropdown}
-							onClose={closeCategoryDropdown}
-							class="!absolute !top-2 !left-0 !right-0 !w-full"
-						/>
-					</div>
+					<CategoryDropdown
+						{categories}
+						isOpen={isCategoryDropdownOpen}
+						onToggle={toggleCategoryDropdown}
+						onClose={closeCategoryDropdown}
+						class="absolute top-full left-0 right-0 mt-2"
+					/>
 				{/if}
 			</div>
 			
-			<!-- Mobile Layout - Optimized for better UX -->
+			<!-- Mobile Layout -->
 			<div class="block md:hidden">
-				<!-- Search Bar Container -->
-				<div class={cn(
-					"relative bg-white rounded-sm border border-gray-200 transition-all duration-100 shadow-sm",
-					isFocused ? "border-blue-500 shadow-md" : "border-gray-200"
-				)}>
-					<!-- Main Search Row -->
-					<div class="flex items-center py-2 px-3 gap-2">
-						<!-- Categories Icon Button -->
-						<div class="relative">
+				<div class="relative">
+					<!-- Search Bar Container -->
+					<div class={cn(
+						"relative bg-white rounded-sm border border-gray-200 transition-all duration-100 shadow-sm",
+						isFocused ? "border-blue-500 shadow-md" : "border-gray-200"
+					)}>
+						<!-- Main Search Row -->
+						<div class="flex items-center py-2 px-3 gap-2">
+							<!-- Categories Icon Button -->
+							<div class="relative">
+								<button
+									data-categories-button
+									onclick={toggleCategoryDropdown}
+									class={`${BUTTON_HEIGHT} w-9 rounded-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-100 flex items-center justify-center flex-shrink-0`}
+									aria-label={quick_filter_categories_menu()}
+								>
+									<Menu class={ICON_SIZE_BASE} />
+								</button>
+							</div>
+							
+							<!-- Divider -->
+							<div class="w-px h-8 bg-[var(--color-border-primary)] flex-shrink-0"></div>
+							
+							<!-- Search Input -->
+							<input
+								type="search"
+								placeholder={browse_search_placeholder()}
+								bind:value={searchQuery}
+								onfocus={() => isFocused = true}
+								onblur={() => isFocused = false}
+								onkeydown={(e) => e.key === 'Enter' && handleSearch()}
+								oninput={handleSearch}
+								aria-label={browse_search_placeholder()}
+								class={`${INPUT_HEIGHT} flex-1 border-0 focus:ring-0 bg-transparent text-[var(--font-size-sm)] min-w-0`}
+							/>
+							
 							<button
-								data-categories-button
-								onclick={toggleCategoryDropdown}
-								class="h-9 w-9 rounded-sm bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-100 flex items-center justify-center flex-shrink-0"
-								aria-label={quick_filter_categories_menu()}
+								onclick={handleSearch}
+								class={`${BUTTON_HEIGHT} w-9 hover:opacity-75 transition-opacity duration-[var(--transition-duration-100)] focus:outline-none focus:ring-1 focus:ring-[var(--color-brand-500)] rounded-[var(--border-radius-sm)] flex items-center justify-center flex-shrink-0`}
+								aria-label={quick_filter_search_button()}
 							>
-								<Menu class="h-4 w-4" />
+								<Search class={ICON_SIZE_BASE} />
 							</button>
 						</div>
-						<!-- Divider -->
-						<div class="w-px h-8 bg-gray-200 flex-shrink-0"></div>
-						<!-- Search Input -->
-						<input
-							type="search"
-							placeholder={browse_search_placeholder()}
-							bind:value={searchQuery}
-							onfocus={() => isFocused = true}
-							onblur={() => isFocused = false}
-							onkeydown={(e) => e.key === 'Enter' && handleSearch()}
-							oninput={handleSearch}
-							aria-label={browse_search_placeholder()}
-							class="h-9 flex-1 border-0 focus:ring-0 bg-transparent text-sm min-w-0"
-						/>
-						<button
-							onclick={handleSearch}
-							class="h-9 w-9 hover:opacity-75 transition-opacity duration-100 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-sm flex items-center justify-center flex-shrink-0"
-							aria-label={quick_filter_search_button()}
-						>
-							<span class="text-base" aria-hidden="true">🔍</span>
-						</button>
-					</div>
-					
-					<!-- Pills Section -->
-					<div class="border-t border-gray-100">
-						<div class="py-2 px-3 relative">
-							<!-- Quick Filters -->
-							<div class="overflow-x-auto relative">
-								<div class="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
-										{#each quickFilters.slice(0, 4) as filter}
+						
+						<!-- Pills Section -->
+						<div class="border-t border-[var(--color-border-primary)]">
+							<div class="py-[var(--spacing-2)] px-[var(--spacing-3)] relative">
+								<!-- Quick Filters -->
+								<div class="overflow-x-auto relative">
+									<div class="flex items-center gap-[var(--spacing-1-5)] overflow-x-auto scrollbar-hide">
+										{#each quickFilters.slice(0, MOBILE_QUICK_FILTERS_FIRST_BATCH) as filter}
 											<button
 												onclick={() => handleQuickFilter(filter.action)}
-												class={cn(
-													"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
-													filter.color === 'golden' && "bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-300 hover:from-yellow-100 hover:to-amber-100 hover:border-amber-400 text-amber-800",
-													filter.color === 'blue' && "bg-gradient-to-r from-blue-50 to-sky-50 border-blue-300 hover:from-blue-100 hover:to-sky-100 hover:border-blue-400 text-blue-800",
-													filter.color === 'pink' && "bg-gradient-to-r from-pink-50 to-rose-50 border-pink-300 hover:from-pink-100 hover:to-rose-100 hover:border-pink-400 text-pink-800",
-													!filter.color && "bg-background border-gray-200 hover:border-gray-200-hover hover:bg-gray-50 text-gray-700"
-												)}
+												class={getFilterClasses(filter.variant)}
 											>
-												<span class="text-sm">{filter.icon}</span>
+												<svelte:component this={filter.icon} class={ICON_SIZE_SM} />
 												<span>{filter.name}</span>
 											</button>
 										{/each}
@@ -413,18 +407,12 @@
 										<div class="w-px h-4 bg-border flex-shrink-0"></div>
 										
 										<!-- More quick filters -->
-										{#each quickFilters.slice(4) as filter}
+										{#each quickFilters.slice(MOBILE_QUICK_FILTERS_FIRST_BATCH) as filter}
 											<button
 												onclick={() => handleQuickFilter(filter.action)}
-												class={cn(
-													"flex items-center gap-1 px-2.5 py-1.5 rounded-sm border text-sm font-medium whitespace-nowrap transition-colors duration-100 focus:outline-none focus:ring-1 flex-shrink-0",
-													filter.color === 'golden' && "bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-300 hover:from-yellow-100 hover:to-amber-100 hover:border-amber-400 text-amber-800",
-													filter.color === 'blue' && "bg-gradient-to-r from-blue-50 to-sky-50 border-blue-300 hover:from-blue-100 hover:to-sky-100 hover:border-blue-400 text-blue-800",
-													filter.color === 'pink' && "bg-gradient-to-r from-pink-50 to-rose-50 border-pink-300 hover:from-pink-100 hover:to-rose-100 hover:border-pink-400 text-pink-800",
-													!filter.color && "bg-background border-gray-200 hover:border-gray-200-hover hover:bg-gray-50 text-gray-700"
-												)}
+												class={getFilterClasses(filter.variant)}
 											>
-												<span class="text-sm">{filter.icon}</span>
+												<svelte:component this={filter.icon} class={ICON_SIZE_SM} />
 												<span>{filter.name}</span>
 											</button>
 										{/each}
@@ -433,10 +421,10 @@
 										<div class="w-px h-4 bg-border flex-shrink-0"></div>
 										
 										<!-- Category Quick Links -->
-										{#each categories.slice(0, 2) as category}
+										{#each categories.slice(0, MOBILE_CATEGORIES_LIMIT) as category}
 											<button
 												onclick={() => handleCategorySelect(category.slug)}
-												class="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-background border border-gray-200 text-gray-700 text-sm font-medium whitespace-nowrap flex-shrink-0"
+												class="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-white border border-gray-200 text-gray-700 text-sm font-medium whitespace-nowrap flex-shrink-0 hover:border-gray-300 hover:bg-gray-50"
 											>
 												<span class="text-sm">{category.icon_url || category.icon || '📦'}</span>
 												<span>{getCategoryName(category)}</span>
@@ -444,25 +432,24 @@
 										{/each}
 									</div>
 								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				<!-- Mobile Category Dropdown - positioned to match search container width -->
-				{#if isCategoryDropdownOpen}
-					<div class="relative">
+						
+					<!-- Mobile Category Dropdown -->
+					{#if isCategoryDropdownOpen}
 						<CategoryDropdown
 							{categories}
 							isOpen={isCategoryDropdownOpen}
 							onToggle={toggleCategoryDropdown}
 							onClose={closeCategoryDropdown}
-							class="!absolute !top-2 !left-0 !right-0 !w-full"
+							class="absolute top-full left-0 right-0 mt-2"
 						/>
-					</div>
-				{/if}
+					{/if}
+				</div>
 			</div>
 			
-			<!-- Trending Searches - Compact -->
+			<!-- Trending Searches -->
 			<TrendingSearches
 				searches={trendingSearches}
 				onSearchClick={searchTrending}
@@ -473,7 +460,7 @@
 	</div>
 </section>
 
-<!-- Sticky Search Bar (Reusable Component) -->
+<!-- Sticky Search Bar -->
 {#if StickySearchBar}
 	<StickySearchBar
 		bind:value={searchQuery}
@@ -485,7 +472,6 @@
 		visible={isSticky}
 	/>
 {/if}
-
 
 <style>
 	/* Hide scrollbar for quick categories */

@@ -49,7 +49,19 @@ export default [js.configs.recommended, {
     },
     rules: {
         ...svelte.configs.recommended.rules,
-        'svelte/no-at-html-tags': 'off'
+        'svelte/no-at-html-tags': 'off',
+        // Prevent inline styles - critical for design system consistency
+        'svelte/no-inline-styles': ['error', {
+            allowTransitions: false,
+            allowAnimations: false
+        }],
+        // Warn about unused CSS custom properties
+        'svelte/no-unused-class-name': 'warn',
+        // Ensure proper component structure
+        'svelte/first-attribute-linebreak': ['error', {
+            multiline: 'below',
+            singleline: 'beside'
+        }]
     }
 }, {
     ignores: [

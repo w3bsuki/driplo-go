@@ -4,14 +4,16 @@
 
 	type $$Props = HTMLAttributes<HTMLHeadingElement>;
 
-	let className: $$Props['class'] = undefined;
-	export { className as class };
+	let { 
+		class: className = undefined,
+		children,
+		...restProps
+	} = $props<$$Props & { children?: any }>();
 </script>
 
 <h5
 	class={cn('mb-1 font-medium leading-none tracking-tight', className)}
-	{...$$restProps}
+	{...restProps}
 >
-	<slot />
+	{@render children?.()}
 </h5>
-</script>

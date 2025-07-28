@@ -6,19 +6,30 @@
     import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
     import { createLazyComponent } from '$lib/utils/lazy-load';
     
-    export let conversationId: string;
-    export let userId: string;
-    export let supabase: SupabaseClient<Database>;
-    export let useVirtualScrolling = false;
+    let { 
+        conversationId, 
+        userId, 
+        supabase, 
+        useVirtualScrolling = false,
+        ...restProps
+    }: { 
+        conversationId: string; 
+        userId: string; 
+        supabase: SupabaseClient<Database>; 
+        useVirtualScrolling?: boolean;
+        [key: string]: any;
+    } = $props();
     
     const lazyThread = createLazyComponent(
         () => import('./MessageThread.svelte')
     );
     
     // Load component when conversationId is provided
-    $: if (conversationId && !lazyThread.component) {
-        lazyThread.load();
-    }
+    $effect(() => {
+        if (conversationId && !lazyThread.component) {
+            lazyThread.load();
+        }
+    });
     
     // Preload if on messages page
     onMount(() => {
@@ -45,13 +56,13 @@
             }}
             resetKeys={[conversationId, userId]}
         >
-            <svelte:component 
-                this={lazyThread.component} 
+            {@const ThreadComponent = lazyThread.component}
+            <ThreadComponent 
                 {conversationId}
                 {userId}
                 {supabase}
                 {useVirtualScrolling}
-                {...$$restProps} 
+                {...restProps} 
             />
         </ErrorBoundary>
     {/if}

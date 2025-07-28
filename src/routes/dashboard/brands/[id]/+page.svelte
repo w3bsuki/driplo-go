@@ -207,6 +207,7 @@
 			
 			<div class="space-y-3">
 				{#each data.socialAccounts as account}
+					{@const Icon = socialPlatformIcons[account.platform] || Globe}
 					<a
 						href={account.url}
 						target="_blank"
@@ -215,8 +216,7 @@
 							hover:bg-gray-100 transition-colors"
 					>
 						<div class="flex items-center gap-3">
-							<svelte:component 
-								this={socialPlatformIcons[account.platform] || Globe} 
+							<Icon 
 								class="w-5 h-5 text-gray-600"
 							/>
 							<div>
@@ -370,10 +370,10 @@
 		</div>
 	{:else}
 		<!-- Already Reviewed -->
+		{@const StatusIcon = data.request.verification_status === 'approved' ? CheckCircle : XCircle}
 		<div class="bg-gray-50 rounded-lg p-6">
 			<div class="flex items-center gap-3 mb-4">
-				<svelte:component 
-					this={data.request.verification_status === 'approved' ? CheckCircle : XCircle}
+				<StatusIcon 
 					class="w-6 h-6 {data.request.verification_status === 'approved' ? 'text-green-600' : 'text-red-600'}"
 				/>
 				<h3 class="text-lg font-semibold text-gray-900">

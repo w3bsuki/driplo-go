@@ -4,22 +4,22 @@
   import * as m from '$lib/paraglide/messages.js';
 
   // Get error details from page store
-  $: error = $page.error;
-  $: status = $page.status;
-  $: errorMessage = error ? getErrorMessage(error) : 'An unexpected error occurred';
+  let error = $derived($page.error);
+  let status = $derived($page.status);
+  let errorMessage = $derived(error ? getErrorMessage(error) : 'An unexpected error occurred');
 
   // Determine error type based on status code
-  $: errorType = (() => {
+  let errorType = $derived((() => {
     if (status === 404) return 'not-found';
     if (status === 403) return 'forbidden';
     if (status === 500) return 'server-error';
     if (status >= 400 && status < 500) return 'client-error';
     if (status >= 500) return 'server-error';
     return 'unknown';
-  })();
+  })());
 
   // Error-specific content
-  $: errorContent = (() => {
+  let errorContent = $derived((() => {
     switch (errorType) {
       case 'not-found':
         return {
@@ -54,7 +54,7 @@
           showRetry: true
         };
     }
-  })();
+  })());
 
   function handleRetry() {
     window.location.reload();

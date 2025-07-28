@@ -92,11 +92,12 @@
         <!-- Tabs -->
         <div class="flex space-x-1 bg-gray-100/80 p-1 rounded-xl mb-6 overflow-x-auto">
             {#each tabs as tab (tab.id)}
+                {@const Icon = tab.icon}
                 <a 
                     href="?tab={tab.id}{statusFilter ? `&status=${statusFilter}` : ''}"
                     class="flex-1 flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap min-w-fit {activeTab === tab.id ? 'bg-white text-primary shadow-sm' : 'text-gray-600 hover:text-gray-900'}"
                 >
-                    <svelte:component this={tab.icon} class="w-4 h-4" />
+                    <Icon class="w-4 h-4" />
                     <span class="hidden sm:inline">{tab.label}</span>
                     <span class="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </a>

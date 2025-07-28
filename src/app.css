@@ -19,16 +19,48 @@
 @import './lib/styles/ecommerce.css';
 
 /* 7. TEMPORARY: Import v4 compatibility layer for migration */
+/* TODO: Remove once all components are migrated to token-based classes */
 @import './lib/styles/compatibility-v4.css';
 
-/* Font imports */
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/plus-jakarta-sans/600.css';
-@import '@fontsource/plus-jakarta-sans/700.css';
-@import '@fontsource/jetbrains-mono/400.css';
+/* Font imports - using variable fonts we have installed */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* ===== DEVELOPMENT CSS DEBUG UTILITIES ===== */
+/* Add .debug-inline-styles class to body in development to highlight inline styles */
+.debug-inline-styles [style*="width"],
+.debug-inline-styles [style*="height"],
+.debug-inline-styles [style*="color"],
+.debug-inline-styles [style*="background"],
+.debug-inline-styles [style*="margin"],
+.debug-inline-styles [style*="padding"],
+.debug-inline-styles [style*="position"],
+.debug-inline-styles [style*="transform"] {
+  outline: 2px solid red !important;
+  outline-offset: 2px !important;
+}
+
+.debug-inline-styles [style*="width"]:before,
+.debug-inline-styles [style*="height"]:before,
+.debug-inline-styles [style*="color"]:before,
+.debug-inline-styles [style*="background"]:before,
+.debug-inline-styles [style*="margin"]:before,
+.debug-inline-styles [style*="padding"]:before,
+.debug-inline-styles [style*="position"]:before,
+.debug-inline-styles [style*="transform"]:before {
+  content: "⚠️ INLINE STYLE";
+  position: absolute;
+  top: -24px;
+  left: 0;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  font-family: monospace;
+  z-index: 10000;
+  pointer-events: none;
+}
 
 /* Fix for dropdown portals */
 [data-portal] {
@@ -68,14 +100,7 @@
 	pointer-events: auto !important;
 }
 
-/* HSL compatibility layer removed - using token-based compatibility CSS instead */
-
-/* HSL compatibility layer removed - using token-based compatibility CSS instead */
-
 /* Custom utility classes - Tailwind v4 @utility syntax */
-
-/* Note: Tailwind v4 has built-in space-* utilities, so these custom ones are likely redundant */
-/* Keeping them temporarily for backward compatibility */
 
 /* Badge size utilities */
 @utility badge-size-sm {
@@ -96,7 +121,7 @@
 	font-size: 1rem;
 }
 
-/* Base styles (not utilities) */
+/* Base styles - Tailwind v4 supports @layer base for global styles */
 @layer base {
 	/* Remove unwanted link underlines */
 	a {

@@ -1,32 +1,16 @@
 <script lang="ts">
-	import { cn } from '$lib/utils'
-	
-	interface Props {
-		value?: string
-		class?: string
-		children?: any
-	}
-	
-	let { value = $bindable(), class: className, children }: Props = $props()
+	// Re-export the proper bits-ui based RadioGroup components
+	export { default as RadioGroup } from './radio-group/RadioGroup.svelte';
+	export { default as RadioGroupItem } from './radio-group/RadioGroupItem.svelte';
 </script>
 
-<div class={cn("grid gap-2", className)}>
-	{@render children?.()}
-</div>
-
-<script context="module" lang="ts">
-	export const RadioGroupItem = RadioGroupItemComponent
-</script>
-
-<script lang="ts">
-	import { cn } from '$lib/utils'
+<!-- 
+	This file now serves as a simple re-export wrapper.
+	The actual implementation is in the radio-group/ directory using bits-ui primitives.
 	
-	interface ItemProps {
-		value: string
-		class?: string
-	}
+	Usage:
+	import { RadioGroup, RadioGroupItem } from '$lib/components/ui/RadioGroup.svelte';
 	
-	function RadioGroupItemComponent({ value: itemValue, class: className }: ItemProps) {
-		return `<input type="radio" bind:group={selectedValue} value="${itemValue}" class="${cn('h-4 w-4', className)}" />`
-	}
-</script>
+	Or use the individual components:
+	import { RadioGroup, RadioGroupItem } from '$lib/components/ui/radio-group';
+-->

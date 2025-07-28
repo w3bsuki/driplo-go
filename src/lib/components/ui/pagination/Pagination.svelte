@@ -15,7 +15,7 @@
 	aria-label="pagination"
 	class={cn('mx-auto flex w-full justify-center', className)}
 >
-	<ul class="flex flex-row items-center gap-1">
+	<ul class="flex flex-row items-center gap-[var(--spacing-1)]">
 		{@render children()}
 	</ul>
 </nav>

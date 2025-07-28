@@ -29,27 +29,28 @@
         messages: Message[];
     };
 
-    export let isOpen = false;
-    export let userId: string;
+    let { isOpen = false, userId }: { isOpen?: boolean; userId: string } = $props();
 
     const dispatch = createEventDispatcher<{
         close: void;
         selectConversation: { conversationId: string };
     }>();
 
-    let searchQuery = '';
-    let searchResults: SearchResult[] = [];
-    let searching = false;
+    let searchQuery = $state('');
+    let searchResults = $state<SearchResult[]>([]);
+    let searching = $state(false);
     let searchTimeout: NodeJS.Timeout;
 
-    $: if (searchQuery.trim().length >= 2) {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            performSearch();
-        }, 300);
-    } else {
-        searchResults = [];
-    }
+    $effect(() => {
+        if (searchQuery.trim().length >= 2) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 300);
+        } else {
+            searchResults = [];
+        }
+    });
 
     async function performSearch() {
         if (searchQuery.trim().length < 2) return;

@@ -1,19 +1,40 @@
 <script lang="ts">
-	import { cn } from '$lib/utils'
-	
+	import { RadioGroup as RadioGroupPrimitive } from 'bits-ui';
+	import { cn } from '$lib/utils';
+
 	interface Props {
-		value?: string
-		class?: string
-		children?: any
+		value?: string;
+		onValueChange?: (value: string) => void;
+		disabled?: boolean;
+		required?: boolean;
+		orientation?: 'horizontal' | 'vertical';
+		class?: string;
+		children?: any;
 	}
-	
-	let { value = $bindable(), class: className, children }: Props = $props()
-	
-	export function getGroupValue() {
-		return value
+
+	let { 
+		value = $bindable(),
+		onValueChange,
+		disabled = false,
+		required = false,
+		orientation = 'vertical',
+		class: className,
+		children
+	}: Props = $props();
+
+	function handleValueChange(newValue: string) {
+		value = newValue;
+		onValueChange?.(newValue);
 	}
 </script>
 
-<div class={cn("grid gap-2", className)} role="radiogroup">
+<RadioGroupPrimitive.Root
+	bind:value
+	onValueChange={handleValueChange}
+	{disabled}
+	{required}
+	{orientation}
+	class={cn("grid gap-2", className)}
+>
 	{@render children?.()}
-</div>
+</RadioGroupPrimitive.Root>

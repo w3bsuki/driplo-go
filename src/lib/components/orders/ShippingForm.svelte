@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     
-    export let orderId: string;
+    let { orderId }: { orderId: string } = $props();
     
     const dispatch = createEventDispatcher();
     

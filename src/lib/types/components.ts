@@ -163,7 +163,7 @@ export interface MessageThreadProps {
   /** Current user ID */
   userId: string;
   /** Supabase client instance */
-  supabase: any; // TODO: Type this properly with SupabaseClient
+  supabase: import('@supabase/supabase-js').SupabaseClient<Database>;
   /** Enable virtual scrolling for large conversations */
   useVirtualScrolling?: boolean;
   /** Auto-focus message input on mount */
@@ -229,7 +229,7 @@ export interface ShippingAddress {
  */
 export interface HeaderProps {
   /** Supabase client for auth and data */
-  supabase: any;
+  supabase: import('@supabase/supabase-js').SupabaseClient<Database>;
   /** Current user data */
   user?: UserProfile | null;
   /** Enable search functionality */

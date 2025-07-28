@@ -104,7 +104,7 @@
 						class="{sizeClasses[size]} text-gray-300" 
 						aria-hidden="true"
 					/>
-					<div class="absolute inset-0 overflow-hidden" style="width: 50%">
+					<div class="absolute inset-0 overflow-hidden w-1/2">
 						<Star 
 							class="{sizeClasses[size]} text-yellow-400 fill-current" 
 							aria-hidden="true"

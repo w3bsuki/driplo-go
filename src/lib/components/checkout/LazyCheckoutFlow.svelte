@@ -19,8 +19,8 @@
 	}: Props = $props();
 	
 	let CheckoutFlow: any = null;
-	let loading = false;
-	let error: Error | null = null;
+	let loading = $state(false);
+	let error = $state<Error | null>(null);
 	
 	async function loadCheckoutFlow() {
 		if (CheckoutFlow || loading) return;
@@ -88,7 +88,7 @@
 			}}
 			resetKeys={[listing.id, isOpen]}
 		>
-			<svelte:component this={CheckoutFlow} {listing} {isOpen} {...restProps} />
+			<CheckoutFlow {listing} {isOpen} {...restProps} />
 		</ErrorBoundary>
 	{/if}
 {/if}

@@ -28,31 +28,31 @@
 	};
 
 	const colorClasses = {
-		primary: 'text-blue-600',
+		primary: 'text-brand-500',
 		white: 'text-white',
 		current: 'text-current'
 	};
 </script>
 
 {#if fullScreen}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
 		<div class="flex flex-col items-center gap-3">
 			<Loader2 
 				class={cn('animate-spin', sizeClasses[size], colorClasses[color], className)} 
 			/>
 			{#if text}
-				<p class="text-sm font-medium text-gray-600">{text}</p>
+				<p class="text-sm font-medium text-gray-600 dark:text-gray-400">{text}</p>
 			{/if}
 		</div>
 	</div>
 {:else if overlay}
-	<div class="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-lg">
+	<div class="absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-lg">
 		<div class="flex flex-col items-center gap-3">
 			<Loader2 
 				class={cn('animate-spin', sizeClasses[size], colorClasses[color], className)} 
 			/>
 			{#if text}
-				<p class="text-sm font-medium text-gray-600">{text}</p>
+				<p class="text-sm font-medium text-gray-600 dark:text-gray-400">{text}</p>
 			{/if}
 		</div>
 	</div>

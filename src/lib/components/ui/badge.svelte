@@ -16,17 +16,17 @@
 	let { variant = 'default', size = 'md', class: className, children }: Props = $props();
 
 	const variants = {
-		default: 'bg-gray-50 text-gray-600 border-gray-200',
-		secondary: 'bg-blue-50 text-blue-600 border-blue-200',
-		success: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-		destructive: 'bg-red-50 text-red-600 border-red-200',
-		outline: 'border-gray-200 text-gray-600 bg-transparent',
-		// Condition variants using CSS variables
-		'condition-new-with-tags': 'bg-[hsl(var(--color-condition-new-with-tags))] text-white border-[hsl(var(--color-condition-new-with-tags))]',
-		'condition-new-without-tags': 'bg-[hsl(var(--color-condition-new-without-tags))] text-white border-[hsl(var(--color-condition-new-without-tags))]',
-		'condition-very-good': 'bg-[hsl(var(--color-condition-very-good))] text-gray-950 border-[hsl(var(--color-condition-very-good))]',
-		'condition-good': 'bg-[hsl(var(--color-condition-good))] text-white border-[hsl(var(--color-condition-good))]',
-		'condition-fair': 'bg-[hsl(var(--color-condition-fair))] text-white border-[hsl(var(--color-condition-fair))]'
+		default: 'bg-[var(--color-surface-secondary)] text-[var(--color-text-secondary)] border-[var(--color-border-primary)]',
+		secondary: 'bg-[var(--color-brand-50)] text-[var(--color-brand-600)] border-[var(--color-brand-200)]',
+		success: 'bg-[var(--color-success-50)] text-[var(--color-success-600)] border-[var(--color-success-500)]/20',
+		destructive: 'bg-[var(--color-error-50)] text-[var(--color-error-600)] border-[var(--color-error-500)]/20',
+		outline: 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] bg-transparent',
+		// Condition variants using token system
+		'condition-new-with-tags': 'bg-[var(--color-success-500)] text-[var(--color-white)] border-[var(--color-success-500)]',
+		'condition-new-without-tags': 'bg-[var(--color-success-500)] text-[var(--color-white)] border-[var(--color-success-500)]',
+		'condition-very-good': 'bg-[var(--color-warning-500)] text-[var(--color-gray-950)] border-[var(--color-warning-500)]',
+		'condition-good': 'bg-[var(--color-warning-600)] text-[var(--color-white)] border-[var(--color-warning-600)]',
+		'condition-fair': 'bg-[var(--color-error-500)] text-[var(--color-white)] border-[var(--color-error-500)]'
 	};
 
 	const sizes = {

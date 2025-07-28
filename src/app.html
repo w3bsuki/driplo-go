@@ -17,6 +17,14 @@
 		
 		%sveltekit.head%
 		
+		<!-- Sentry Error Tracking -->
+		<script>
+			// Initialize Sentry early to catch all errors
+			window.sentryOnLoad = function() {
+				// Sentry will be initialized by hooks.client.ts
+			};
+		</script>
+		
 		<!-- Cookie Consent Default State -->
 		<script src="%sveltekit.assets%/cookie-consent-init.js"></script>
 		

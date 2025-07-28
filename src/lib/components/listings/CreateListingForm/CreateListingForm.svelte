@@ -14,6 +14,7 @@
 		Save,
 		AlertTriangle
 	} from 'lucide-svelte'
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte'
 	
 	// Import context and components
 	import { createFormStore, setFormContext } from './FormContext.svelte.ts'
@@ -311,12 +312,12 @@
 							{formStore.steps[formStore.currentStep - 1]?.name}
 						</span>
 					</div>
-					<div class="bg-gray-200 rounded-full h-2 overflow-hidden">
-						<div 
-							class="bg-gradient-to-r from-primary to-[#6BB6D8] h-full rounded-full transition-all duration-500 ease-out shadow-sm"
-							style="width: {(formStore.currentStep / formStore.totalSteps) * 100}%"
-						/>
-					</div>
+					<ProgressBar 
+						value={formStore.currentStep}
+						max={formStore.totalSteps}
+						size="sm"
+						class="bg-gradient-to-r from-primary to-[#6BB6D8]"
+					/>
 				</div>
 				
 				<!-- Step counter -->

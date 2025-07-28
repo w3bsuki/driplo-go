@@ -44,6 +44,12 @@
   --color-info-50: oklch(97.61% 0.014 254.6); /* was #eff6ff - light blue */
   --color-info-500: oklch(61.42% 0.209 252.42); /* was #3b82f6 - info blue */
   --color-info-600: oklch(53.24% 0.241 252.44); /* was #2563eb */
+  
+  /* ===== Accent Colors ===== */
+  --color-pink-50: oklch(97.78% 0.014 343.4); /* was #fdf2f8 - light pink */
+  --color-pink-300: oklch(83.47% 0.131 351.36); /* was #f9a8d4 */
+  --color-pink-400: oklch(78.48% 0.184 355.61); /* was #f472b6 */
+  --color-pink-500: oklch(71.71% 0.235 0.14); /* was #ec4899 */
 
   /* ===== Utility Color System (for Tailwind classes) ===== */
   /* OKLCH migration - old HEX values kept as comments for rollback */
@@ -74,6 +80,11 @@
   --font-family-sans: 'Inter Variable', Inter, system-ui, -apple-system, sans-serif;
   --font-family-display: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', var(--font-family-sans);
   --font-family-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', monospace;
+  
+  /* Typography aliases for backward compatibility */
+  --font-sans: var(--font-family-sans);
+  --font-display: var(--font-family-display);
+  --font-mono: var(--font-family-mono);
 
   /* Font Sizes */
   --font-size-2xs: 0.6875rem;
@@ -87,6 +98,9 @@
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 2.5rem;
+  
+  /* Typography aliases */
+  --text-base: var(--font-size-base);
 
   /* Line Heights */
   --line-height-none: 1;
@@ -95,6 +109,28 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.625;
   --line-height-loose: 1.75;
+  
+  /* Line height aliases */
+  --leading-normal: var(--line-height-normal);
+  
+  /* Font Weights */
+  --font-thin: 100;
+  --font-extralight: 200;
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  --font-black: 900;
+  
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
 
   /* ===== Border Radius ===== */
   --border-radius-none: 0;
@@ -143,112 +179,10 @@
   --container-screens-2xl: 1280px;
 }
 
-/* ===== LEGACY COMPATIBILITY MAPPINGS ===== */
-/* These allow existing components to work during migration */
+/* ===== CONSOLIDATED SEMANTIC SYSTEM ===== */
+/* Single source of truth for all semantic tokens */
 :root {
-    /* Grid System for custom components */
-    --grid-unit: 4px;
-    --grid-2: calc(var(--grid-unit) * 2);   /* 8px */
-    --grid-3: calc(var(--grid-unit) * 3);   /* 12px */
-    --grid-4: calc(var(--grid-unit) * 4);   /* 16px */
-    --grid-5: calc(var(--grid-unit) * 5);   /* 20px */
-    --grid-6: calc(var(--grid-unit) * 6);   /* 24px */
-    --grid-8: calc(var(--grid-unit) * 8);   /* 32px */
-    --grid-10: calc(var(--grid-unit) * 10); /* 40px */
-    --grid-12: calc(var(--grid-unit) * 12); /* 48px */
-    --grid-16: calc(var(--grid-unit) * 16); /* 64px */
-
-    /* Legacy font family mappings */
-    --font-sans: var(--font-family-sans);
-    --font-display: var(--font-family-display);
-    --font-mono: var(--font-family-mono);
-
-    /* Legacy text size mappings */
-    --text-2xs: var(--font-size-2xs);
-    
-    /* Legacy button height mappings */
-    --button-height-xs: 1.75rem;    /* 28px */
-    --button-height-sm: 2.25rem;    /* 36px */
-    --button-height-md: 2.5rem;     /* 40px */
-    --button-height-lg: 2.75rem;    /* 44px */
-    --button-height-xl: 3rem;       /* 48px */
-    
-    /* Legacy input height mappings */
-    --input-height-sm: 2.25rem;     /* 36px */
-    --input-height-md: 2.5rem;      /* 40px */
-    --input-height-lg: 2.75rem;     /* 44px */
-    
-    /* Legacy spacing mappings */
-    --space-1: var(--spacing-1);
-    --space-2: var(--spacing-2);
-    --space-3: var(--spacing-3);
-    --space-4: var(--spacing-4);
-    --space-5: var(--spacing-5);
-    --space-6: var(--spacing-6);
-    --space-8: var(--spacing-8);
-    --space-10: var(--spacing-10);
-    --space-12: var(--spacing-12);
-    --space-16: var(--spacing-16);
-    --space-20: var(--spacing-20);
-    
-    /* Legacy color mappings for navbar and components */
-    /* OKLCH migration - old HEX values kept as comments */
-    --color-white: oklch(100% 0 0); /* was #ffffff */
-    --color-gray-50: oklch(98.47% 0.004 247.86); /* was #f8fafc */
-    --color-gray-100: oklch(96.58% 0.007 249.37); /* was #f1f5f9 */
-    --color-gray-200: oklch(92.27% 0.011 252.37); /* was #e2e8f0 */
-    --color-gray-300: oklch(86.29% 0.014 252.61); /* was #cbd5e1 */
-    --color-gray-400: oklch(69.72% 0.021 252.26); /* was #94a3b8 */
-    --color-gray-500: oklch(52.87% 0.022 252.59); /* was #64748b */
-    --color-gray-600: oklch(41.05% 0.022 254.56); /* was #475569 */
-    --color-gray-700: oklch(32.18% 0.021 254.15); /* was #334155 */
-    --color-gray-800: oklch(23.51% 0.019 252.89); /* was #1e293b */
-    --color-gray-900: oklch(15.85% 0.015 257.28); /* was #0f172a */
-    
-    --color-red-500: oklch(62.8% 0.237 25.34); /* was #ef4444 */
-    --color-brand-500: oklch(81.24% 0.086 210.97); /* was #87ceeb */
-    
-    --text-xs: var(--font-size-xs);
-    --text-sm: var(--font-size-sm);
-    --text-base: var(--font-size-base);
-    --text-md: var(--font-size-md);
-    --text-lg: var(--font-size-lg);
-    --text-xl: var(--font-size-xl);
-    --text-2xl: var(--font-size-2xl);
-    --text-3xl: var(--font-size-3xl);
-    --text-4xl: var(--font-size-4xl);
-    --text-5xl: var(--font-size-5xl);
-
-    /* Legacy line height mappings */
-    --leading-none: var(--line-height-none);
-    --leading-tight: var(--line-height-tight);
-    --leading-snug: var(--line-height-snug);
-    --leading-normal: var(--line-height-normal);
-    --leading-relaxed: var(--line-height-relaxed);
-    --leading-loose: var(--line-height-loose);
-
-    /* Legacy spacing mappings */
-    --space-0: var(--spacing-0);
-    --space-px: var(--spacing-px);
-    --space-0-5: var(--spacing-0-5);
-    --space-1: var(--spacing-1);
-    --space-1-5: var(--spacing-1-5);
-    --space-2: var(--spacing-2);
-    --space-2-5: var(--spacing-2-5);
-    --space-3: var(--spacing-3);
-    --space-4: var(--spacing-4);
-    --space-5: var(--spacing-5);
-    --space-6: var(--spacing-6);
-    --space-7: var(--spacing-7);
-    --space-8: var(--spacing-8);
-    --space-9: var(--spacing-9);
-    --space-10: var(--spacing-10);
-    --space-12: var(--spacing-12);
-    --space-16: var(--spacing-16);
-    --space-20: var(--spacing-20);
-
-    /* Legacy border radius mappings */
-    --radius-none: var(--border-radius-none);
+    /* Essential utility mappings */
     --radius-xs: var(--border-radius-xs);
     --radius-sm: var(--border-radius-sm);
     --radius-md: var(--border-radius-md);
@@ -256,33 +190,24 @@
     --radius-xl: var(--border-radius-xl);
     --radius-2xl: var(--border-radius-2xl);
     --radius-full: var(--border-radius-full);
-
-    /* Legacy shadow mappings */
-    --shadow-none: var(--box-shadow-none);
-    --shadow-xs: var(--box-shadow-xs);
     --shadow-sm: var(--box-shadow-sm);
     --shadow-md: var(--box-shadow-md);
     --shadow-lg: var(--box-shadow-lg);
     --shadow-xl: var(--box-shadow-xl);
-    --shadow-border: var(--box-shadow-border);
-    --shadow-dropdown: var(--box-shadow-dropdown);
-    --shadow-modal: var(--box-shadow-modal);
-    --shadow-focus: var(--box-shadow-focus);
+    
+    /* Animation durations */
+    --duration-fast: 150ms;
+    --duration-normal: 250ms;
+    --duration-slow: 350ms;
+    --duration-page: 300ms;
+    
+    /* Animation easings */
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-sharp: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-    /* Legacy animation mappings */
-    --duration-instant: 0ms;
-    --duration-fast: var(--transition-duration-75);
-    --duration-base: var(--transition-duration-150);
-    --duration-normal: var(--transition-duration-150);
-    --duration-slow: var(--transition-duration-200);
-    --duration-page: var(--transition-duration-250);
-    --ease-linear: var(--transition-timing-function-linear);
-    --ease-in: var(--transition-timing-function-in);
-    --ease-out: var(--transition-timing-function-out);
-    --ease-in-out: var(--transition-timing-function-in-out);
-    --ease-sharp: var(--transition-timing-function-out);
-
-    /* Z-index scale (unchanged for custom components) */
+    /* Z-index scale */
     --z-base: 0;
     --z-dropdown: 10;
     --z-sticky: 20;
@@ -294,78 +219,129 @@
     --z-notification: 80;
     --z-max: 99999;
 
-    /* ===== SEMANTIC COLOR MAPPINGS ===== */
-    /* Light Mode (Default) */
-    /* OKLCH migration - old HEX values kept as comments */
-    --color-bg-primary: oklch(100% 0 0); /* was #ffffff */
-    --color-bg-secondary: oklch(98.47% 0.004 247.86);  /* was #f8fafc - gray-50 */
-    --color-bg-tertiary: oklch(96.58% 0.007 249.37);   /* was #f1f5f9 - gray-100 */
-    --color-bg-inverse: oklch(15.85% 0.015 257.28);    /* was #0f172a - gray-900 */
+    /* ===== SHADCN COMPATIBILITY MAPPINGS ===== */
+    /* Map old shadcn classes to OKLCH tokens for seamless migration */
+    
+    /* Primary Colors */
+    --color-primary: var(--color-brand-500);
+    --color-primary-foreground: var(--color-white);
+    
+    /* Secondary Colors */
+    --color-secondary: var(--color-gray-100);
+    --color-secondary-foreground: var(--color-gray-900);
+    
+    /* Semantic Colors */
+    --color-destructive: var(--color-error-500);
+    --color-destructive-foreground: var(--color-white);
+    --color-success: var(--color-success-500);
+    --color-success-foreground: var(--color-white);
+    --color-warning: var(--color-warning-500);
+    --color-warning-foreground: var(--color-gray-900);
+    
+    /* Neutral Colors */
+    --color-background: var(--color-white);
+    --color-foreground: var(--color-gray-900);
+    --color-card: var(--color-white);
+    --color-card-foreground: var(--color-gray-900);
+    --color-popover: var(--color-white);
+    --color-popover-foreground: var(--color-gray-900);
+    --color-muted: var(--color-gray-50);
+    --color-muted-foreground: var(--color-gray-500);
+    --color-accent: var(--color-brand-500);
+    --color-accent-foreground: var(--color-white);
+    
+    /* Border & Input Colors */
+    --color-border: var(--color-gray-200);
+    --color-input: var(--color-gray-200);
+    --color-ring: var(--color-brand-500);
 
-    --color-surface-primary: oklch(100% 0 0); /* was #ffffff */
-    --color-surface-secondary: oklch(98.47% 0.004 247.86);  /* was #f8fafc - gray-50 */
-    --color-surface-tertiary: oklch(96.58% 0.007 249.37);   /* was #f1f5f9 - gray-100 */
-    --color-surface-hover: oklch(98.47% 0.004 247.86);      /* was #f8fafc - gray-50 */
-    --color-surface-active: oklch(96.58% 0.007 249.37);     /* was #f1f5f9 - gray-100 */
+    /* Component shortcuts (optimized) */
+    --button-primary-bg: var(--color-brand-500);
+    --button-primary-bg-hover: var(--color-brand-600);
+    --button-primary-text: var(--color-white);
+    --input-bg: var(--color-white);
+    --input-border: var(--color-gray-200);
+    --input-border-hover: var(--color-gray-300);
+    --input-border-focus: var(--color-brand-500);
 
-    --color-text-primary: oklch(15.85% 0.015 257.28);   /* was #0f172a - gray-900 */
-    --color-text-secondary: oklch(41.05% 0.022 254.56);  /* was #475569 - gray-600 */
-    --color-text-tertiary: oklch(52.87% 0.022 252.59);   /* was #64748b - gray-500 */
-    --color-text-placeholder: oklch(69.72% 0.021 252.26); /* was #94a3b8 - gray-400 */
-    --color-text-inverse: oklch(100% 0 0); /* was #ffffff */
-
-    --color-border-primary: oklch(92.27% 0.011 252.37);   /* was #e2e8f0 - gray-200 */
-    --color-border-secondary: oklch(86.29% 0.014 252.61);  /* was #cbd5e1 - gray-300 */
-    --color-border-hover: oklch(86.29% 0.014 252.61);     /* was #cbd5e1 - gray-300 */
-    --color-border-focus: var(--color-brand-500);     /* baby blue */
-
-    /* Component-specific */
-    --button-primary-bg: var(--color-brand-500);      /* baby blue */
-    --button-primary-bg-hover: var(--color-brand-600); /* darker blue */
-    --button-primary-text: oklch(100% 0 0); /* was #ffffff */
-
-    --input-bg: oklch(100% 0 0); /* was #ffffff */
-    --input-border: oklch(92.27% 0.011 252.37);    /* was #e2e8f0 - gray-200 */
-    --input-border-hover: oklch(86.29% 0.014 252.61); /* was #cbd5e1 - gray-300 */
-    --input-border-focus: var(--color-brand-500); /* baby blue */
+    /* ===== MISSING SEMANTIC TOKENS (CAUSING BLACK BORDERS) ===== */
+    /* Surface colors */
+    --color-surface-primary: var(--color-white);
+    --color-surface-secondary: var(--color-gray-50);
+    --color-surface-tertiary: var(--color-gray-100);
+    --color-surface-hover: var(--color-gray-50);
+    
+    /* Border colors */
+    --color-border-primary: var(--color-gray-200);
+    --color-border-secondary: var(--color-gray-300);
+    --color-border-hover: var(--color-gray-300);
+    
+    /* Text colors */
+    --color-text-primary: var(--color-gray-900);
+    --color-text-secondary: var(--color-gray-600);
+    --color-text-tertiary: var(--color-gray-500);
+    
+    /* Background color aliases */
+    --color-bg-primary: var(--color-surface-primary);
+    --color-bg-secondary: var(--color-surface-secondary);
+    
+    /* Component sizing */
+    --button-height-sm: 2rem; /* 32px */
+    --button-height-md: 2.25rem; /* 36px */
+    --button-height-lg: 2.5rem; /* 40px */
+    --button-height-xl: 2.75rem; /* 44px - touch target */
+    
+    --input-height-sm: 2rem; /* 32px */
+    --input-height-md: 2.25rem; /* 36px */
+    --input-height-lg: 2.5rem; /* 40px */
+    --input-height-xl: 2.75rem; /* 44px - touch target */
 }
 
-/* Dark Mode */
+/* ===== DARK MODE (CONSOLIDATED) ===== */
 .dark {
-    --color-bg-primary: var(--color-gray-950);
-    --color-bg-secondary: var(--color-gray-900);
-    --color-bg-tertiary: var(--color-gray-800);
-    --color-bg-inverse: var(--color-gray-0);
+    /* Shadcn compatibility for dark mode */
+    --color-background: var(--color-gray-950);
+    --color-foreground: var(--color-gray-50);
+    --color-card: var(--color-gray-900);
+    --color-card-foreground: var(--color-gray-50);
+    --color-popover: var(--color-gray-900);
+    --color-popover-foreground: var(--color-gray-50);
+    --color-muted: var(--color-gray-800);
+    --color-muted-foreground: var(--color-gray-400);
+    --color-primary: var(--color-brand-600);
+    --color-primary-foreground: var(--color-gray-0);
+    --color-secondary: var(--color-gray-800);
+    --color-secondary-foreground: var(--color-gray-50);
+    --color-border: var(--color-gray-800);
+    --color-input: var(--color-gray-700);
+    --color-ring: var(--color-brand-500);
 
-    --color-surface-primary: var(--color-gray-900);
-    --color-surface-secondary: var(--color-gray-800);
-    --color-surface-tertiary: var(--color-gray-700);
-    --color-surface-hover: var(--color-gray-800);
-    --color-surface-active: var(--color-gray-700);
-
-    --color-text-primary: var(--color-gray-50);
-    --color-text-secondary: var(--color-gray-400);
-    --color-text-tertiary: var(--color-gray-500);
-    --color-text-placeholder: var(--color-gray-600);
-    --color-text-inverse: var(--color-gray-900);
-
-    --color-border-primary: var(--color-gray-800);
-    --color-border-secondary: var(--color-gray-700);
-    --color-border-hover: var(--color-gray-600);
-    --color-border-focus: var(--color-brand-500);
-
+    /* Component shortcuts (dark mode) */
     --button-primary-bg: var(--color-brand-500);
     --button-primary-bg-hover: var(--color-brand-600);
     --button-primary-text: var(--color-gray-0);
-
     --input-bg: var(--color-gray-900);
     --input-border: var(--color-gray-700);
     --input-border-hover: var(--color-gray-600);
     --input-border-focus: var(--color-brand-500);
 
-    /* Adjust shadows for dark mode */
+    /* Dark mode shadows */
     --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.2);
     --shadow-md: 0 2px 4px -1px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 4px 8px -2px rgb(0 0 0 / 0.4);
     --shadow-xl: 0 8px 16px -4px rgb(0 0 0 / 0.5);
+
+    /* Dark mode semantic tokens */
+    --color-surface-primary: var(--color-gray-900);
+    --color-surface-secondary: var(--color-gray-800);
+    --color-surface-tertiary: var(--color-gray-700);
+    --color-surface-hover: var(--color-gray-800);
+    
+    --color-border-primary: var(--color-gray-800);
+    --color-border-secondary: var(--color-gray-700);
+    --color-border-hover: var(--color-gray-700);
+    
+    --color-text-primary: var(--color-gray-50);
+    --color-text-secondary: var(--color-gray-400);
+    --color-text-tertiary: var(--color-gray-500);
 }

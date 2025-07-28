@@ -36,7 +36,7 @@
 	<div
 		role="tooltip"
 		class={cn(
-			'absolute z-50 rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white animate-in fade-in zoom-in-95 duration-100',
+			'absolute z-tooltip rounded-md bg-gray-900 dark:bg-gray-700 px-3 py-1.5 text-xs text-white dark:text-gray-50 animate-in fade-in-0 zoom-in-95 duration-100 shadow-md border border-gray-700 dark:border-gray-600',
 			sideClasses[side],
 			className
 		)}
@@ -44,7 +44,7 @@
 		{@render children()}
 		<div 
 			class={cn(
-				'absolute h-1.5 w-1.5 rotate-45 bg-gray-900',
+				'absolute h-1.5 w-1.5 rotate-45 bg-gray-900 dark:bg-gray-700 border-l border-b border-gray-700 dark:border-gray-600',
 				side === 'top' && 'top-full left-1/2 -translate-x-1/2 -translate-y-1',
 				side === 'right' && 'right-full top-1/2 -translate-y-1/2 translate-x-1',
 				side === 'bottom' && 'bottom-full left-1/2 -translate-x-1/2 translate-y-1',

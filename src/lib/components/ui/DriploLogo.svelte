@@ -14,14 +14,14 @@
 	}: Props = $props();
 	
 	const sizeClasses = {
-		sm: 'text-xl md:text-2xl',
+		sm: 'text-lg',
 		md: 'text-2xl md:text-3xl',
 		lg: 'text-3xl md:text-4xl'
 	};
 	
 	// Emoji needs to be ~1.3x larger to match capital letter height
 	const emojiSizes = {
-		sm: 'text-2xl md:text-3xl',
+		sm: 'text-xl',
 		md: 'text-3xl md:text-4xl',
 		lg: 'text-4xl md:text-5xl'
 	};
@@ -41,11 +41,10 @@
 			class={cn(
 				"inline-flex items-center justify-center",
 				emojiSizes[size],
-				"leading-none"
+				"leading-none -translate-y-[0.1em]"
 			)}
 			role="img"
 			aria-label="Clothing"
-			style="transform: translateY(-0.1em)"
 		>
 			👕
 		</span>

@@ -32,8 +32,7 @@
         unread_count: number;
     };
 
-    export let userId: string;
-    export let showArchived = false;
+    let { userId, showArchived = false }: { userId: string; showArchived?: boolean } = $props();
     
     let conversations: Conversation[] = [];
     let loading = true;
@@ -90,10 +89,12 @@
     }
 
     // Refresh when showArchived changes
-    $: if (showArchived !== undefined) {
-        offset = 0;
-        loadConversations();
-    }
+    $effect(() => {
+        if (showArchived !== undefined) {
+            offset = 0;
+            loadConversations();
+        }
+    });
 
     function getOtherUser(conversation: Conversation) {
         return userId === conversation.buyer_id ? conversation.seller : conversation.buyer;
@@ -226,7 +227,7 @@
         {#if hasMore}
             <button
                 class="btn btn-outline btn-sm w-full mt-4 flex items-center justify-center"
-                onclick={handleLoadConversations}
+                onclick={loadConversations}
                 disabled={loading}
             >
                 {#if loading}

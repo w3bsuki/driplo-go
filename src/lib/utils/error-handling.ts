@@ -155,15 +155,16 @@ export async function withRetry<T>(
 
 // Global error logger (only in production)
 export function logError(error: any, context?: Record<string, any>) {
-  if (browser && import.meta.env['PROD']) {
-    // Send to error tracking service (e.g., Sentry)
-    console.error('Error:', error, 'Context:', context);
-    
-    // You would typically send to an error tracking service here
-    // Example: Sentry.captureException(error, { extra: context });
-  } else {
-    // In development, just log to console
-    console.error('Error:', error, 'Context:', context);
+  // Always log to console for debugging
+  console.error('Error:', error, 'Context:', context);
+  
+  // Send to Sentry if available
+  if (browser && window.Sentry) {
+    window.Sentry.captureException(error, {
+      contexts: {
+        custom: context
+      }
+    });
   }
 }
 

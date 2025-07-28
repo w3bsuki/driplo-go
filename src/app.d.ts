@@ -37,6 +37,9 @@ declare global {
 		}
 		onRecaptchaLoad?: () => void
 		hcaptcha?: any // In case we switch to hCaptcha later
+		// Sentry error tracking
+		Sentry?: any
+		sentryOnLoad?: () => void
 	}
 }
 

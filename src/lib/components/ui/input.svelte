@@ -50,9 +50,9 @@
 	}: Props = $props()
 	
 	const sizeClasses = {
-		sm: 'px-3 text-sm',
-		md: 'px-3 text-sm',
-		lg: 'px-3 text-sm'
+		sm: 'px-3 text-sm h-[var(--input-height-sm)]',
+		md: 'px-3 text-sm h-[var(--input-height-md)]',
+		lg: 'px-3 text-sm h-[var(--input-height-lg)]'
 	}
 </script>
 
@@ -68,7 +68,6 @@
 		sizeClasses[size],
 		className
 	)}
-	style={`height: var(--input-height-${size})`}
 	{onblur}
 	{onchange}
 	{onclick}

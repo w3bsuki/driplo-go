@@ -4,14 +4,16 @@
 
 	type $$Props = HTMLAttributes<HTMLParagraphElement>;
 
-	let className: $$Props['class'] = undefined;
-	export { className as class };
+	let { 
+		class: className = undefined,
+		children,
+		...restProps
+	} = $props<$$Props & { children?: any }>();
 </script>
 
 <div
 	class={cn('text-sm [&_p]:leading-relaxed', className)}
-	{...$$restProps}
+	{...restProps}
 >
-	<slot />
+	{@render children?.()}
 </div>
-</script>

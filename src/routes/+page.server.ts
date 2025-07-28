@@ -1,6 +1,16 @@
 import type { PageServerLoad } from './$types';
 import { getCachedData, cacheKeys, cacheTTL } from '$lib/server/cache';
 
+// Server-side debug logging
+const serverDebug = {
+  log: (message: string, data?: any) => {
+    console.log(`[SERVER] ${new Date().toISOString()} - ${message}`, data || '');
+  },
+  error: (message: string, error?: any) => {
+    console.error(`[SERVER ERROR] ${new Date().toISOString()} - ${message}`, error || '');
+  }
+};
+
 export const load: PageServerLoad = async ({ locals }) => {
   // Load critical data first, stream the rest
   const criticalData = await getCachedData(
@@ -32,6 +42,11 @@ export const load: PageServerLoad = async ({ locals }) => {
       }));
 
       const featuredListings = (featuredResult.data || []).map((item: any) => item.listing_data);
+
+      serverDebug.log('Featured listings loaded', {
+        count: featuredListings.length,
+        sampleListing: featuredListings[0]
+      });
 
       return {
         categories,
@@ -79,6 +94,11 @@ export const load: PageServerLoad = async ({ locals }) => {
       }
 
       const popularListings = (popularResult.data || []).map((item: any) => item.listing_data);
+
+      serverDebug.log('Popular listings loaded', {
+        count: popularListings.length,
+        sampleListing: popularListings[0]
+      });
 
       return {
         popularListings,

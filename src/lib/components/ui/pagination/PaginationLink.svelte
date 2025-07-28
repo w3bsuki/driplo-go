@@ -18,10 +18,10 @@
 	<a
 		{href}
 		class={cn(
-			'flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors duration-100',
+			'flex h-8 w-8 items-center justify-center rounded-[var(--border-radius-md)] text-[var(--font-size-sm)] font-medium transition-colors duration-[var(--transition-duration-100)]',
 			isActive
-				? 'bg-brand-500 text-white'
-				: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+				? 'bg-[var(--color-brand-500)] text-[var(--color-white)]'
+				: 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)]',
 			disabled && 'pointer-events-none opacity-50',
 			className
 		)}
@@ -34,10 +34,10 @@
 	<button
 		type="button"
 		class={cn(
-			'flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors duration-100',
+			'flex h-8 w-8 items-center justify-center rounded-[var(--border-radius-md)] text-[var(--font-size-sm)] font-medium transition-colors duration-[var(--transition-duration-100)]',
 			isActive
-				? 'bg-brand-500 text-white'
-				: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+				? 'bg-[var(--color-brand-500)] text-[var(--color-white)]'
+				: 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--color-text-primary)]',
 			disabled && 'pointer-events-none opacity-50',
 			className
 		)}

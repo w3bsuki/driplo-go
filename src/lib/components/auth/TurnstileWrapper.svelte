@@ -56,9 +56,9 @@
   <Turnstile
     bind:this={turnstileInstance}
     siteKey={siteKey}
-    on:callback={handleCallback}
-    on:expire={handleExpire}
-    on:error={handleError}
+    oncallback={handleCallback}
+    onexpire={handleExpire}
+    onerror={handleError}
     {theme}
     {size}
     {appearance}

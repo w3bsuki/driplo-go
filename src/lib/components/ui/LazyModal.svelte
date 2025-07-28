@@ -3,14 +3,23 @@
 	import type { ComponentType, SvelteComponent } from 'svelte';
 	import Spinner from './Spinner.svelte';
 	
-	export let loader: () => Promise<{ default: ComponentType<SvelteComponent> }>;
-	export let show = false;
-	export let preloadOnMount = false;
-	export let loadingText = 'Loading...';
+	let { 
+		loader,
+		show = false,
+		preloadOnMount = false,
+		loadingText = 'Loading...',
+		...restProps
+	}: {
+		loader: () => Promise<{ default: ComponentType<SvelteComponent> }>;
+		show?: boolean;
+		preloadOnMount?: boolean;
+		loadingText?: string;
+		[key: string]: any;
+	} = $props();
 	
 	let Component: ComponentType<SvelteComponent> | null = null;
-	let loading = false;
-	let error: Error | null = null;
+	let loading = $state(false);
+	let error = $state<Error | null>(null);
 	
 	async function loadComponent() {
 		if (Component || loading) return;
@@ -30,9 +39,11 @@
 	}
 	
 	// Load when modal opens
-	$: if (show && !Component) {
-		loadComponent();
-	}
+	$effect(() => {
+		if (show && !Component) {
+			loadComponent();
+		}
+	});
 	
 	// Preload on mount if requested
 	onMount(() => {
@@ -50,21 +61,21 @@
 
 {#if show}
 	{#if loading}
-		<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-			<div class="bg-card p-8 rounded-lg shadow-lg">
+		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+			<div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-modal">
 				<Spinner size="lg" />
-				<p class="mt-4 text-sm text-muted-foreground">{loadingText}</p>
+				<p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{loadingText}</p>
 			</div>
 		</div>
 	{:else if error}
-		<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-			<div class="bg-card p-8 rounded-lg shadow-lg max-w-md">
-				<h3 class="text-lg font-semibold text-destructive">Loading Error</h3>
-				<p class="mt-2 text-sm text-muted-foreground">
+		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+			<div class="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-modal max-w-md border border-gray-200 dark:border-gray-700">
+				<h3 class="text-lg font-semibold text-error-500">Loading Error</h3>
+				<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
 					We encountered an error loading this content. Please try again.
 				</p>
 				<button 
-					class="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+					class="mt-4 px-4 py-2 bg-brand-500 text-white rounded-md hover:bg-brand-600 transition-colors"
 					onclick={() => {
 						error = null;
 						loadComponent();
@@ -75,6 +86,6 @@
 			</div>
 		</div>
 	{:else if Component}
-		<svelte:component this={Component} {...$$restProps} />
+		<Component {...restProps} />
 	{/if}
 {/if}

@@ -132,12 +132,12 @@
 			</div>
 			
 			{#if showError()}
-				<p class="mt-2 text-sm text-red-600 flex items-center gap-1">
+				<p class="mt-2 text-sm text-red-600 flex items-center gap-1" role="alert" aria-live="assertive">
 					<AlertCircle class="w-4 h-4" />
 					{showError()}
 				</p>
 			{:else if isAvailable}
-				<p class="mt-2 text-sm text-green-600 flex items-center gap-1">
+				<p class="mt-2 text-sm text-green-600 flex items-center gap-1" role="status" aria-live="polite">
 					<CheckCircle class="w-4 h-4" />
 					This username is available!
 				</p>

@@ -73,10 +73,11 @@
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 		{#each stats as stat}
+			{@const Icon = stat.icon}
 			<div class="bg-white rounded-lg shadow-sm p-6">
 				<div class="flex items-center justify-between mb-4">
 					<div class={`p-3 rounded-lg ${getColorClasses(stat.color)}`}>
-						<svelte:component this={stat.icon} class="w-6 h-6" />
+						<Icon class="w-6 h-6" />
 					</div>
 					<span class="text-sm font-medium {stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'}">
 						{stat.change}

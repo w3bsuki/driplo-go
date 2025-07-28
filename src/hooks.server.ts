@@ -7,6 +7,28 @@ import { setLocale, isLocale } from '$lib/paraglide/runtime.js'
 import { dev } from '$app/environment'
 import { check2FAMiddleware } from '$lib/server/auth-middleware'
 import { logError, createErrorResponse } from '$lib/utils/error-handling'
+import * as Sentry from '@sentry/sveltekit'
+import { SENTRY_CONFIG } from '$lib/config/sentry'
+
+// Try to get Sentry DSN from environment
+const PUBLIC_SENTRY_DSN = import.meta.env.PUBLIC_SENTRY_DSN || '';
+
+// Initialize Sentry on the server
+if (PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    dsn: PUBLIC_SENTRY_DSN,
+    environment: SENTRY_CONFIG.environment,
+    release: SENTRY_CONFIG.release,
+    tracesSampleRate: SENTRY_CONFIG.tracesSampleRate,
+    profilesSampleRate: SENTRY_CONFIG.profilesSampleRate,
+    sendDefaultPii: SENTRY_CONFIG.sendDefaultPii,
+    ignoreErrors: SENTRY_CONFIG.ignoreErrors,
+    ignoreTransactions: SENTRY_CONFIG.ignoreTransactions,
+    beforeSend: SENTRY_CONFIG.beforeSend,
+    beforeSendTransaction: SENTRY_CONFIG.beforeSendTransaction,
+    debug: dev,
+  });
+}
 
 const handleI18n: Handle = async ({ event, resolve }) => {
 	try {
@@ -183,15 +205,16 @@ const handleSupabase: Handle = async ({ event, resolve }) => {
 	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
 	response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()')
 	
-	// Add CSP header for reCAPTCHA and Stripe
+	// Add CSP header for reCAPTCHA, Stripe, and Sentry
 	response.headers.set('Content-Security-Policy', 
 		"default-src 'self'; " +
-		"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://js.stripe.com https://checkout.stripe.com; " +
+		"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://js.stripe.com https://checkout.stripe.com https://browser.sentry-cdn.com; " +
 		"frame-src 'self' https://www.google.com https://checkout.stripe.com; " +
 		"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
 		"font-src 'self' https://fonts.gstatic.com; " +
 		"img-src 'self' data: https: blob:; " +
-		"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google.com https://api.stripe.com"
+		"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google.com https://api.stripe.com https://*.sentry.io https://*.ingest.sentry.io; " +
+		"report-uri https://o1.ingest.sentry.io/api/1/security/?sentry_key=" + PUBLIC_SENTRY_DSN?.split('@')[0].split('//')[1]
 	)
 	
 	// Only set HSTS in production
@@ -294,7 +317,7 @@ const handleCaching: Handle = async ({ event, resolve }) => {
 }
 
 // Global error handler for unhandled server errors
-export const handleError: HandleServerError = ({ error, event, status, message }) => {
+export const handleError: HandleServerError = Sentry.handleErrorWithSentry(({ error, event, status, message }) => {
 	const errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 	
 	// Log the error with context
@@ -308,6 +331,18 @@ export const handleError: HandleServerError = ({ error, event, status, message }
 		errorId,
 		stack: error?.stack
 	});
+	
+	// Add context to Sentry
+	if (PUBLIC_SENTRY_DSN) {
+		Sentry.setContext('server_error', {
+			errorId,
+			url: event.url.pathname,
+			method: event.request.method,
+			status,
+			userAgent: event.request.headers.get('user-agent'),
+			timestamp: new Date().toISOString(),
+		});
+	}
 
 	// Return sanitized error for client
 	if (dev) {
@@ -324,6 +359,13 @@ export const handleError: HandleServerError = ({ error, event, status, message }
 			errorId
 		};
 	}
+});
+
+// Add Sentry handle if enabled
+const sentryHandle = PUBLIC_SENTRY_DSN ? Sentry.sentryHandle() : null;
+const handles = [handleI18n, handleSupabase, check2FAMiddleware, handleCaching];
+if (sentryHandle) {
+  handles.unshift(sentryHandle);
 }
 
-export const handle = sequence(handleI18n, handleSupabase, check2FAMiddleware, handleCaching)
+export const handle = sequence(...handles)

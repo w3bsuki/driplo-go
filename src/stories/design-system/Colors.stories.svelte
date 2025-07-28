@@ -6,24 +6,24 @@
   }
   
   const primaryColors = [
-    { name: 'primary', value: 'hsl(197 71% 73%)', class: 'bg-primary' },
-    { name: 'primary-600', value: '#6bb6d8', class: 'bg-primary-600' },
-    { name: 'primary-700', value: '#4f9fc5', class: 'bg-primary-700' },
+    { name: 'primary', value: 'oklch(78.94% 0.094 218.73)', class: 'bg-primary' },
+    { name: 'primary-600', value: 'oklch(73.13% 0.106 219.25)', class: 'bg-primary-600' },
+    { name: 'primary-700', value: 'oklch(67.3% 0.117 220.17)', class: 'bg-primary-700' },
   ];
   
   const semanticColors = [
-    { name: 'destructive', value: 'hsl(0 84% 60%)', class: 'bg-destructive' },
-    { name: 'success', value: 'hsl(152 69% 42%)', class: 'bg-success' },
-    { name: 'warning', value: 'hsl(61 95% 66%)', class: 'bg-warning' },
+    { name: 'destructive', value: 'oklch(54.16% 0.221 26.54)', class: 'bg-destructive' },
+    { name: 'success', value: 'oklch(65.44% 0.174 149.77)', class: 'bg-success' },
+    { name: 'warning', value: 'oklch(87.7% 0.168 98.14)', class: 'bg-warning' },
   ];
   
   const neutralColors = [
-    { name: 'background', value: 'hsl(0 0% 100%)', class: 'bg-background' },
-    { name: 'foreground', value: 'hsl(0 0% 6%)', class: 'bg-foreground' },
-    { name: 'muted', value: 'hsl(0 0% 96%)', class: 'bg-muted' },
-    { name: 'muted-foreground', value: 'hsl(0 0% 45%)', class: 'bg-muted-foreground' },
-    { name: 'border', value: 'hsl(0 0% 90%)', class: 'bg-border' },
-    { name: 'input', value: 'hsl(0 0% 90%)', class: 'bg-input' },
+    { name: 'background', value: 'oklch(100% 0 0)', class: 'bg-background' },
+    { name: 'foreground', value: 'oklch(17.68% 0 0)', class: 'bg-foreground' },
+    { name: 'muted', value: 'oklch(96.32% 0 0)', class: 'bg-muted' },
+    { name: 'muted-foreground', value: 'oklch(52.49% 0 0)', class: 'bg-muted-foreground' },
+    { name: 'border', value: 'oklch(92.12% 0 0)', class: 'bg-border' },
+    { name: 'input', value: 'oklch(92.12% 0 0)', class: 'bg-input' },
   ];
 </script>
 

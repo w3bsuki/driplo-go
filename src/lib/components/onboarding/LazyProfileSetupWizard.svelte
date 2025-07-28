@@ -3,17 +3,18 @@
     import Spinner from '$lib/components/ui/Spinner.svelte';
     import { createLazyComponent } from '$lib/utils/lazy-load';
     
-    export let open = false;
-    export let currentStep = 1;
+    let { open = false, currentStep = 1, ...restProps }: { open?: boolean; currentStep?: number; [key: string]: any } = $props();
     
     const lazyWizard = createLazyComponent(
         () => import('./ProfileSetupWizard.svelte')
     );
     
     // Load when dialog opens
-    $: if (open && !lazyWizard.component) {
-        lazyWizard.load();
-    }
+    $effect(() => {
+        if (open && !lazyWizard.component) {
+            lazyWizard.load();
+        }
+    });
     
     // Preload for new users
     onMount(() => {
@@ -34,6 +35,7 @@
             </div>
         </div>
     {:else if lazyWizard.component}
-        <svelte:component this={lazyWizard.component} {open} {currentStep} {...$$restProps} />
+        {@const WizardComponent = lazyWizard.component}
+        <WizardComponent {open} {currentStep} {...restProps} />
     {/if}
 {/if}

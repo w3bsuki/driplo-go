@@ -308,12 +308,13 @@
 												<span class="text-sm font-medium">{rating}</span>
 												<Star class="w-4 h-4 text-yellow-500 fill-current" />
 											</div>
-											<div class="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
-												<div 
-													class="h-full bg-yellow-500 transition-all duration-500"
-													style="width: {percentage}%"
-												></div>
-											</div>
+											<ProgressBar 
+												value={percentage}
+												max={100}
+												size="sm"
+												variant="warning"
+												class="flex-1"
+											/>
 											<span class="text-sm text-gray-600 w-12 text-right">{count}</span>
 										</div>
 									{/each}

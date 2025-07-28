@@ -249,7 +249,7 @@
 	/* Style the dropdown options */
 	select option {
 		background-color: white;
-		color: #374151;
+		color: var(--color-gray-700);
 		padding: 0.5rem;
 	}
 	

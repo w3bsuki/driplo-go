@@ -9,7 +9,7 @@
 	const brandProfile = $derived(data.brandProfile);
 	const profile = $derived(data.profile);
 	
-	const nextSteps = [
+	const nextSteps = $derived([
 		{
 			icon: Package,
 			title: 'List Your Products',
@@ -42,7 +42,7 @@
 			href: `/brands/${brandProfile.brand_slug}`,
 			completed: false
 		}
-	];
+	]);
 	
 	const brandBenefits = [
 		{
@@ -159,7 +159,7 @@
 					{#each nextSteps as step}
 						<div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors {step.completed ? 'opacity-60' : ''}">
 							<div class="w-12 h-12 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-								<svelte:component this={step.icon} class="w-6 h-6 text-purple-600" />
+								<step.icon class="w-6 h-6 text-purple-600" />
 							</div>
 							<div class="flex-1">
 								<div class="flex items-start justify-between">
@@ -195,9 +195,10 @@
 				<h2 class="text-2xl font-bold text-gray-900 mb-6">Your Brand Benefits</h2>
 				<div class="space-y-4">
 					{#each brandBenefits as benefit}
+						{@const Icon = benefit.icon}
 						<div class="flex gap-4 p-4">
 							<div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-								<svelte:component this={benefit.icon} class="w-6 h-6 text-blue-600" />
+								<Icon class="w-6 h-6 text-blue-600" />
 							</div>
 							<div>
 								<h3 class="font-semibold text-gray-900 mb-1">{benefit.title}</h3>

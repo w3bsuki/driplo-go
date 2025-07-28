@@ -48,18 +48,19 @@
 	const maxPercent = $derived(((maxValue - min) / (max - min)) * 100);
 </script>
 
-<div class="space-y-4">
+<div class="space-y-[var(--spacing-4)]">
 	<div class="relative h-2">
 		<!-- Track background -->
-		<div class="absolute inset-0 bg-gray-200 rounded-full"></div>
+		<div class="absolute inset-0 bg-[var(--color-surface-secondary)] rounded-full"></div>
 		
 		<!-- Active track -->
 		<div 
 			class={cn(
 				"absolute h-full rounded-full",
-				theme === 'pink' ? "bg-pink-500" : "bg-blue-500"
+				theme === 'pink' ? "bg-[var(--color-error-500)]" : "bg-[var(--color-brand-500)]"
 			)}
-			style="left: {minPercent}%; right: {100 - maxPercent}%"
+			style:left="{minPercent}%"
+			style:right="{100 - maxPercent}%"
 		></div>
 		
 		<!-- Min slider -->
@@ -72,7 +73,7 @@
 			onmousedown={() => isDragging = true}
 			onmouseup={() => isDragging = false}
 			class="absolute w-full h-full opacity-0 cursor-pointer"
-			style="pointer-events: none"
+			class="pointer-events-none"
 		/>
 		
 		<!-- Max slider -->
@@ -85,53 +86,53 @@
 			onmousedown={() => isDragging = true}
 			onmouseup={() => isDragging = false}
 			class="absolute w-full h-full opacity-0 cursor-pointer"
-			style="pointer-events: none"
+			class="pointer-events-none"
 		/>
 		
 		<!-- Min thumb -->
 		<div 
 			class={cn(
-				"absolute w-5 h-5 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 top-1/2 cursor-pointer transition-transform",
-				theme === 'pink' ? "bg-pink-500" : "bg-blue-500",
+				"absolute w-5 h-5 rounded-full border-2 border-[var(--color-white)] shadow-[var(--box-shadow-lg)] transform -translate-x-1/2 -translate-y-1/2 top-1/2 cursor-pointer transition-transform",
+				theme === 'pink' ? "bg-[var(--color-error-500)]" : "bg-[var(--color-brand-500)]",
 				isDragging && "scale-110"
 			)}
-			style="left: {minPercent}%"
+			style:left="{minPercent}%"
 		></div>
 		
 		<!-- Max thumb -->
 		<div 
 			class={cn(
-				"absolute w-5 h-5 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 top-1/2 cursor-pointer transition-transform",
-				theme === 'pink' ? "bg-pink-500" : "bg-blue-500",
+				"absolute w-5 h-5 rounded-full border-2 border-[var(--color-white)] shadow-[var(--box-shadow-lg)] transform -translate-x-1/2 -translate-y-1/2 top-1/2 cursor-pointer transition-transform",
+				theme === 'pink' ? "bg-[var(--color-error-500)]" : "bg-[var(--color-brand-500)]",
 				isDragging && "scale-110"
 			)}
-			style="left: {maxPercent}%"
+			style:left="{maxPercent}%"
 		></div>
 	</div>
 	
 	<!-- Value display -->
-	<div class="flex items-center justify-between text-sm">
-		<div class="flex items-center gap-2">
-			<span class="text-gray-500">Min:</span>
+	<div class="flex items-center justify-between text-[var(--font-size-sm)]">
+		<div class="flex items-center gap-[var(--spacing-2)]">
+			<span class="text-[var(--color-text-tertiary)]">Min:</span>
 			<input
 				type="number"
 				value={minValue}
 				{min}
 				max={maxValue - 10}
 				onchange={handleMinChange}
-				class="w-20 px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+				class="w-20 px-[var(--spacing-2)] py-[var(--spacing-1)] border border-[var(--color-border-primary)] rounded-[var(--border-radius-sm)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
 			/>
 		</div>
-		<div class="text-gray-400">—</div>
-		<div class="flex items-center gap-2">
-			<span class="text-gray-500">Max:</span>
+		<div class="text-[var(--color-text-tertiary)]">—</div>
+		<div class="flex items-center gap-[var(--spacing-2)]">
+			<span class="text-[var(--color-text-tertiary)]">Max:</span>
 			<input
 				type="number"
 				value={maxValue}
 				min={minValue + 10}
 				{max}
 				onchange={handleMaxChange}
-				class="w-20 px-2 py-1 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+				class="w-20 px-[var(--spacing-2)] py-[var(--spacing-1)] border border-[var(--color-border-primary)] rounded-[var(--border-radius-sm)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)]"
 			/>
 		</div>
 	</div>

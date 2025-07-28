@@ -3,7 +3,7 @@
 	import { fly, fade } from 'svelte/transition';
 	import { CheckCircle, XCircle, Info, AlertTriangle, X } from 'lucide-svelte';
 	
-	export let position: 'top-right' | 'top-center' | 'bottom-right' = 'top-right';
+	let { position = 'top-right' }: { position?: 'top-right' | 'top-center' | 'bottom-right' } = $props();
 	
 	const positionClasses = {
 		'top-right': 'top-4 right-4',
@@ -22,20 +22,25 @@
 <div class="fixed {positionClasses[position]} z-50 pointer-events-none">
 	<div class="flex flex-col gap-2 pointer-events-auto">
 		{#each notifications.all as notification (notification.id)}
+			{@const Icon = notificationIcons[notification.type]}
 			<div
 				transition:fly={{ y: -20, duration: 300 }}
-				class="bg-background border rounded-lg shadow-lg p-4 min-w-[300px] max-w-[400px]
-					{notification.type === 'success' ? 'border-green-500/20 bg-green-50 dark:bg-green-950/20' : ''}
-					{notification.type === 'error' ? 'border-red-500/20 bg-red-50 dark:bg-red-950/20' : ''}
-					{notification.type === 'info' ? 'border-blue-500/20 bg-blue-50 dark:bg-blue-950/20' : ''}
-					{notification.type === 'warning' ? 'border-yellow-500/20 bg-yellow-50 dark:bg-yellow-950/20' : ''}"
+				class="border rounded-lg shadow-lg p-4 min-w-[300px] max-w-[400px]
+					{notification.type === 'success' ? 'border-success-200 dark:border-success-500/30 bg-success-50 dark:bg-success-500/10' : ''}
+					{notification.type === 'error' ? 'border-error-200 dark:border-error-500/30 bg-error-50 dark:bg-error-500/10' : ''}
+					{notification.type === 'info' ? 'border-info-200 dark:border-info-500/30 bg-info-50 dark:bg-info-500/10' : ''}
+					{notification.type === 'warning' ? 'border-warning-200 dark:border-warning-500/30 bg-warning-50 dark:bg-warning-500/10' : ''}
+					{!notification.type || notification.type === 'default' ? 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900' : ''}"
 			>
 				<div class="flex items-start gap-3">
-					<div class="{notification.type === 'success' ? 'text-green-600 dark:text-green-400' : ''}
-						{notification.type === 'error' ? 'text-red-600 dark:text-red-400' : ''}
-						{notification.type === 'info' ? 'text-blue-600 dark:text-blue-400' : ''}
-						{notification.type === 'warning' ? 'text-yellow-600 dark:text-yellow-400' : ''}">
-						<svelte:component this={notificationIcons[notification.type]} class="w-5 h-5" />
+					<div class="{notification.type === 'success' ? 'text-success-600 dark:text-success-400' : ''}
+						{notification.type === 'error' ? 'text-error-600 dark:text-error-400' : ''}
+						{notification.type === 'info' ? 'text-info-600 dark:text-info-400' : ''}
+						{notification.type === 'warning' ? 'text-warning-600 dark:text-warning-400' : ''}
+						{!notification.type || notification.type === 'default' ? 'text-gray-600 dark:text-gray-400' : ''}">
+						{#if Icon}
+							<Icon class="w-5 h-5" />
+						{/if}
 					</div>
 					
 					<div class="flex-1">

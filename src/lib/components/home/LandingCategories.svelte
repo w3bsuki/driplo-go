@@ -87,7 +87,6 @@
 						onmouseenter={() => hoveredCategory = category.value}
 						onmouseleave={() => hoveredCategory = ''}
 						class="group flex-shrink-0 text-center transition-all duration-100 snap-center rounded-sm p-2"
-						style="outline: none !important; -webkit-tap-highlight-color: transparent !important; box-shadow: none !important;"
 					>
 						<!-- Category Emoji Container -->
 						<div class="relative mb-2 md:mb-3">

@@ -29,7 +29,7 @@
 						<p class="text-2xl font-bold text-gray-900 mt-2">{stat.value}</p>
 					</div>
 					<div class="bg-{stat.color}-100 p-3 rounded-lg">
-						<svelte:component this={stat.icon} class="w-6 h-6 text-{stat.color}-600" />
+						<stat.icon class="w-6 h-6 text-{stat.color}-600" />
 					</div>
 				</div>
 			</div>

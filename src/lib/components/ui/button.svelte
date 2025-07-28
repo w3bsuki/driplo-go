@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
+	import { Button as ButtonPrimitive } from 'bits-ui';
 	import { cva, type VariantProps } from 'class-variance-authority';
 	import { cn } from '$lib/utils';
 
@@ -17,12 +18,12 @@
 					link: 'text-brand-500 underline-offset-4 hover:underline p-0 h-auto'
 				},
 				size: {
-					xs: 'px-2 text-xs rounded-sm',
-					sm: 'px-3 text-sm rounded-sm',
-					default: 'px-4 text-sm rounded-sm',
-					lg: 'px-5 text-sm rounded-sm',
-					xl: 'px-6 text-sm rounded-sm',
-					icon: 'p-0 rounded-sm'
+					xs: 'h-7 px-2 text-xs rounded-sm',
+					sm: 'h-9 px-3 text-sm rounded-sm',
+					default: 'h-10 px-4 text-sm rounded-sm',
+					lg: 'h-11 px-5 text-sm rounded-sm',
+					xl: 'h-12 px-6 text-sm rounded-sm',
+					icon: 'h-10 w-10 p-0 rounded-sm'
 				}
 			},
 			defaultVariants: {
@@ -50,20 +51,19 @@
 	}: ButtonProps = $props();
 </script>
 
-<button 
-	{type} 
-	{disabled} 
+<ButtonPrimitive.Root
+	{type}
+	{disabled}
 	class={cn(buttonVariants({ variant, size, className }))}
-	style={`height: var(--button-height-${size === 'default' ? 'md' : size})`}
 	{...restProps}
 >
 	{@render children()}
-</button>
+</ButtonPrimitive.Root>
 
 <style>
 	/* Modern 2025 button interactions with spring physics */
 	@media (hover: hover) and (pointer: fine) {
-		button:hover {
+		:global(button):hover {
 			transform: translateY(-1px) scale(1.02);
 			transition: transform 150ms cubic-bezier(0.5, 1.25, 0.75, 1.25);
 		}
@@ -71,40 +71,40 @@
 
 	/* Touch devices get optimized feedback */
 	@media (hover: none) and (pointer: coarse) {
-		button:active {
+		:global(button):active {
 			transform: scale(0.95);
 			transition: transform 100ms ease-out;
 		}
 	}
 
 	/* Enhanced focus-visible for better accessibility */
-	button:focus-visible {
+	:global(button):focus-visible {
 		transform: scale(1.02);
 		transition: transform 150ms cubic-bezier(0.5, 1.25, 0.75, 1.25);
 	}
 
 	/* Disabled state animations */
-	button:disabled {
+	:global(button):disabled {
 		transform: none !important;
 		animation: none !important;
 	}
 
 	/* Respect reduced motion preferences */
 	@media (prefers-reduced-motion: reduce) {
-		button {
+		:global(button) {
 			transition: none !important;
 		}
-		button:hover,
-		button:focus-visible,
-		button:active {
+		:global(button):hover,
+		:global(button):focus-visible,
+		:global(button):active {
 			transform: none !important;
 		}
 	}
 
 	/* Link variant should not scale */
-	button:global(.btn-link):hover,
-	button:global(.btn-link):focus-visible,
-	button:global(.btn-link):active {
+	:global(button.btn-link):hover,
+	:global(button.btn-link):focus-visible,
+	:global(button.btn-link):active {
 		transform: none !important;
 	}
 </style>

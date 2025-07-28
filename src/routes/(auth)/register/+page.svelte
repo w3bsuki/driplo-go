@@ -435,6 +435,7 @@
 							type="button"
 							class="absolute inset-y-0 right-0 pr-3 flex items-center"
 							onclick={() => showPassword = !showPassword}
+							aria-label={showPassword ? 'Hide password' : 'Show password'}
 						>
 							{#if showPassword}
 								<EyeOff class="h-4 w-4 text-gray-400" />
@@ -465,6 +466,7 @@
 							type="button"
 							class="absolute inset-y-0 right-0 pr-3 flex items-center"
 							onclick={() => showConfirmPassword = !showConfirmPassword}
+							aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
 						>
 							{#if showConfirmPassword}
 								<EyeOff class="h-4 w-4 text-gray-400" />
@@ -511,7 +513,7 @@
 						size="normal"
 					/>
 					{#if showCaptchaError && !captchaToken}
-						<p class="text-red-500 text-xs mt-1">Please complete the CAPTCHA verification</p>
+						<p class="text-red-500 text-xs mt-1" role="alert" aria-live="assertive">Please complete the CAPTCHA verification</p>
 					{/if}
 				</div>
 				

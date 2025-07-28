@@ -7,9 +7,9 @@
 	import * as m from '$lib/paraglide/messages';
 	import type { User } from '@supabase/supabase-js';
 	
-	export let user: User;
+	let { user }: { user: User } = $props();
 	
-	let currentSlide = 0;
+	let currentSlide = $state(0);
 	
 	const slides = [
 		{

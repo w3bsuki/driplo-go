@@ -4,7 +4,7 @@
     import ErrorBoundary from '$lib/components/shared/ErrorBoundary.svelte';
     import { createLazyComponent } from '$lib/utils/lazy-load';
     
-    export let open = false;
+    let { open = false, ...restProps }: { open?: boolean; [key: string]: any } = $props();
     
     const lazyForm = createLazyComponent(
         () => import('./CreateListingForm/CreateListingForm.svelte'),
@@ -12,9 +12,11 @@
     );
     
     // Load when dialog opens
-    $: if (open && !lazyForm.component) {
-        lazyForm.load();
-    }
+    $effect(() => {
+        if (open && !lazyForm.component) {
+            lazyForm.load();
+        }
+    });
     
     // Preload on mount if likely to be used
     onMount(() => {
@@ -43,7 +45,8 @@
             }}
             resetKeys={[open]}
         >
-            <svelte:component this={lazyForm.component} {open} {...$$restProps} />
+            {@const FormComponent = lazyForm.component}
+            <FormComponent {open} {...restProps} />
         </ErrorBoundary>
     {/if}
 {/if}

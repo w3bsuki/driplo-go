@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui'
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte'
 	import { TrendingUp, Star, Clock, Package, Award, Eye, DollarSign, Shield } from 'lucide-svelte'
 	import type { Profile } from '$lib/types/unified'
 	import * as m from '$lib/paraglide/messages.js'
@@ -35,6 +36,13 @@
 		if (percentage >= 85) return 'bg-yellow-500'
 		if (percentage >= 70) return 'bg-blue-500'
 		return 'bg-red-500'
+	}
+	
+	function getPerformanceBadgeVariant(percentage: number): 'default' | 'success' | 'warning' | 'error' {
+		if (percentage >= 95) return 'success'
+		if (percentage >= 85) return 'warning'
+		if (percentage >= 70) return 'default'
+		return 'error'
 	}
 	
 	function getResponseTimeColor(hours: number): string {
@@ -154,12 +162,12 @@
 						<span class="text-xs text-gray-600">{m.profile_stats_order_completion()}</span>
 						<span class="text-xs font-semibold">{metrics.completion_rate}%</span>
 					</div>
-					<div class="w-full bg-gray-200 rounded-full h-1.5">
-						<div 
-							class="h-1.5 rounded-full transition-all duration-500 {getPerformanceBadgeColor(metrics.completion_rate)}"
-							style="width: {metrics.completion_rate}%"
-						></div>
-					</div>
+					<ProgressBar 
+						value={metrics.completion_rate}
+						max={100}
+						size="xs"
+						variant={getPerformanceBadgeVariant(metrics.completion_rate)}
+					/>
 				</div>
 				
 				<!-- Repeat Customers -->
@@ -168,12 +176,12 @@
 						<span class="text-xs text-gray-600">{m.profile_stats_repeat_customers()}</span>
 						<span class="text-xs font-semibold">{metrics.repeat_customer_rate}%</span>
 					</div>
-					<div class="w-full bg-gray-200 rounded-full h-1.5">
-						<div 
-							class="h-1.5 rounded-full transition-all duration-500 {getPerformanceBadgeColor(metrics.repeat_customer_rate)}"
-							style="width: {metrics.repeat_customer_rate}%"
-						></div>
-					</div>
+					<ProgressBar 
+						value={metrics.repeat_customer_rate}
+						max={100}
+						size="xs"
+						variant={getPerformanceBadgeVariant(metrics.repeat_customer_rate)}
+					/>
 				</div>
 				
 				<!-- 30-Day Stats -->

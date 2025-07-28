@@ -3,16 +3,29 @@
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
   import { getErrorMessage, logError, type AppError } from '$lib/utils/error-handling';
+  import { captureSentryException } from '$lib/config/sentry';
   import * as m from '$lib/paraglide/messages.js';
 
   // Component props
-  export let error: any = null;
-  export let reset: (() => void) | null = null;
-  export let fallback: string | null = null; // Custom fallback component
-  export let level: 'minimal' | 'detailed' | 'custom' = 'detailed';
-  export let isolate: boolean = false; // Prevent error from bubbling up
-  export let onError: ((error: any, errorInfo: any) => void) | null = null;
-  export let resetKeys: any[] = []; // Reset when these values change
+  let { 
+    error = null,
+    reset = null,
+    fallback = null,
+    level = 'detailed',
+    isolate = false,
+    onError = null,
+    resetKeys = [],
+    children
+  }: {
+    error?: any;
+    reset?: (() => void) | null;
+    fallback?: string | null;
+    level?: 'minimal' | 'detailed' | 'custom';
+    isolate?: boolean;
+    onError?: ((error: any, errorInfo: any) => void) | null;
+    resetKeys?: any[];
+    children?: any;
+  } = $props();
 
   // Internal state
   let errorMessage = '';
@@ -25,7 +38,7 @@
   let lastResetKeys = [...resetKeys];
 
   // Reset error when resetKeys change
-  $: {
+  $effect(() => {
     const keysChanged = resetKeys.length !== lastResetKeys.length || 
       resetKeys.some((key, index) => key !== lastResetKeys[index]);
     
@@ -35,38 +48,43 @@
       errorCount = 0;
     }
     lastResetKeys = [...resetKeys];
-  }
+  });
 
   // Process error when it changes
-  $: if (error && !hasError) {
-    hasError = true;
-    errorCount++;
-    errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    errorMessage = getErrorMessage(error);
-    
-    // Log error with context
-    const errorContext = {
-      url: $page.url.pathname,
-      errorBoundary: true,
-      level,
-      isolate,
-      errorId,
-      errorCount,
-      userAgent: browser ? navigator.userAgent : '',
-      timestamp: new Date().toISOString()
-    };
-    
-    logError(error, errorContext);
-    
-    // Call custom error handler
-    if (onError) {
-      try {
-        onError(error, errorContext);
-      } catch (handlerError) {
-        console.error('Error in onError handler:', handlerError);
+  $effect(() => {
+    if (error && !hasError) {
+      hasError = true;
+      errorCount++;
+      errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      errorMessage = getErrorMessage(error);
+      
+      // Log error with context
+      const errorContext = {
+        url: $page.url.pathname,
+        errorBoundary: true,
+        level,
+        isolate,
+        errorId,
+        errorCount,
+        userAgent: browser ? navigator.userAgent : '',
+        timestamp: new Date().toISOString()
+      };
+      
+      logError(error, errorContext);
+      
+      // Send to Sentry
+      captureSentryException(error, errorContext);
+      
+      // Call custom error handler
+      if (onError) {
+        try {
+          onError(error, errorContext);
+        } catch (handlerError) {
+          console.error('Error in onError handler:', handlerError);
+        }
       }
     }
-  }
+  });
 
   function handleReset() {
     try {
@@ -241,5 +259,5 @@
     </div>
   {/if}
 {:else}
-  <slot />
+  {@render children?.()}
 {/if}

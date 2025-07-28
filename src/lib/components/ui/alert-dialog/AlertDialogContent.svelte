@@ -52,7 +52,7 @@
 
 {#if $isOpen}
 	<div
-		class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+		class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in-0 duration-200"
 		onclick={handleBackdropClick}
 		onkeydown={handleEscape}
 		tabindex="-1"
@@ -65,7 +65,7 @@
 			aria-labelledby="alert-dialog-title"
 			aria-describedby="alert-dialog-description"
 			class={cn(
-				'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-white p-6 shadow-lg animate-in fade-in zoom-in-95 duration-200',
+				'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-white dark:bg-gray-900 p-6 shadow-modal animate-in fade-in-0 zoom-in-95 duration-200',
 				className
 			)}
 			tabindex="-1"

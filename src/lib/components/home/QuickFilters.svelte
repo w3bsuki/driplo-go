@@ -164,10 +164,10 @@
 							value={selectedFilters[filter.type]}
 							onchange={(e) => applyFilter(filter.type, e.currentTarget.value)}
 							class={cn(
-								"filter-select appearance-none pl-3 pr-7 py-2 rounded-sm text-xs font-medium border cursor-pointer transition-all duration-100 min-w-[80px] outline-none",
+								"filter-select appearance-none pl-3 pr-7 py-2 rounded-sm text-xs font-medium border cursor-pointer transition-all duration-100 min-w-[80px] focus:outline-none focus:ring-1 focus:ring-brand-300/20 focus:border-brand-500",
 								selectedFilters[filter.type]
-									? "bg-blue-50 border-blue-200 text-blue-500"
-									: "bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50"
+									? "bg-brand-50 border-brand-200 text-brand-500"
+									: "bg-white border-gray-200 hover:border-brand-200 hover:bg-brand-50"
 							)}
 						>
 							<option value="">{filter.type.charAt(0).toUpperCase() + filter.type.slice(1)}</option>
@@ -178,9 +178,9 @@
 						{#if selectedFilters[filter.type]}
 							<button
 								onclick={() => applyFilter(filter.type, '')}
-								class="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-blue-100 rounded-full p-0.5"
+								class="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-brand-100 rounded-full p-0.5"
 							>
-								<X class="h-3 w-3 text-blue-400" />
+								<X class="h-3 w-3 text-brand-400" />
 							</button>
 						{/if}
 					</div>
@@ -190,10 +190,10 @@
 				<select
 					value={selectedFilters.sort}
 					onchange={(e) => { selectedFilters.sort = e.currentTarget.value; updateUrl(); }}
-					class="filter-select appearance-none pl-3 pr-7 py-2 rounded-sm text-xs font-medium border bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50 min-w-[90px] outline-none"
+					class="filter-select appearance-none pl-3 pr-7 py-2 rounded-sm text-xs font-medium border bg-white border-gray-200 hover:border-brand-200 hover:bg-brand-50 min-w-[90px] focus:outline-none focus:ring-1 focus:ring-brand-300/20"
 				>
 					{#each sortOptions as option}
-						<option value={option.value}>{option.label}</option>
+						<option value={option.value}>{option.icon} {option.label}</option>
 					{/each}
 				</select>
 			</div>
@@ -209,8 +209,8 @@
 							class={cn(
 								"flex items-center gap-1.5 px-3 py-2 rounded-sm border font-medium transition-all duration-100",
 								selectedFilters[filter.type]
-									? "bg-blue-100 border-blue-200 text-blue-500 hover:bg-blue-100"
-									: "bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50"
+									? "bg-brand-100 border-brand-200 text-brand-500 hover:bg-brand-100"
+									: "bg-white border-gray-200 hover:border-brand-200 hover:bg-brand-50"
 							)}
 						>
 							<span>{filter.type.charAt(0).toUpperCase() + filter.type.slice(1)}</span>
@@ -228,7 +228,7 @@
 									class={cn(
 										"w-full text-left px-3 py-2 rounded-sm text-sm transition-colors duration-100",
 										selectedFilters[filter.type] === option.value
-											? "bg-blue-100 text-blue-500"
+											? "bg-brand-100 text-brand-500"
 											: "hover:bg-gray-100"
 									)}
 								>
@@ -242,7 +242,7 @@
 				{#if activeFilterCount > 0}
 					<button
 						onclick={clearAllFilters}
-						class="text-sm text-gray-600 hover:text-blue-400 font-medium ml-2"
+						class="text-sm text-gray-600 hover:text-brand-400 font-medium ml-2"
 					>
 						Clear all
 					</button>
@@ -255,7 +255,7 @@
 				<select
 					value={selectedFilters.sort}
 					onchange={(e) => { selectedFilters.sort = e.currentTarget.value; updateUrl(); }}
-					class="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-medium hover:border-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-300/20"
+					class="bg-white border border-gray-200 rounded-sm px-3 py-2 text-sm font-medium hover:border-brand-200 focus:outline-none focus:ring-1 focus:ring-brand-300/20"
 				>
 					{#each sortOptions as option}
 						<option value={option.value}>{option.icon} {option.label}</option>
@@ -281,8 +281,8 @@
 									class={cn(
 										"px-3 py-1.5 rounded-sm text-sm font-medium border transition-all duration-100",
 										selectedFilters[filter.type] === option.value
-											? "bg-blue-300 text-white border-blue-300"
-											: "bg-white border-gray-200 hover:border-blue-200 hover:bg-blue-50"
+											? "bg-brand-300 text-white border-brand-300"
+											: "bg-white border-gray-200 hover:border-brand-200 hover:bg-brand-50"
 									)}
 								>
 									{option.label}
@@ -295,27 +295,3 @@
 		</div>
 	{/if}
 </section>
-
-<style>
-	.scrollbar-hide {
-		-ms-overflow-style: none;
-		scrollbar-width: none;
-	}
-	.scrollbar-hide::-webkit-scrollbar {
-		display: none;
-	}
-	
-	/* Custom select arrow for filter selects */
-	.filter-select {
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2360A5FA' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-		background-repeat: no-repeat;
-		background-position: right 0.75rem center;
-		background-size: 0.75rem;
-	}
-	
-	.filter-select:focus {
-		outline: none !important;
-		box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
-		border-color: #60A5FA !important;
-	}
-</style>

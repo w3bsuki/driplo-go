@@ -67,7 +67,8 @@
 						? "ring-2 ring-offset-2 ring-blue-500 shadow-lg" 
 						: "hover:shadow-md"
 				)}
-				style={color.value !== 'multi' ? `background-color: ${color.value}` : 'background: linear-gradient(to br, #EF4444, #F59E0B, #10B981, #3B82F6, #8B5CF6)'}
+				style:background-color={color.value !== 'multi' ? color.value : undefined}
+				style:background={color.value === 'multi' ? 'linear-gradient(to br, #EF4444, #F59E0B, #10B981, #3B82F6, #8B5CF6)' : undefined}
 				aria-label={`Select ${color.name}`}
 			>
 				<!-- Emoji indicator -->

@@ -6,17 +6,23 @@
   import { Loader2, Shield, ShieldOff, RefreshCw, Download } from 'lucide-svelte';
   import TwoFactorSetup from './TwoFactorSetup.svelte';
   
-  export let enabled = false;
-  export let backupCodesCount = 0;
-  export let isRequired = false;
+  let { 
+    enabled = false, 
+    backupCodesCount = 0, 
+    isRequired = false 
+  }: { 
+    enabled?: boolean; 
+    backupCodesCount?: number; 
+    isRequired?: boolean 
+  } = $props();
   
-  let showSetup = false;
-  let showDisable = false;
-  let showRegenerateBackup = false;
-  let loading = false;
-  let verificationCode = '';
-  let password = '';
-  let backupCodes: string[] = [];
+  let showSetup = $state(false);
+  let showDisable = $state(false);
+  let showRegenerateBackup = $state(false);
+  let loading = $state(false);
+  let verificationCode = $state('');
+  let password = $state('');
+  let backupCodes = $state<string[]>([]);
 
   async function handleSetupComplete() {
     showSetup = false;
@@ -189,7 +195,7 @@ ${backupCodes.join('\n')}`;
 {#if showSetup}
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
     <div class="bg-background rounded-sm shadow-lg max-w-md w-full p-6">
-      <TwoFactorSetup on:complete={handleSetupComplete} />
+      <TwoFactorSetup oncomplete={handleSetupComplete} />
       <Button
         variant="ghost"
         onclick={() => showSetup = false}

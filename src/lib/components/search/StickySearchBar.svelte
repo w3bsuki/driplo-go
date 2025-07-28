@@ -102,7 +102,7 @@
 			"fixed left-0 right-0 z-40 bg-white border-b shadow-sm transition-[top] duration-300 ease-in-out",
 			className
 		)}
-		style="top: {headerHeight}px"
+		style:top="{headerHeight}px"
 		transition:fly={{ y: -20, duration: 200 }}
 	>
 		<div class="container mx-auto px-3 md:px-4 py-2 md:py-3">
@@ -111,7 +111,7 @@
 				<div class="relative flex-shrink-0">
 					<button
 						data-categories-button
-						onclick={handleToggleCategoryDropdown}
+						onclick={toggleCategoryDropdown}
 						class={cn(
 							"p-2 rounded-lg transition-all focus:outline-none h-[38px] w-[38px] flex items-center justify-center",
 							isCategoryDropdownOpen 

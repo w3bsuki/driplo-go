@@ -2,6 +2,7 @@
 	import { onboarding } from '$lib/stores/onboarding.svelte';
 	import { goto } from '$app/navigation';
 	import { UserCircle, Plus, ShoppingBag } from 'lucide-svelte';
+	import { ProgressBar } from '$lib/components/ui';
 	import * as m from '$lib/paraglide/messages';
 	
 	let showProgress = $derived(
@@ -40,7 +41,7 @@
 </script>
 
 {#if showProgress}
-	<div class="bg-muted/50 border rounded-lg p-4 mb-4">
+	<div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
 		<div class="flex justify-between items-center mb-3">
 			<span class="text-sm font-medium">Getting Started</span>
 			<span class="text-sm text-muted-foreground">
@@ -48,26 +49,27 @@
 			</span>
 		</div>
 		
-		<div class="h-2 bg-muted rounded-full overflow-hidden mb-4">
-			<div 
-				class="h-full bg-primary transition-all duration-500" 
-				style="width: {onboarding.progress.percentage}%"
-			/>
-		</div>
+		<ProgressBar 
+			value={onboarding.progress.percentage} 
+			max={100}
+			size="sm"
+			class="mb-4"
+		/>
 		
 		<div class="flex flex-col gap-2">
 			{#each steps as step}
+				{@const Icon = step.icon}
 				<button 
-					class="flex items-center gap-2 text-sm p-2 rounded hover:bg-muted transition-colors text-left disabled:cursor-not-allowed"
-					class:text-muted-foreground={step.completed}
+					class="flex items-center gap-2 text-sm p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left disabled:cursor-not-allowed"
+					class:text-gray-500={step.completed} class:dark:text-gray-400={step.completed}
 					class:opacity-75={step.completed}
 					onclick={() => goto(step.href)}
 					disabled={step.completed}
 				>
-					<svelte:component this={step.icon} class="w-4 h-4" />
+					<Icon class="w-4 h-4" />
 					<span>{step.label}</span>
 					{#if step.completed}
-						<span class="ml-auto text-xs text-green-600">✓</span>
+						<span class="ml-auto text-xs text-success-600 dark:text-success-400">✓</span>
 					{/if}
 				</button>
 			{/each}

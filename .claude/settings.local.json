@@ -24,7 +24,8 @@
       "Bash(mv:*)",
       "Bash(ls:*)",
       "mcp__supabase__get_logs",
-      "Bash(timeout 5 pnpm run dev)"
+      "Bash(timeout 5 pnpm run dev)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   },

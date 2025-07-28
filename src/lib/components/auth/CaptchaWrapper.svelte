@@ -1,9 +1,15 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   
-  export let onVerify: (token: string) => void
-  export let onExpire: () => void = () => {}
-  export let onError: () => void = () => {}
+  let { 
+    onVerify, 
+    onExpire = () => {}, 
+    onError = () => {} 
+  }: { 
+    onVerify: (token: string) => void; 
+    onExpire?: () => void; 
+    onError?: () => void 
+  } = $props()
   
   // You'll need to add this to your .env file:
   // PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_v2_site_key
@@ -69,12 +75,18 @@
     }
   })
   
-  // Expose reset method
-  export function reset() {
+  // Expose reset method through the component instance
+  function reset() {
     if (window.grecaptcha && widgetId !== null) {
       window.grecaptcha.reset(widgetId)
     }
   }
+  
+  // Export the reset function for parent components to use
+  $effect(() => {
+    // This allows parent components to call reset() on the component instance
+    return reset;
+  });
 </script>
 
 {#if siteKey}

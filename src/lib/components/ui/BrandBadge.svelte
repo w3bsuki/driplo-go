@@ -20,24 +20,24 @@
 	
 	const sizeClasses = {
 		xs: {
-			container: 'px-1.5 py-0.5 gap-1',
+			container: 'px-[var(--spacing-1-5)] py-[var(--spacing-0-5)] gap-[var(--spacing-1)]',
 			icon: 'w-3 h-3',
-			text: 'text-xs'
+			text: 'text-[var(--font-size-xs)]'
 		},
 		sm: {
-			container: 'px-2 py-1 gap-1.5',
+			container: 'px-[var(--spacing-2)] py-[var(--spacing-1)] gap-[var(--spacing-1-5)]',
 			icon: 'w-3.5 h-3.5',
-			text: 'text-xs'
+			text: 'text-[var(--font-size-xs)]'
 		},
 		md: {
-			container: 'px-2.5 py-1.5 gap-1.5',
+			container: 'px-[var(--spacing-2-5)] py-[var(--spacing-1-5)] gap-[var(--spacing-1-5)]',
 			icon: 'w-4 h-4',
-			text: 'text-sm'
+			text: 'text-[var(--font-size-sm)]'
 		},
 		lg: {
-			container: 'px-3 py-2 gap-2',
+			container: 'px-[var(--spacing-3)] py-[var(--spacing-2)] gap-[var(--spacing-2)]',
 			icon: 'w-5 h-5',
-			text: 'text-sm'
+			text: 'text-[var(--font-size-sm)]'
 		}
 	};
 	
@@ -45,18 +45,18 @@
 </script>
 
 <div class={cn(
-	"inline-flex items-center rounded-sm font-medium",
+	"inline-flex items-center rounded-[var(--border-radius-sm)] font-medium",
 	classes.container,
 	isVerified 
-		? "bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 border border-blue-200" 
-		: "bg-gray-100 text-gray-700 border border-gray-200",
+		? "bg-gradient-to-r from-[var(--color-brand-50)] to-[var(--color-info-50)] text-[var(--color-brand-700)] border border-[var(--color-brand-200)]" 
+		: "bg-[var(--color-surface-tertiary)] text-[var(--color-text-secondary)] border border-[var(--color-border-primary)]",
 	className
 )}>
-	<Store class={cn(classes.icon, isVerified ? "text-blue-600" : "text-gray-600")} />
+	<Store class={cn(classes.icon, isVerified ? "text-[var(--color-brand-600)]" : "text-[var(--color-text-secondary)]")} />
 	{#if showText}
 		<span class={cn(classes.text, "font-medium")}>{brand || 'Brand'}</span>
 	{/if}
 	{#if isVerified}
-		<CheckCircle2 class={cn(classes.icon, "text-blue-600")} />
+		<CheckCircle2 class={cn(classes.icon, "text-[var(--color-brand-600)]")} />
 	{/if}
 </div>

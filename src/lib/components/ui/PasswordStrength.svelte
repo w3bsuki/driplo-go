@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import ProgressBar from './ProgressBar.svelte';
 
 	interface Props {
 		password: string;
@@ -33,12 +34,12 @@
 
 	const strength = $derived.by(() => {
 		const metCount = requirements.filter(req => req.met).length;
-		if (metCount === 0) return { level: 0, label: 'Very Weak', color: 'bg-destructive' };
-		if (metCount === 1) return { level: 1, label: 'Weak', color: 'bg-orange-500' };
-		if (metCount === 2) return { level: 2, label: 'Fair', color: 'bg-yellow-500' };
-		if (metCount === 3) return { level: 3, label: 'Good', color: 'bg-blue-500' };
-		if (metCount === 4) return { level: 4, label: 'Strong', color: 'bg-green-500' };
-		return { level: 5, label: 'Very Strong', color: 'bg-green-600' };
+		if (metCount === 0) return { level: 0, label: 'Very Weak', color: 'bg-destructive', variant: 'error' as const };
+		if (metCount === 1) return { level: 1, label: 'Weak', color: 'bg-orange-500', variant: 'error' as const };
+		if (metCount === 2) return { level: 2, label: 'Fair', color: 'bg-yellow-500', variant: 'warning' as const };
+		if (metCount === 3) return { level: 3, label: 'Good', color: 'bg-blue-500', variant: 'default' as const };
+		if (metCount === 4) return { level: 4, label: 'Strong', color: 'bg-green-500', variant: 'success' as const };
+		return { level: 5, label: 'Very Strong', color: 'bg-green-600', variant: 'success' as const };
 	});
 
 	const strengthPercentage = $derived((strength.level / 5) * 100);
@@ -59,12 +60,12 @@
 			</span>
 		</div>
 		
-		<div class="h-2 bg-muted rounded-full overflow-hidden">
-			<div 
-				class={cn('h-full transition-all duration-300', strength.color)}
-				style="width: {strengthPercentage}%"
-			/>
-		</div>
+		<ProgressBar 
+			value={strengthPercentage}
+			max={100}
+			size="sm"
+			variant={strength.variant}
+		/>
 
 		<div class="space-y-1 text-xs">
 			{#each requirements as req}

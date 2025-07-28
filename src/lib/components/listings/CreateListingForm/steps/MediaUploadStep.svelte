@@ -3,6 +3,7 @@
 	import ImageUploader from '../components/ImageUploader.svelte'
 	import { Camera, AlertCircle } from 'lucide-svelte'
 	import { fade } from 'svelte/transition'
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte'
 	
 	const form = getFormContext()
 	
@@ -134,12 +135,12 @@
 						<span class="text-gray-600">Photo {id.substring(0, 8)}</span>
 						<span class="text-gray-900">{progress.percentage}%</span>
 					</div>
-					<div class="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
-						<div 
-							class="bg-gradient-to-r from-primary to-[#6BB6D8] h-full rounded-full transition-all duration-300"
-							style="width: {progress.percentage}%"
-						/>
-					</div>
+					<ProgressBar 
+						value={progress.percentage}
+						max={100}
+						size="sm"
+						class="bg-gradient-to-r from-primary to-[#6BB6D8]"
+					/>
 				</div>
 			{/each}
 		</div>

@@ -4,15 +4,15 @@
   import Header from '$lib/components/layout/Header.svelte';
   import * as m from '$lib/paraglide/messages.js';
 
-  export let data;
+  let { data }: { data: any } = $props();
 
   // Get error details from page store
-  $: error = $page.error;
-  $: status = $page.status;
-  $: errorMessage = error ? getErrorMessage(error) : 'Something went wrong';
+  let error = $derived($page.error);
+  let status = $derived($page.status);
+  let errorMessage = $derived(error ? getErrorMessage(error) : 'Something went wrong');
 
   // App-specific error handling
-  $: appErrorContent = (() => {
+  let appErrorContent = $derived((() => {
     const errorString = error?.message || String(error || '').toLowerCase();
     const pathname = $page.url.pathname;
     
@@ -116,7 +116,7 @@
       showHome: true,
       category: 'general'
     };
-  })();
+  })());
 
   function handleRetry() {
     window.location.reload();

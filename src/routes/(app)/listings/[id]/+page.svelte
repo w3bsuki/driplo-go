@@ -348,12 +348,14 @@
 							<button
 								onclick={(e) => { e.stopPropagation(); prevImage(); }}
 								class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-200 hover:bg-white transition-all duration-100"
+								aria-label="Previous image"
 							>
 								<ChevronLeft class="w-4 h-4" />
 							</button>
 							<button
 								onclick={(e) => { e.stopPropagation(); nextImage(); }}
 								class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center border border-gray-200 hover:bg-white transition-all duration-100"
+								aria-label="Next image"
 							>
 								<ChevronRight class="w-4 h-4" />
 							</button>
@@ -366,6 +368,7 @@
 										class={cn("w-1 h-1 rounded-full transition-all", 
 											index === currentImageIndex ? "bg-white w-4" : "bg-white/60"
 										)}
+										aria-label={`View image ${index + 1}`}
 									/>
 								{/each}
 							</div>

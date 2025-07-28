@@ -4,12 +4,12 @@
   import * as m from '$lib/paraglide/messages.js';
 
   // Get error details from page store
-  $: error = $page.error;
-  $: status = $page.status;
-  $: errorMessage = error ? getErrorMessage(error) : 'Authentication error occurred';
+  let error = $derived($page.error);
+  let status = $derived($page.status);
+  let errorMessage = $derived(error ? getErrorMessage(error) : 'Authentication error occurred');
 
   // Auth-specific error handling
-  $: authErrorContent = (() => {
+  let authErrorContent = $derived((() => {
     const errorString = error?.message || String(error || '').toLowerCase();
     
     if (status === 429 || errorString.includes('rate limit')) {
@@ -67,9 +67,9 @@
       showRetry: true,
       showHome: true
     };
-  })();
+  })());
 
-  let retryCountdown = 0;
+  let retryCountdown = $state(0);
   let retryTimer: number;
 
   function handleRetry() {

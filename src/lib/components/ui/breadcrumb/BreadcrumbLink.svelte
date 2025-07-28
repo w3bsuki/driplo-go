@@ -15,7 +15,7 @@
 	<a
 		{href}
 		class={cn(
-			'text-gray-600 hover:text-gray-900 transition-colors duration-100 font-medium',
+			'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50 transition-colors duration-150 font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-1 rounded-sm',
 			className
 		)}
 	>
@@ -24,7 +24,7 @@
 {:else}
 	<span
 		class={cn(
-			'text-gray-900 font-medium',
+			'text-gray-900 dark:text-gray-50 font-medium',
 			className
 		)}
 	>

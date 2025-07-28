@@ -104,6 +104,7 @@
 		
 		<div class="flex flex-wrap gap-2">
 			{#each allSocialLinks as link}
+				{@const Icon = getPlatformIcon(link.platform)}
 				<a
 					href={link.url}
 					target="_blank"
@@ -117,8 +118,7 @@
 					
 					<!-- Content -->
 					<div class="relative flex items-center gap-2">
-						<svelte:component 
-							this={getPlatformIcon(link.platform)} 
+						<Icon 
 							class="w-4 h-4 text-gray-700 group-hover:text-white transition-colors"
 						/>
 						<span class="text-sm font-medium text-gray-700 group-hover:text-white transition-colors">

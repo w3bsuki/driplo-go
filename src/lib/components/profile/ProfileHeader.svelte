@@ -2,6 +2,7 @@
 	import { Badge } from '$lib/components/ui'
 	import { Button } from '$lib/components/ui'
 	import BrandBadge from '$lib/components/ui/BrandBadge.svelte'
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte'
 	import { Camera, MapPin, Calendar, ExternalLink, MessageCircle, UserPlus, UserMinus, Award, Star, Building2 } from 'lucide-svelte'
 	import type { Profile } from '$lib/types/unified'
 	import { getAchievementIcon, getAchievementColor } from '$lib/data/achievements'
@@ -245,12 +246,13 @@
 					<span class="text-sm font-medium text-gray-700">{m.profile_header_completion()}</span>
 					<span class="text-sm font-bold text-blue-600">{completionScore}%</span>
 				</div>
-				<div class="w-full bg-blue-200 rounded-full h-2">
-					<div 
-						class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500"
-						style="width: {completionScore}%"
-					></div>
-				</div>
+				<ProgressBar 
+					value={completionScore}
+					max={100}
+					size="sm"
+					variant="default"
+					class="bg-gradient-to-r from-blue-500 to-blue-600"
+				/>
 			</div>
 		{/if}
 	</div>

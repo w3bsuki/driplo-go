@@ -35,7 +35,7 @@
     <div class="bg-white rounded-sm border border-gray-200 p-6">
       <TwoFactorVerification 
         email={auth?.user?.email}
-        on:verified={handleVerified}
+        onverified={handleVerified}
       />
     </div>
   </div>

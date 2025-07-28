@@ -8,11 +8,11 @@
 
   const dispatch = createEventDispatcher();
 
-  export let email = '';
+  let { email = '' }: { email?: string } = $props();
   
-  let verificationCode = '';
-  let loading = false;
-  let useBackupCode = false;
+  let verificationCode = $state('');
+  let loading = $state(false);
+  let useBackupCode = $state(false);
 
   async function verifyCode() {
     if (!verificationCode) {

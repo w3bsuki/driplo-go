@@ -8,27 +8,46 @@
 		getSizesAttribute,
 		type LazyLoadingOptions
 	} from '$lib/utils/lazy-loading';
+	import { debug } from '$lib/utils/debug-logger';
 	
-	export let src: string;
-	export let alt: string;
-	export let width: number | undefined = undefined;
-	export let height: number | undefined = undefined;
-	export let loading: 'lazy' | 'eager' = 'lazy';
-	export let priority: boolean = false;
-	export let sizes: string = getSizesAttribute();
-	export let srcsetSizes: number[] = [320, 640, 768, 1024, 1280, 1536];
-	export let usePlaceholder: boolean = true;
-	export let placeholderSrc: string | undefined = undefined;
-	export let className: string = '';
-	export let style: string = '';
-	export let fetchpriority: 'high' | 'low' | 'auto' = 'auto';
-	export let decoding: 'sync' | 'async' | 'auto' = 'async';
-	export let lazyOptions: LazyLoadingOptions = {};
+	let { 
+		src,
+		alt,
+		width = undefined,
+		height = undefined,
+		loading = 'lazy',
+		priority = false,
+		sizes = getSizesAttribute(),
+		srcsetSizes = [320, 640, 768, 1024, 1280, 1536],
+		usePlaceholder = true,
+		placeholderSrc = undefined,
+		class: className = '',
+		style = '',
+		fetchpriority = 'auto',
+		decoding = 'async',
+		lazyOptions = {}
+	}: {
+		src: string;
+		alt: string;
+		width?: number | undefined;
+		height?: number | undefined;
+		loading?: 'lazy' | 'eager';
+		priority?: boolean;
+		sizes?: string;
+		srcsetSizes?: number[];
+		usePlaceholder?: boolean;
+		placeholderSrc?: string | undefined;
+		class?: string;
+		style?: string;
+		fetchpriority?: 'high' | 'low' | 'auto';
+		decoding?: 'sync' | 'async' | 'auto';
+		lazyOptions?: LazyLoadingOptions;
+	} = $props();
 	
 	let imgElement: HTMLImageElement;
-	let isLoaded = false;
-	let isIntersecting = false;
-	let hasError = false;
+	let isLoaded = $state(false);
+	let isIntersecting = $state(false);
+	let hasError = $state(false);
 	
 	// Generate placeholder if needed
 	const placeholder = placeholderSrc || (usePlaceholder ? generatePlaceholder(40, 40) : '');
@@ -42,13 +61,34 @@
 		loading = 'eager';
 	}
 	
+	// Log initial state
+	debug.log('EnhancedImage initialized', {
+		component: 'EnhancedImage',
+		data: {
+			src,
+			alt,
+			loading,
+			priority,
+			sizes,
+			placeholder: placeholder ? 'yes' : 'no'
+		}
+	});
+	
 	// Handle image load
 	function handleLoad() {
+		debug.log('Image loaded successfully', {
+			component: 'EnhancedImage',
+			data: { src, alt }
+		});
 		isLoaded = true;
 	}
 	
 	// Handle image error
 	function handleError() {
+		debug.error('Image failed to load', {
+			component: 'EnhancedImage',
+			data: { src, alt }
+		});
 		hasError = true;
 		isLoaded = true;
 	}

@@ -19,9 +19,10 @@
 	import { onboarding } from '$lib/stores/onboarding.svelte.ts';
 	import { browser, dev } from '$app/environment';
 	import { initWebVitals } from '$lib/utils/web-vitals';
+	import { setSentryUser } from '$lib/config/sentry';
 	import * as m from '$lib/paraglide/messages.js';
 
-	export let data;
+	let { data, children } = $props();
 
 	// Initialize auth context with server-side data
 	const authContext = setAuthContext(data.supabase, data.user, data.session);
@@ -29,8 +30,13 @@
 	// Initialize query client
 	const queryClient = createQueryClient();
 	
+	// Set initial Sentry user context
+	if (browser && data.user) {
+		setSentryUser(data.user);
+	}
+	
 	// Track scroll position for landing page
-	let showMobileNavOnLanding = false;
+	let showMobileNavOnLanding = $state(false);
 	
 	// Define pages where bottom nav should be hidden
 	const hiddenPaths = [
@@ -43,17 +49,19 @@
 	];
 	
 	// Hide mobile nav on specific pages
-	$: shouldHideMobileNav = 
+	let shouldHideMobileNav = $derived(
 		hiddenPaths.some(path => $page.url.pathname.startsWith(path)) || // Hidden paths
 		$page.url.pathname.includes('/listings/') || // Product detail pages
 		$page.url.pathname.includes('/sell') || // Sell product form
 		($page.url.pathname === '/' && !showMobileNavOnLanding) || // Landing page (show when scrolled)
 		$page.url.pathname.includes('/payment') || // Payment forms
 		$page.url.pathname.includes('/login') || // Login page
-		$page.url.pathname.includes('/register'); // Register page
+		$page.url.pathname.includes('/register') || // Register page
+		$page.url.pathname.includes('/onboarding') // Onboarding pages
+	);
 		
 	// Check if we're on an auth page
-	$: isAuthPage = $page.url.pathname.includes('/login') || $page.url.pathname.includes('/register');
+	let isAuthPage = $derived($page.url.pathname.includes('/login') || $page.url.pathname.includes('/register'));
 
 	onMount(() => {
 		// Initialize Web Vitals monitoring
@@ -94,6 +102,8 @@
 			if (event === 'SIGNED_IN' && session?.user) {
 				authContext.user = session.user;
 				authContext.session = session;
+				// Update Sentry user context
+				setSentryUser(session.user);
 				// Initialize onboarding for new user
 				onboarding.initialize(session.user.id);
 				// Notify compatibility layer
@@ -104,6 +114,8 @@
 				authContext.user = null;
 				authContext.session = null;
 				authContext.profile = null;
+				// Clear Sentry user context
+				setSentryUser(null);
 				// Reset onboarding
 				onboarding.reset();
 				// Notify compatibility layer
@@ -138,6 +150,11 @@
 		}}
 		resetKeys={[data.user?.id, $page.url.pathname]}
 	>
+		<!-- Skip link for keyboard navigation -->
+		<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-brand-500 focus:text-white focus:px-4 focus:py-2 focus:rounded-md focus:font-medium">
+			Skip to main content
+		</a>
+		
 		<div class="min-h-screen bg-background">
 			{#if !isAuthPage}
 				{#if !data.user}
@@ -161,9 +178,9 @@
 					<Header categories={data.categories} supabase={data.supabase} />
 				</ErrorBoundary>
 			{/if}
-			<main class={shouldHideMobileNav ? "pb-0 md:pb-0" : "pb-20 md:pb-0"}>
+			<main id="main-content" class={shouldHideMobileNav ? "pb-0 md:pb-0" : "pb-20 md:pb-0"}>
 				<ErrorBoundary level="detailed" isolate={true} resetKeys={[$page.url.pathname]}>
-					<slot />
+					{@render children()}
 				</ErrorBoundary>
 			</main>
 			{#if !shouldHideMobileNav}
@@ -182,7 +199,7 @@
 		{#if $navigating}
 			<div class="fixed top-0 left-0 right-0 z-[100]">
 				<div class="h-1 bg-blue-200">
-					<div class="h-full bg-blue-400 animate-pulse" style="animation: loading-bar 1s ease-in-out infinite"></div>
+					<div class="h-full bg-blue-400 animate-[loading-bar_1s_ease-in-out_infinite]"></div>
 				</div>
 			</div>
 		{/if}

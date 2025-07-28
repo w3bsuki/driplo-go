@@ -357,8 +357,7 @@
         <div class="relative">
           <select
             bind:value={sortBy}
-            class="w-full text-sm border border-gray-200 rounded-sm pl-3 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white hover:border-gray-300 transition-all duration-100 font-medium text-gray-700"
-            style="appearance: none; -webkit-appearance: none; -moz-appearance: none;"
+            class="w-full text-sm border border-gray-200 rounded-sm pl-3 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-200 bg-white hover:border-gray-300 transition-all duration-100 font-medium text-gray-700 appearance-none"
           >
             {#each sortOptions as option}
               <option value={option.value}>{option.label}</option>

@@ -13,9 +13,11 @@
 <textarea
 	bind:value
 	class={cn(
-		"flex w-full rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all duration-100 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe",
+		"flex w-full rounded-sm border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white transition-all duration-100 placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 input-compact-safe h-auto",
+		size === 'sm' && 'min-h-[calc(var(--input-height-sm)*2)]',
+		size === 'md' && 'min-h-[calc(var(--input-height-md)*2)]',
+		size === 'lg' && 'min-h-[calc(var(--input-height-lg)*2)]',
 		className
 	)}
-	style={`min-height: calc(var(--input-height-${size}) * 2); height: auto;`}
 	{...restProps}
 />

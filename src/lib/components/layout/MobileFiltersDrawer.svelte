@@ -144,6 +144,18 @@
 	const activeFilterCount = $derived(
 		Object.values(selectedFilters).filter(v => v && v !== 'recent').length
 	);
+	
+	function handleOnClose() {
+		onClose();
+	}
+	
+	function handleClearAllFilters() {
+		clearAllFilters();
+	}
+	
+	function handleApplyFilters() {
+		applyFilters();
+	}
 </script>
 
 <!-- Backdrop -->
@@ -156,16 +168,16 @@
 
 <!-- Drawer -->
 <div class={cn(
-	"fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl z-[70] transition-transform duration-300 ease-out",
+	"fixed bottom-0 left-0 right-0 bg-background rounded-t-2xl shadow-2xl z-[70] transition-transform duration-300 ease-out",
 	isOpen ? "translate-y-0" : "translate-y-full"
 )}>
 	<div class="max-h-[80vh] flex flex-col">
 		<!-- Header -->
-		<div class="flex items-center justify-between p-3 border-b border-gray-200">
+		<div class="flex items-center justify-between p-3 border-b border-border">
 			<div class="flex items-center gap-2">
-				<h2 class="text-base font-bold text-gray-900">{m.nav_filters()}</h2>
+				<h2 class="text-base font-bold text-foreground">{m.nav_filters()}</h2>
 				{#if activeFilterCount > 0}
-					<span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+					<span class="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
 						{activeFilterCount}
 					</span>
 				{/if}
@@ -174,16 +186,16 @@
 				{#if activeFilterCount > 0}
 					<button
 						onclick={handleClearAllFilters}
-						class="text-xs text-blue-600 hover:text-blue-700 font-medium px-2 py-1 rounded-lg hover:bg-blue-50"
+						class="text-xs text-primary hover:text-primary/90 font-medium px-2 py-1 rounded-lg hover:bg-primary/10"
 					>
 						{m.filter_clear_all()}
 					</button>
 				{/if}
 				<button
 					onclick={handleOnClose}
-					class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+					class="p-1.5 hover:bg-muted rounded-lg transition-colors"
 				>
-					<X class="h-4 w-4 text-gray-500" />
+					<X class="h-4 w-4 text-muted-foreground" />
 				</button>
 			</div>
 		</div>
@@ -192,7 +204,7 @@
 		<div class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
 			<!-- Categories -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_categories()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_categories()}</h3>
 				<div class="grid grid-cols-2 gap-2">
 					{#each categories as category (category.slug)}
 						<button
@@ -200,17 +212,17 @@
 							class={cn(
 								"flex items-center gap-2 p-2 rounded-lg border transition-all duration-200 text-left",
 								selectedFilters.category === category.slug
-									? "bg-blue-50 border-blue-300 text-blue-700"
-									: "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary/10 border-primary text-primary"
+									: "bg-background border-border hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							<span class="text-base">{category.icon}</span>
 							<div class="flex-1 min-w-0">
 								<div class="font-medium text-xs">{category.name}</div>
-								<div class="text-xs text-gray-500">{category.count}</div>
+								<div class="text-xs text-muted-foreground">{category.count}</div>
 							</div>
 							{#if selectedFilters.category === category.slug}
-								<Check class="h-3 w-3 text-blue-600 flex-shrink-0" />
+								<Check class="h-3 w-3 text-primary flex-shrink-0" />
 							{/if}
 						</button>
 					{/each}
@@ -219,7 +231,7 @@
 			
 			<!-- Subcategories -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_what_looking_for()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_what_looking_for()}</h3>
 				<div class="grid grid-cols-2 gap-2">
 					{#each subcategories as subcategory (subcategory.slug)}
 						<button
@@ -227,14 +239,14 @@
 							class={cn(
 								"flex items-center gap-1.5 p-2 rounded-lg border transition-all duration-200 text-left",
 								selectedFilters.subcategory === subcategory.slug
-									? "bg-blue-50 border-blue-300 text-blue-700"
-									: "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary/10 border-primary text-primary"
+									: "bg-background border-border hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							<span class="text-sm">{subcategory.icon}</span>
 							<span class="font-medium text-xs flex-1">{subcategory?.name || ''}</span>
 							{#if selectedFilters.subcategory === subcategory.slug}
-								<Check class="h-3 w-3 text-blue-600 flex-shrink-0" />
+								<Check class="h-3 w-3 text-primary flex-shrink-0" />
 							{/if}
 						</button>
 					{/each}
@@ -243,7 +255,7 @@
 			
 			<!-- Price Range -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_price_range()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_price_range()}</h3>
 				<div class="grid grid-cols-2 gap-2">
 					{#each priceRanges as price (price.value)}
 						<button
@@ -251,8 +263,8 @@
 							class={cn(
 								"p-2 rounded-lg border text-center font-medium text-xs transition-all duration-200",
 								selectedFilters.price === price.value
-									? "bg-blue-500 border-blue-500 text-white"
-									: "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary border-primary text-primary-foreground"
+									: "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							{price.label}
@@ -263,7 +275,7 @@
 			
 			<!-- Size -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_size()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_size()}</h3>
 				<div class="flex flex-wrap gap-2">
 					{#each sizes as size (size.value)}
 						<button
@@ -271,8 +283,8 @@
 							class={cn(
 								"px-3 py-1.5 rounded-lg border font-medium text-xs transition-all duration-200 min-w-[45px]",
 								selectedFilters.size === size.value
-									? "bg-blue-500 border-blue-500 text-white"
-									: "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary border-primary text-primary-foreground"
+									: "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							{size.label}
@@ -283,7 +295,7 @@
 			
 			<!-- Brand -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_brand()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_brand()}</h3>
 				<div class="grid grid-cols-2 gap-2">
 					{#each brands as brand (brand.value)}
 						<button
@@ -303,7 +315,7 @@
 			
 			<!-- Condition -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_condition()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_condition()}</h3>
 				<div class="space-y-2">
 					{#each conditions as condition (condition.value)}
 						<button
@@ -311,8 +323,8 @@
 							class={cn(
 								"w-full p-2 rounded-lg border text-left font-medium text-xs transition-all duration-200 flex items-center justify-between",
 								selectedFilters.condition === condition.value
-									? "bg-blue-50 border-blue-300 text-blue-700"
-									: "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary/10 border-primary text-primary"
+									: "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							<span>{condition.label}</span>
@@ -326,7 +338,7 @@
 			
 			<!-- Sort -->
 			<div>
-				<h3 class="text-sm font-semibold text-gray-900 mb-2">{m.filter_sort_by()}</h3>
+				<h3 class="text-sm font-semibold text-foreground mb-2">{m.filter_sort_by()}</h3>
 				<div class="space-y-2">
 					{#each sortOptions as sort (sort.value)}
 						<button
@@ -334,8 +346,8 @@
 							class={cn(
 								"w-full p-2 rounded-lg border text-left font-medium text-xs transition-all duration-200 flex items-center gap-2",
 								selectedFilters.sort === sort.value
-									? "bg-blue-50 border-blue-300 text-blue-700"
-									: "bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:bg-blue-50"
+									? "bg-primary/10 border-primary text-primary"
+									: "bg-background border-border text-foreground hover:border-primary hover:bg-primary/5"
 							)}
 						>
 							<span class="text-sm">{sort.icon}</span>
@@ -350,10 +362,10 @@
 		</div>
 		
 		<!-- Footer -->
-		<div class="border-t border-gray-200 p-3 bg-gray-50">
+		<div class="border-t border-border p-3 bg-muted">
 			<button
 				onclick={handleApplyFilters}
-				class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 text-sm"
+				class="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 text-sm"
 			>
 				{#if activeFilterCount > 0}
 					{m.filter_apply_count({ count: activeFilterCount })}

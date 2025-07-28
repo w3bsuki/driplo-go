@@ -118,10 +118,11 @@
 			<h3 class="text-lg font-semibold text-gray-900 mb-6">What's Next?</h3>
 			<div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
 				{#each nextSteps as step}
+					{@const Icon = step.icon}
 					<div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200">
 						<div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg 
 							flex items-center justify-center mb-4 mx-auto">
-							<svelte:component this={step.icon} class="w-6 h-6 text-blue-600" />
+							<Icon class="w-6 h-6 text-blue-600" />
 						</div>
 						<h4 class="font-semibold text-gray-900 mb-2">{step.title}</h4>
 						<p class="text-sm text-gray-600 mb-4">{step.description}</p>

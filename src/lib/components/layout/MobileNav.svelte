@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { cn } from '$lib/utils/cn';
 	import MobileFiltersDrawer from './MobileFiltersDrawer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { logger } from '$lib/services/logger';
@@ -91,31 +92,42 @@
 
 {#if isVisible}
 <nav 
-	class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg md:hidden safe-area-pb {className}"
+	class={cn(
+		"fixed bottom-0 left-0 right-0 z-50",
+		"bg-background border-t border-border shadow-lg",
+		"md:hidden safe-area-pb",
+		className
+	)}
 	role="navigation"
 	aria-label="Mobile navigation"
 >
 	<div class="grid grid-cols-5">
 		{#each navItems as item (item.href)}
 			{#if item.isPrimary}
-				<!-- Primary Sell Button -->
+				<!-- Primary Sell Button with proper touch target -->
 				<a
 					href={item.href}
-					class="flex items-center justify-center py-2"
+					class="flex items-center justify-center min-h-[60px] py-2"
 					aria-label={item.ariaLabel}
 				>
 					<div class="relative">
-						<div class="absolute inset-0 bg-gray-900 rounded-full blur-lg opacity-20"></div>
-						<div class="relative flex items-center justify-center w-12 h-12 bg-gray-900 text-white rounded-full shadow-lg transform transition-all duration-200 active:scale-95">
+						<div class="absolute inset-0 bg-foreground rounded-full blur-lg opacity-20"></div>
+						<div class="relative flex items-center justify-center w-[48px] h-[48px] bg-foreground text-background rounded-full shadow-lg transform transition-all duration-200 active:scale-95 will-change-transform">
 							<span class="text-2xl font-bold" aria-hidden="true">+</span>
 						</div>
 					</div>
 				</a>
 			{:else if item.isAction}
-				<!-- Filter Action -->
+				<!-- Filter Action with proper touch target -->
 				<button
 					onclick={() => handleNavClick(item)}
-					class="flex flex-col items-center justify-center gap-1 py-2 px-2 text-gray-600 transition-colors duration-200 active:scale-95"
+					class={cn(
+						"flex flex-col items-center justify-center gap-1",
+						"min-h-[60px] py-2 px-2",
+						"text-muted-foreground transition-colors duration-200",
+						"active:scale-95 will-change-transform",
+						"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
+					)}
 					aria-label={item.ariaLabel}
 					type="button"
 				>
@@ -123,17 +135,23 @@
 					<span class="text-xs font-medium">{item.label}</span>
 				</button>
 			{:else}
-				<!-- Regular Navigation -->
+				<!-- Regular Navigation with proper touch target -->
 				<a
 					href={item.href}
-					class="flex flex-col items-center justify-center gap-1 py-2 px-2 transition-all duration-200 active:scale-95 {isActive(item) ? 'text-blue-600' : 'text-gray-600'}"
+					class={cn(
+						"flex flex-col items-center justify-center gap-1",
+						"min-h-[60px] py-2 px-2",
+						"transition-all duration-200 active:scale-95 will-change-transform",
+						"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+						isActive(item) ? 'text-brand-500' : 'text-muted-foreground'
+					)}
 					aria-label={item.ariaLabel}
 					aria-current={isActive(item) ? 'page' : undefined}
 				>
 					<div class="relative">
 						<span class="text-xl {isActive(item) ? 'scale-110' : ''}" aria-hidden="true">{item.emoji}</span>
 						{#if isActive(item)}
-							<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full" aria-hidden="true"></div>
+							<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-brand-500 rounded-full" aria-hidden="true"></div>
 						{/if}
 					</div>
 					<span class="text-xs font-medium {isActive(item) ? 'font-semibold' : ''}">{item.label}</span>
@@ -150,5 +168,20 @@
 	/* Safe area padding for iOS devices */
 	.safe-area-pb {
 		padding-bottom: env(safe-area-inset-bottom, 0);
+	}
+	
+	/* Dark mode support */
+	@media (prefers-color-scheme: dark) {
+		.safe-area-pb {
+			background-color: var(--background);
+		}
+	}
+	
+	/* GPU acceleration for better performance */
+	@supports (transform: translateZ(0)) {
+		nav {
+			transform: translateZ(0);
+			backface-visibility: hidden;
+		}
 	}
 </style>

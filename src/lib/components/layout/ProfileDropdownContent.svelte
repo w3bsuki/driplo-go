@@ -30,7 +30,7 @@
 	<!-- Profile Header -->
 	<DropdownMenu.Item
 		onSelect={() => goto(authContext.profile?.username ? `/profile/${authContext.profile.username}` : '/profile')}
-		class="flex items-center gap-2 p-2 mb-2 rounded-sm hover:bg-gray-50"
+		class="flex items-center gap-2 p-2 mb-2 rounded-sm hover:bg-muted"
 	>
 		<div class="relative">
 			<img 
@@ -69,7 +69,7 @@
 					{/each}
 				{/if}
 			</div>
-			<p class="text-xs text-gray-500">View profile</p>
+			<p class="text-xs text-muted-foreground">View profile</p>
 		</div>
 	</DropdownMenu.Item>
 
@@ -77,7 +77,7 @@
 	<div class="grid grid-cols-2 gap-1.5 p-2">
 		<DropdownMenu.Item
 			onSelect={() => goto('/orders?type=bought')}
-			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 		>
 			<span class="text-lg">🛍️</span>
 			<span class="text-xs">Orders</span>
@@ -85,7 +85,7 @@
 		
 		<DropdownMenu.Item
 			onSelect={() => goto('/orders?type=sold')}
-			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 		>
 			<span class="text-lg">💰</span>
 			<span class="text-xs">Sales</span>
@@ -93,7 +93,7 @@
 		
 		<DropdownMenu.Item
 			onSelect={() => goto('/profile/settings')}
-			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 		>
 			<span class="text-lg">⚙️</span>
 			<span class="text-xs">Settings</span>
@@ -101,7 +101,7 @@
 		
 		<DropdownMenu.Item
 			onSelect={() => goto('/wishlist')}
-			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+			class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 		>
 			<span class="text-lg">❤️</span>
 			<span class="text-xs">Wishlist</span>
@@ -110,7 +110,7 @@
 		{#if authContext.profile?.account_type === 'brand' && brandSlug}
 			<DropdownMenu.Item
 				onSelect={() => goto(`/brands/${brandSlug}`)}
-				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 			>
 				<span class="text-lg">🏪</span>
 				<span class="text-xs">Brand</span>
@@ -118,7 +118,7 @@
 			
 			<DropdownMenu.Item
 				onSelect={() => goto('/brands/analytics')}
-				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-gray-50 hover:bg-gray-100 text-center"
+				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-muted hover:bg-accent/10 text-center"
 			>
 				<span class="text-lg">📊</span>
 				<span class="text-xs">Analytics</span>
@@ -126,7 +126,7 @@
 		{:else}
 			<DropdownMenu.Item
 				onSelect={() => goto('/brands/settings')}
-				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-amber-50 hover:bg-amber-100 text-center col-span-2"
+				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-warning/10 hover:bg-warning/20 text-center col-span-2"
 			>
 				<span class="text-lg">✨</span>
 				<span class="text-xs">Upgrade to Brand</span>
@@ -136,24 +136,24 @@
 		{#if authContext.profile?.is_admin}
 			<DropdownMenu.Item
 				onSelect={() => goto('/admin')}
-				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-purple-50 hover:bg-purple-100 text-center col-span-2"
+				class="flex flex-col items-center gap-1 p-2 rounded-sm bg-primary/10 hover:bg-primary/20 text-center col-span-2"
 			>
 				<span class="text-lg">👑</span>
-				<span class="text-xs text-purple-700">Admin Dashboard</span>
+				<span class="text-xs text-primary">Admin Dashboard</span>
 			</DropdownMenu.Item>
 		{/if}
 	</div>
 	
 	<!-- Footer -->
 	<div class="border-t p-2 space-y-1.5">
-		<div class="flex items-center justify-between px-2 py-1.5 rounded-sm hover:bg-gray-50">
+		<div class="flex items-center justify-between px-2 py-1.5 rounded-sm hover:bg-muted">
 			<span class="text-sm">🌐 Language</span>
 			<LanguageSwitcher />
 		</div>
 		
 		<DropdownMenu.Item
 			onSelect={onSignOut}
-			class="flex items-center justify-center gap-2 py-1.5 rounded-sm hover:bg-red-50 text-red-600"
+			class="flex items-center justify-center gap-2 py-1.5 rounded-sm hover:bg-destructive/10 text-destructive"
 		>
 			<span>🚪</span>
 			<span class="text-sm">Sign out</span>
@@ -164,18 +164,18 @@
 	<div class="p-4 text-center">
 		<span class="text-3xl mb-3 block">👋</span>
 		<p class="text-sm font-medium mb-1">Welcome!</p>
-		<p class="text-xs text-gray-500 mb-4">Sign in to start shopping</p>
+		<p class="text-xs text-muted-foreground mb-4">Sign in to start shopping</p>
 		
 		<div class="space-y-2">
 			<a
 				href="/login"
-				class="flex items-center justify-center py-1.5 bg-gray-900 hover:bg-gray-800 text-white rounded-sm text-sm font-medium cursor-pointer w-full no-underline"
+				class="flex items-center justify-center py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-sm text-sm font-medium cursor-pointer w-full no-underline"
 			>
 				Sign in
 			</a>
 			<a
 				href="/register"
-				class="flex items-center justify-center py-1.5 border border-gray-300 hover:bg-gray-50 rounded-sm text-sm cursor-pointer w-full no-underline"
+				class="flex items-center justify-center py-1.5 border border-border hover:bg-muted rounded-sm text-sm cursor-pointer w-full no-underline"
 			>
 				Create account
 			</a>

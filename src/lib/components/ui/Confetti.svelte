@@ -94,7 +94,6 @@
 <canvas
 	bind:this={canvas}
 	class="fixed inset-0 pointer-events-none z-50"
-	style="width: 100%; height: 100%;"
 />
 
 <style>

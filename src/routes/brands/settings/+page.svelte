@@ -606,6 +606,7 @@
 								</div>
 							{:else if verificationRequest}
 								{@const status = getStatusBadge(verificationRequest.verification_status)}
+								{@const StatusIcon = status.icon}
 								<div class={cn(
 									"border rounded-lg p-6 flex items-start gap-4",
 									verificationRequest.verification_status === 'pending' && "bg-yellow-50 border-yellow-200",
@@ -613,7 +614,7 @@
 									verificationRequest.verification_status === 'more_info_needed' && "bg-orange-50 border-orange-200"
 								)}>
 									<div class={cn("w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0", status.class)}>
-										<svelte:component this={status.icon} class="w-6 h-6" />
+										<StatusIcon class="w-6 h-6" />
 									</div>
 									<div class="flex-1">
 										<h3 class="font-semibold">{status.text}</h3>

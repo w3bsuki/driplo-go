@@ -252,9 +252,10 @@
 
 					<div class="space-y-6">
 						{#each cookieCategories as category}
+							{@const Icon = category.icon}
 							<div class="flex items-start justify-between gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
 								<div class="flex items-start gap-3 flex-1">
-									<svelte:component this={category.icon} class="w-5 h-5 text-blue-600 mt-0.5" />
+									<Icon class="w-5 h-5 text-blue-600 mt-0.5" />
 									<div class="space-y-1">
 										<h3 class="font-medium text-gray-900">{category.title}</h3>
 										<p class="text-sm text-gray-600">

@@ -3,7 +3,7 @@
 	import { handleStreamedData } from '$lib/utils/streaming'
 	import type { DashboardStats, StreamedData } from '$lib/utils/streaming'
 	
-	export let streamedDashboard: StreamedData<DashboardStats>
+	let { streamedDashboard }: { streamedDashboard: StreamedData<DashboardStats> } = $props()
 	
 	let stats = $state<DashboardStats>({
 		quickCounts: {},

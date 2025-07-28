@@ -83,8 +83,9 @@
 						<!-- Status Badge -->
 						{#if getSellerBadge(seller)}
 							{@const badge = getSellerBadge(seller)}
+							{@const BadgeIcon = badge.icon}
 							<div class="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-sm flex items-center justify-center border border-gray-200">
-								<svelte:component this={badge.icon} class="h-3 w-3 {badge.color}" />
+								<BadgeIcon class="h-3 w-3 {badge.color}" />
 							</div>
 						{/if}
 					</div>

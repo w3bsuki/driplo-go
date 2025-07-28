@@ -17,4 +17,5 @@ export { default as LazyModal } from './LazyModal.svelte';
 export { default as Skeleton } from './skeleton.svelte';
 export { default as PasswordStrength } from './PasswordStrength.svelte';
 export { default as Confetti } from './Confetti.svelte';
+export { default as ProgressBar } from './ProgressBar.svelte';
 

@@ -49,6 +49,7 @@
 	<div class="grid md:grid-cols-2 gap-6">
 		{#each accountTypes as type}
 			{@const isSelected = accountType === type.value}
+			{@const Icon = type.icon}
 			<button
 				onclick={() => accountType = type.value}
 				class="relative text-left p-6 rounded-xl border-2 transition-all duration-300 group
@@ -66,8 +67,7 @@
 				<div class="flex items-start gap-4 mb-4">
 					<div class="p-3 rounded-lg {isSelected ? `bg-${type.color}-100` : 'bg-gray-100'} 
 						group-hover:scale-110 transition-transform duration-200">
-						<svelte:component 
-							this={type.icon} 
+						<Icon 
 							class="w-6 h-6 {isSelected ? `text-${type.color}-600` : 'text-gray-600'}"
 						/>
 					</div>

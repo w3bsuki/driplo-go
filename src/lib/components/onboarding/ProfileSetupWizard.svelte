@@ -4,6 +4,7 @@
 	import { getAuthContext } from '$lib/stores/auth-context.svelte';
 	import { toast } from 'svelte-sonner';
 	import { ChevronLeft, ChevronRight, Check, User as UserIcon, Palette, Building2, Sparkles, AtSign } from 'lucide-svelte';
+	import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
 	import AccountTypeSelector from './AccountTypeSelector.svelte';
 	import UsernameSetup from './UsernameSetup.svelte';
 	import AvatarPicker from './AvatarPicker.svelte';
@@ -304,7 +305,8 @@
 								{#if isCompleted}
 									<Check class="w-6 h-6" />
 								{:else}
-									<svelte:component this={step.icon} class="w-6 h-6" />
+									{@const Icon = step.icon}
+									<Icon class="w-6 h-6" />
 								{/if}
 							</div>
 							<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-medium whitespace-nowrap
@@ -313,12 +315,13 @@
 							</span>
 						</div>
 						{#if index < activeSteps.length - 1}
-							<div class="flex-1 h-1 mx-4 rounded-full overflow-hidden bg-gray-200">
-								<div 
-									class="h-full bg-gradient-to-r from-green-500 to-blue-600 transition-all duration-500"
-									style="width: {isCompleted ? '100%' : '0%'}"
-								></div>
-							</div>
+							<ProgressBar 
+								value={isCompleted ? 100 : 0}
+								max={100}
+								size="xs"
+								variant="success"
+								class="flex-1 mx-4 bg-gradient-to-r from-green-500 to-blue-600"
+							/>
 						{/if}
 					</div>
 				{/each}

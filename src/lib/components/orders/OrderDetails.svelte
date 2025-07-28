@@ -47,8 +47,7 @@
         }>;
     };
 
-    export let order: Order;
-    export let userId: string;
+    let { order, userId }: { order: Order; userId: string } = $props();
     
     let showShippingForm = false;
 
@@ -306,7 +305,7 @@
                     {#if canMarkDelivered()}
                         <button 
                             class="btn btn-success"
-                            onclick={handleCompleteOrder}
+                            onclick={completeOrder}
                         >
                             Mark as Delivered
                         </button>
@@ -315,7 +314,7 @@
                     {#if canCancelOrder()}
                         <button 
                             class="btn btn-error btn-outline"
-                            onclick={handleCancelOrder}
+                            onclick={cancelOrder}
                         >
                             Cancel Order
                         </button>
