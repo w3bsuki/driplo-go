@@ -1,0 +1,25 @@
+<!-- Fonts and Meta Tags for Storybook -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Preconnect to font sources -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Import fonts if not using @fontsource -->
+<style>
+  /* Ensure consistent font rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Fix for Storybook-specific styling issues */
+  .sb-show-main {
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Ensure dark mode works properly */
+  html.dark {
+    color-scheme: dark;
+  }
+</style>

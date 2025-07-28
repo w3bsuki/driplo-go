@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.svelte-kit
+build
+dist
+.output
+.vercel
+.netlify
+
+# Environment files
+.env
+.env.*
+
+# Package files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE
+.vscode
+.idea
+
+# Other
+.DS_Store
+Thumbs.db
+coverage
+.nyc_output

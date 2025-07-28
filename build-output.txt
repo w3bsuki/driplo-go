@@ -1,0 +1,6 @@
+
+> threadly-svelte@0.0.1 build K:\driplo.bg-main
+> vite build
+
+/usr/bin/bash: Files\Git\bin\bash.exe: No such file or directory
+ ELIFECYCLE  Command failed.

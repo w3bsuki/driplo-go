@@ -1,0 +1,58 @@
+/* /src/lib/styles/animations.css - Tailwind v4 @utility syntax */
+
+/* Entrance animations - INSTANT */
+@utility fade-in-fast {
+  animation: fade-in var(--duration-fast) var(--ease-sharp);
+}
+
+@utility pop-in {
+  animation: pop-in var(--duration-normal) var(--ease-sharp);
+}
+
+/* Page transitions only */
+@utility slide-in-page {
+  animation: slide-in var(--duration-page) var(--ease-sharp);
+}
+
+/* No exit animations - instant removal */
+@utility remove {
+  display: none !important;
+}
+
+/* Loading states only - no decorative animations */
+@utility animate-spin {
+  animation: spin 0.6s linear infinite;
+}
+
+/* Keyframes definitions (not utilities, so no @utility wrapper) */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pop-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in {
+  from { transform: translateX(-8px); }
+  to { transform: translateX(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton loading - subtle */
+@keyframes skeleton-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}

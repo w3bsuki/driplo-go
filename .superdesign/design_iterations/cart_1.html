@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Driplo Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme_cart_1.css">
+    <style>
+        body {
+            font-family: var(--font-sans) !important;
+            background-color: oklch(var(--background)) !important;
+            color: oklch(var(--foreground)) !important;
+        }
+        
+        .transition-all-fast {
+            transition: all 150ms ease;
+        }
+        
+        .transition-transform-fast {
+            transition: transform 100ms ease;
+        }
+        
+        .hover-lift {
+            transition: transform 150ms ease, box-shadow 150ms ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .number-transition {
+            transition: opacity 200ms ease;
+        }
+        
+        .fade-out {
+            animation: fadeOut 200ms ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+        
+        .button-press:active {
+            transform: scale(0.98);
+        }
+        
+        .cart-item {
+            background: oklch(var(--card));
+            border: 1px solid oklch(var(--border));
+            border-radius: var(--radius);
+            transition: all 150ms ease;
+        }
+        
+        .cart-item:hover {
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .primary-button {
+            background: oklch(var(--primary));
+            color: oklch(var(--primary-foreground));
+            border-radius: var(--radius);
+            font-weight: 600;
+            transition: all 100ms ease;
+        }
+        
+        .primary-button:hover {
+            opacity: 0.9;
+        }
+        
+        .secondary-button {
+            background: oklch(var(--secondary));
+            color: oklch(var(--secondary-foreground));
+            border-radius: var(--radius-sm);
+            transition: all 100ms ease;
+        }
+        
+        .quantity-button {
+            background: oklch(var(--muted));
+            color: oklch(var(--foreground));
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            transition: all 100ms ease;
+        }
+        
+        .quantity-button:hover {
+            background: oklch(var(--accent));
+        }
+        
+        .remove-button {
+            color: oklch(var(--muted-foreground));
+            transition: color 150ms ease;
+        }
+        
+        .remove-button:hover {
+            color: oklch(var(--destructive));
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold mb-2">Shopping Cart</h1>
+            <p class="text-muted-foreground">3 items • $124.99</p>
+        </div>
+        
+        <!-- Cart Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Cart Item 1 -->
+                <div class="cart-item p-4 md:p-6">
+                    <div class="flex gap-4">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120&h=120&fit=crop" 
+                             alt="Product" 
+                             class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg">
+                        
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold text-lg">Nike Air Max 270</h3>
+                                    <p class="text-sm text-muted-foreground">by @sneakerhead</p>
+                                </div>
+                                <p class="font-bold text-lg">$29.99</p>
+                            </div>
+                            
+                            <p class="text-sm text-muted-foreground mb-4">Size: M | Color: Blue</p>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, -1)">
+                                        <i data-lucide="minus" class="w-4 h-4"></i>
+                                    </button>
+                                    <span class="font-medium w-8 text-center">1</span>
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, 1)">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="remove-button flex items-center gap-1 text-sm" onclick="removeItem(this)">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Item 2 -->
+                <div class="cart-item p-4 md:p-6">
+                    <div class="flex gap-4">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=120&fit=crop" 
+                             alt="Digital Product" 
+                             class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg">
+                        
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold text-lg">Premium Dashboard Template</h3>
+                                    <p class="text-sm text-muted-foreground">by @uidesigner</p>
+                                </div>
+                                <p class="font-bold text-lg">$45.00</p>
+                            </div>
+                            
+                            <p class="text-sm text-muted-foreground mb-4">Digital Download</p>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, -1)">
+                                        <i data-lucide="minus" class="w-4 h-4"></i>
+                                    </button>
+                                    <span class="font-medium w-8 text-center">2</span>
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, 1)">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="remove-button flex items-center gap-1 text-sm" onclick="removeItem(this)">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Item 3 -->
+                <div class="cart-item p-4 md:p-6">
+                    <div class="flex gap-4">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=120&h=120&fit=crop" 
+                             alt="Watch" 
+                             class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg">
+                        
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-semibold text-lg">Vintage Casio Watch</h3>
+                                    <p class="text-sm text-muted-foreground">by @retrofinds</p>
+                                </div>
+                                <p class="font-bold text-lg">$50.00</p>
+                            </div>
+                            
+                            <p class="text-sm text-muted-foreground mb-4">Condition: Like New</p>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, -1)">
+                                        <i data-lucide="minus" class="w-4 h-4"></i>
+                                    </button>
+                                    <span class="font-medium w-8 text-center">1</span>
+                                    <button class="quantity-button button-press" onclick="updateQuantity(this, 1)">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="remove-button flex items-center gap-1 text-sm" onclick="removeItem(this)">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Continue Shopping -->
+                <div class="pt-4">
+                    <a href="#" class="secondary-button inline-flex items-center gap-2 px-6 py-3 transition-all-fast">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="cart-item p-6 sticky top-4">
+                    <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Subtotal (4 items)</span>
+                            <span class="font-medium">$124.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Shipping</span>
+                            <span class="font-medium">$5.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-muted-foreground">Platform Fee</span>
+                            <span class="font-medium">$3.75</span>
+                        </div>
+                        
+                        <div class="border-t pt-3">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-lg">Total</span>
+                                <span class="font-bold text-xl number-transition">$134.73</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Promo Code -->
+                    <div class="mb-6">
+                        <div class="flex gap-2">
+                            <input type="text" 
+                                   placeholder="Enter promo code" 
+                                   class="flex-1 px-3 py-2 border rounded-lg transition-all-fast focus:outline-none focus:ring-2 focus:ring-primary">
+                            <button class="secondary-button px-4 py-2 button-press">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout Button -->
+                    <button class="primary-button w-full py-4 text-lg button-press mb-4">
+                        Proceed to Checkout
+                    </button>
+                    
+                    <!-- Security Info -->
+                    <div class="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="credit-card" class="w-4 h-4"></i>
+                            Secure checkout
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                            SSL Protected
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Empty Cart State (Hidden by default) -->
+    <div class="hidden max-w-md mx-auto text-center py-16 px-4" id="emptyCart">
+        <div class="mb-8">
+            <i data-lucide="shopping-bag" class="w-24 h-24 mx-auto text-muted-foreground"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-4">Your cart is empty</h2>
+        <p class="text-muted-foreground mb-8">Start shopping to add items here!</p>
+        <a href="#" class="primary-button inline-flex items-center gap-2 px-8 py-3">
+            Browse Marketplace
+        </a>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Update quantity function
+        function updateQuantity(button, change) {
+            const container = button.parentElement;
+            const quantitySpan = container.querySelector('span');
+            let quantity = parseInt(quantitySpan.textContent);
+            
+            quantity = Math.max(1, quantity + change);
+            
+            // Animate the number change
+            quantitySpan.style.opacity = '0';
+            setTimeout(() => {
+                quantitySpan.textContent = quantity;
+                quantitySpan.style.opacity = '1';
+                updateTotal();
+            }, 100);
+        }
+        
+        // Remove item function
+        function removeItem(button) {
+            const cartItem = button.closest('.cart-item');
+            cartItem.classList.add('fade-out');
+            
+            setTimeout(() => {
+                cartItem.remove();
+                updateTotal();
+                checkEmptyCart();
+            }, 200);
+        }
+        
+        // Update total
+        function updateTotal() {
+            // This would calculate the actual total
+            const totalElement = document.querySelector('.number-transition');
+            totalElement.style.opacity = '0';
+            setTimeout(() => {
+                totalElement.style.opacity = '1';
+            }, 100);
+        }
+        
+        // Check if cart is empty
+        function checkEmptyCart() {
+            const items = document.querySelectorAll('.cart-item').length;
+            if (items === 0) {
+                // Show empty cart state
+                document.getElementById('emptyCart').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<script lang="ts">
+	import ListingCard from './ListingCard.svelte';
+	import InfiniteScroll from '$lib/components/ui/InfiniteScroll.svelte';
+	// import VirtualGrid from '$lib/components/ui/VirtualGrid.svelte';
+	import { getLoadingStrategy } from '$lib/utils/lazy-loading';
+	import * as m from '$lib/paraglide/messages.js';
+	import { browser } from '$app/environment';
+	import { debug } from '$lib/utils/debug-logger';
+	
+	// Constants
+	const RESPONSIVE_BREAKPOINTS = {
+		'2xl': { width: 1536, columns: 6 }, // Reduced from 8 for better readability
+		xl: { width: 1280, columns: 5 },
+		lg: { width: 1024, columns: 4 },
+		md: { width: 768, columns: 3 },
+		sm: { width: 640, columns: 2 },
+		default: { width: 0, columns: 2 }
+	};
+	
+	const SKELETON_COUNT = 8;
+	const VIRTUAL_SCROLL_THRESHOLD = 50;
+	
+	type ListingData = {
+		id: string;
+		title: string;
+		price: number;
+		size?: string;
+		brand?: string;
+		images?: string[];
+		image_urls?: string[];
+		seller?: {
+			username: string;
+			avatar_url?: string;
+			account_type?: string;
+			is_verified?: boolean;
+		};
+		favorite_count?: number;
+		condition?: string | null;
+		status: string;
+		created_at: string;
+		view_count?: number;
+	};
+
+	interface Props {
+		title?: string;
+		listings: ListingData[];
+		showLoading?: boolean;
+		infiniteScroll?: boolean;
+		hasMore?: boolean;
+		onLoadMore?: () => Promise<void> | void;
+		userFavorites?: string[];
+		useVirtualScrolling?: boolean;
+		virtualScrollHeight?: number;
+		showEmptyState?: boolean;
+		isLoading?: boolean;
+		error?: string | null;
+	}
+	
+	let { 
+		title = m.home_featured_title(), 
+		listings = [],
+		showLoading = false,
+		infiniteScroll = false,
+		hasMore = false,
+		onLoadMore,
+		userFavorites = [],
+		useVirtualScrolling = false,
+		virtualScrollHeight = 600,
+		showEmptyState = true,
+		isLoading = false,
+		error = null
+	}: Props = $props();
+	
+	// State - use a safe default that works on server and client
+	let windowWidth = $state(browser ? window.innerWidth : 768);
+	
+	// Update window width on resize and initial mount
+	$effect(() => {
+		if (!browser) return;
+		
+		// Set initial width on client mount to prevent hydration mismatch
+		windowWidth = window.innerWidth;
+		
+		const handleResize = () => {
+			windowWidth = window.innerWidth;
+		};
+		
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	});
+	
+	// Derived values
+	const transformedListings = $derived(transformListings(listings));
+	const shouldUseVirtualScrolling = $derived(useVirtualScrolling && transformedListings.length > VIRTUAL_SCROLL_THRESHOLD);
+	const columns = $derived(getResponsiveColumns(windowWidth));
+	const loadingStrategy = $derived(getLoadingStrategy());
+	const eagerLoadCount = $derived(loadingStrategy.eagerCount);
+	const loading = $derived(isLoading || showLoading);
+	
+	// Functions
+	function getResponsiveColumns(width: number): number {
+		// Sort breakpoints by width descending to get correct order
+		const sortedBreakpoints = Object.entries(RESPONSIVE_BREAKPOINTS)
+			.sort(([, a], [, b]) => b.width - a.width);
+			
+		for (const [_, config] of sortedBreakpoints) {
+			if (width >= config.width) return config.columns;
+		}
+		return RESPONSIVE_BREAKPOINTS.default.columns;
+	}
+	
+	function transformListings(rawListings: any[]): any[] {
+		debug.log('transformListings called', { 
+			component: 'ListingGrid', 
+			data: { 
+				rawListingsCount: rawListings?.length || 0,
+				sampleListing: rawListings?.[0]
+			} 
+		});
+		
+		if (!rawListings || rawListings.length === 0) {
+			debug.warn('No listings to transform', { component: 'ListingGrid' });
+			return [];
+		}
+		
+		const transformed = rawListings.map((listing, index) => {
+			debug.log(`Transforming listing ${index}`, {
+				component: 'ListingGrid',
+				data: {
+					id: listing.id,
+					title: listing.title,
+					image_urls: listing.image_urls,
+					images: listing.images,
+					seller: listing.seller,
+					profiles: listing.profiles
+				}
+			});
+			
+			const result = {
+				id: listing.id,
+				title: listing.title,
+				price: listing.price,
+				size: listing.size,
+				brand: listing.brand,
+				image: listing.image_urls || listing.images || [],
+				imageUrls: listing.image_urls || listing.images || [],
+				seller: {
+					username: listing.seller?.username || listing.profiles?.username || 'user',
+					avatar: listing.seller?.avatar_url || listing.profiles?.avatar_url,
+					account_type: listing.seller?.account_type || listing.profiles?.account_type,
+					is_verified: listing.seller?.is_verified || listing.profiles?.is_verified
+				},
+				likes: listing.favorite_count || 0,
+				isLiked: userFavorites.includes(listing.id),
+				condition: listing.condition
+			};
+			
+			if (index === 0) {
+				debug.log('First transformed listing', {
+					component: 'ListingGrid',
+					data: result
+				});
+			}
+			
+			return result;
+		});
+		
+		debug.log('Transformation complete', {
+			component: 'ListingGrid',
+			data: {
+				transformedCount: transformed.length
+			}
+		});
+		
+		return transformed;
+	}
+</script>
+
+<section class="py-[var(--spacing-2)] md:py-[var(--spacing-3)]" aria-labelledby={title ? 'listing-grid-title' : undefined}>
+	<div class="container px-[var(--spacing-4)]">
+		{#if title}
+			<h2 id="listing-grid-title" class="mb-[var(--spacing-2)] text-[var(--font-size-sm)] font-semibold text-[var(--color-text-primary)]">
+				{title}
+			</h2>
+		{/if}
+		
+		{#if error && !loading}
+			<!-- Error state -->
+			<div class="rounded-[var(--border-radius-sm)] border border-[var(--color-error-500)]/20 bg-[var(--color-error-50)] p-[var(--spacing-2)]" role="alert">
+				<div class="flex items-start gap-[var(--spacing-2)]">
+					<span class="text-[var(--font-size-2xl)]" aria-hidden="true">⚠️</span>
+					<div class="flex-1">
+						<h3 class="font-medium text-[var(--color-error-600)]">{m.listing_error_title()}</h3>
+						<p class="text-[var(--font-size-xs)] text-[var(--color-error-500)]/80 mt-[var(--spacing-1)]">{error}</p>
+					</div>
+				</div>
+			</div>
+		{:else if loading}
+			<!-- Skeleton loader with proper grid -->
+			<div 
+				class="grid gap-[var(--spacing-2)]"
+				style:grid-template-columns="repeat({columns}, minmax(0, 1fr))"
+				aria-busy="true"
+				aria-label={m.listing_loading()}
+			>
+				{#each Array(SKELETON_COUNT) as _, i (i)}
+					<div class="animate-pulse">
+						<div class="aspect-[3/4] bg-[var(--color-surface-tertiary)] rounded-t-[var(--border-radius-sm)]"></div>
+						<div class="p-[var(--spacing-2)] bg-[var(--color-surface-primary)] rounded-b-[var(--border-radius-sm)] space-y-[var(--spacing-1)]">
+							<div class="h-4 bg-[var(--color-surface-tertiary)] rounded w-3/4"></div>
+							<div class="h-3 bg-[var(--color-surface-tertiary)] rounded w-1/2"></div>
+							<div class="flex items-center gap-[var(--spacing-1)] mt-[var(--spacing-2)]">
+								<div class="h-5 w-5 bg-[var(--color-surface-tertiary)] rounded-[var(--border-radius-sm)]"></div>
+								<div class="h-3 bg-[var(--color-surface-tertiary)] rounded w-16"></div>
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else if transformedListings.length > 0}
+			{#if false}
+				<!-- Virtual scrolling disabled - VirtualGrid component missing -->
+			{:else}
+				<!-- Regular responsive grid -->
+				<div 
+					class="grid gap-[var(--spacing-2)] md:gap-[var(--spacing-3)]"
+					style:grid-template-columns="repeat({columns}, minmax(0, 1fr))"
+					role="list"
+				>
+					{#each transformedListings as listing, index (listing.id)}
+						<div role="listitem">
+							<ListingCard {...listing} eagerLoading={index < eagerLoadCount} />
+						</div>
+					{/each}
+				</div>
+			{/if}
+			
+			{#if infiniteScroll && onLoadMore && !shouldUseVirtualScrolling}
+				<InfiniteScroll 
+					{hasMore} 
+					loading={loading} 
+					onLoadMore={onLoadMore}
+					class="mt-[var(--spacing-8)]"
+				/>
+			{/if}
+		{:else if showEmptyState}
+			<!-- Empty state -->
+			<div class="text-center py-[var(--spacing-8)]">
+				<div class="text-[var(--font-size-5xl)] mb-[var(--spacing-3)]" aria-hidden="true">🛍️</div>
+				<h3 class="text-[var(--font-size-sm)] font-medium text-[var(--color-text-primary)] mb-[var(--spacing-2)]">{m.listing_empty_title()}</h3>
+				<p class="text-[var(--font-size-xs)] text-[var(--color-text-tertiary)] mb-[var(--spacing-3)]">{m.listing_empty_description()}</p>
+				<a 
+					href="/sell" 
+					class="inline-flex items-center px-[var(--spacing-3)] py-[var(--spacing-1-5)] bg-[var(--color-brand-500)] hover:bg-[var(--color-brand-600)] text-[var(--color-white)] font-medium rounded-[var(--border-radius-sm)] transition-colors duration-[var(--transition-duration-100)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-500)] focus:ring-offset-2"
+				>
+					{m.listing_start_selling()}
+				</a>
+			</div>
+		{/if}
+	</div>
+</section>

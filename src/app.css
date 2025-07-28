@@ -1,0 +1,170 @@
+/* ===== TAILWIND V4 CSS-FIRST CONFIGURATION ===== */
+
+/* 1. Import Tailwind v4 base (with @theme from tokens.css) */
+@import 'tailwindcss';
+
+/* 2. Import our design tokens (includes @theme directive) */
+@import './lib/styles/tokens.css';
+
+/* 3. Import base styles and resets */
+@import './lib/styles/base.css';
+
+/* 4. Import custom utilities (@utility directives) */
+@import './lib/styles/utilities.css';
+
+/* 5. Import animations and interactions */
+@import './lib/styles/animations.css';
+
+/* 6. Import domain-specific styles */
+@import './lib/styles/ecommerce.css';
+
+/* 7. TEMPORARY: Import v4 compatibility layer for migration */
+/* TODO: Remove once all components are migrated to token-based classes */
+@import './lib/styles/compatibility-v4.css';
+
+/* Font imports - using variable fonts we have installed */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* ===== DEVELOPMENT CSS DEBUG UTILITIES ===== */
+/* Add .debug-inline-styles class to body in development to highlight inline styles */
+.debug-inline-styles [style*="width"],
+.debug-inline-styles [style*="height"],
+.debug-inline-styles [style*="color"],
+.debug-inline-styles [style*="background"],
+.debug-inline-styles [style*="margin"],
+.debug-inline-styles [style*="padding"],
+.debug-inline-styles [style*="position"],
+.debug-inline-styles [style*="transform"] {
+  outline: 2px solid red !important;
+  outline-offset: 2px !important;
+}
+
+.debug-inline-styles [style*="width"]:before,
+.debug-inline-styles [style*="height"]:before,
+.debug-inline-styles [style*="color"]:before,
+.debug-inline-styles [style*="background"]:before,
+.debug-inline-styles [style*="margin"]:before,
+.debug-inline-styles [style*="padding"]:before,
+.debug-inline-styles [style*="position"]:before,
+.debug-inline-styles [style*="transform"]:before {
+  content: "⚠️ INLINE STYLE";
+  position: absolute;
+  top: -24px;
+  left: 0;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  font-family: monospace;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Fix for dropdown portals */
+[data-portal] {
+	position: fixed;
+	z-index: 9999;
+}
+
+/* Ensure dropdown content is visible */
+[data-slot='dropdown-menu-content'] {
+	z-index: 9999 !important;
+}
+
+/* Fix for bits-ui dropdowns */
+[data-state='open'][data-slot='dropdown-menu-content'] {
+	opacity: 1 !important;
+	transform: none !important;
+}
+
+/* Fix for category dropdown absolute positioning */
+.absolute {
+	position: absolute !important;
+}
+
+/* Ensure dropdowns appear above everything */
+[data-slot='dropdown-menu-content'],
+.z-\[100\],
+.z-\[9999\] {
+	z-index: 99999 !important;
+}
+
+/* Fix dropdown portal rendering */
+[data-portal],
+[data-radix-portal],
+[data-melt-portal] {
+	position: fixed !important;
+	z-index: 99999 !important;
+	pointer-events: auto !important;
+}
+
+/* Custom utility classes - Tailwind v4 @utility syntax */
+
+/* Badge size utilities */
+@utility badge-size-sm {
+	height: 1.5rem;
+	padding: 0 0.5rem;
+	font-size: 0.75rem;
+}
+
+@utility badge-size-md {
+	height: 2rem;
+	padding: 0 0.75rem;
+	font-size: 0.875rem;
+}
+
+@utility badge-size-lg {
+	height: 2.5rem;
+	padding: 0 1rem;
+	font-size: 1rem;
+}
+
+/* Base styles - Tailwind v4 supports @layer base for global styles */
+@layer base {
+	/* Remove unwanted link underlines */
+	a {
+		text-decoration: none;
+	}
+
+	/* Fix hover animations - only on interactive elements */
+	button, a, [role="button"] {
+		transition: all 0.1s ease;
+	}
+
+	/* Remove double borders */
+	* {
+		border-style: solid;
+	}
+
+	/* iOS form fixes */
+	@supports (-webkit-touch-callout: none) {
+		/* iOS specific styles */
+		input[type='text'],
+		input[type='email'],
+		input[type='password'],
+		input[type='tel'],
+		input[type='number'],
+		input[type='search'],
+		textarea,
+		select {
+			font-size: 16px !important; /* Prevents zoom on iOS */
+			-webkit-appearance: none;
+			-webkit-text-size-adjust: 100%;
+		}
+
+		/* Prevent iOS bounce/elastic scrolling */
+		body {
+			width: 100%;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		/* Fix for position fixed */
+		.min-h-screen {
+			min-height: 100vh;
+			min-height: -webkit-fill-available;
+		}
+	}
+}
